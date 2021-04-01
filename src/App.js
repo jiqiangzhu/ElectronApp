@@ -30,7 +30,7 @@ export default class App extends React.Component {
       )
     })
     return (
-      <Layout>
+      <Layout className="main-content">
         <Layout>
           <Header className="header">
             <CustomHeader />

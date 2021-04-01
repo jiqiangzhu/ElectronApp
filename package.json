@@ -1,5 +1,5 @@
 {
-  "name": "react-kugou",
+  "name": "react-demo2",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -13,23 +13,21 @@
     "concurrently": "^6.0.0",
     "craco-less": "^1.17.1",
     "mockjs": "^1.1.0",
+    "path-key": "^3.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "which": "^2.0.2"
   },
   "main": "main.js",
   "scripts": {
-    "eject": "craco eject",
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test",
-    "electron": "electron .",
-    "dev": "nf start",
-    "nstart": "nf start -p 3000",
-    "cc:dev": "concurrently \"wait-on http://localhost:3000 && electron .\" \"cross-env BROWSER=none npm start\"",
-    "electron-start": "node src/wait-for-react",
-    "react-start": "react-scripts start"
+    "eject": "react-scripts eject",
+    "start": "craco  start",
+    "build": "craco  build",
+    "test": "craco  test",
+    "ele": "electron .",
+    "dev": "concurrently \"wait-on http://localhost:3000 && electron .\" \"cross-env BROWSER=none npm start\""
   },
   "eslintConfig": {
     "extends": [
@@ -37,7 +35,6 @@
       "react-app/jest"
     ]
   },
-  "homepage": "./",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -53,7 +50,7 @@
   "devDependencies": {
     "cross-env": "^7.0.3",
     "electron": "^12.0.2",
-    "foreman": "^3.0.1",
+    "electron-is-dev": "^2.0.0",
     "react-scripts": "4.0.3"
   }
 }
