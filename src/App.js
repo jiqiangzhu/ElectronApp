@@ -1,25 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import { Layout, Tabs } from 'antd';
+import './App.less';
+import React from 'react';
+import { CustomHeader } from './components/header';
+const { Content, Header } = Layout;
+const { TabPane } = Tabs;
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function callback(params) {
+
 }
-
-export default App;
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tabs: [
+        '我的音乐',
+        '发现',
+        '直播',
+        '探索',
+        '手机Play'
+      ]
+    };
+  }
+  render() {
+    let renderDom = this.state.tabs.map((item, index) => {
+      return (
+        <TabPane tab={item} key={index}>
+          {index}
+        </TabPane>
+      )
+    })
+    return (
+      <Layout>
+        <Layout>
+          <Header className="header">
+            <CustomHeader />
+          </Header>
+          <Content style={{ padding: '0 20px', minHeight: 500 }}>
+            <Tabs defaultActiveKey="0" onChange={callback}>
+              {renderDom}
+            </Tabs>
+          </Content>
+        </Layout>
+      </Layout>
+    )
+  }
+}
