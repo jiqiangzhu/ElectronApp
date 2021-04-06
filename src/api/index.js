@@ -1,11 +1,5 @@
 import axios from 'axios';
 
-
-function getUserInfor() {
-    return axios.get("http://api.blairq.top/")
-}
-
-
-export {
-    getUserInfor
+export async function getUserInfor() {
+    return await axios.get('/user/details');
 }

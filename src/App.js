@@ -1,4 +1,4 @@
-import { Layout, Tabs, Button } from 'antd';
+import { Layout, Tabs, Button, Skeleton } from 'antd';
 import './App.less';
 import React from 'react';
 import { CustomHeader } from './components/header';
@@ -21,8 +21,19 @@ export default class App extends React.Component {
         '直播',
         '探索',
         '手机Play'
-      ]
+      ],
+      loadingFlag: true
     };
+  }
+  changeSize = (e, size) => {
+    console.log("size");
+  }
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        loadingFlag: false
+      })
+    }, 2000)
   }
   render() {
     let renderDom = this.state.tabs.map((item, index) => {
@@ -32,20 +43,23 @@ export default class App extends React.Component {
         </TabPane>
       )
     })
+
     return (
-      <Layout className="main-content">
-        <Layout>
-          <Header className="header webkit-drag">
-            <CustomHeader />
-          </Header>
-          <Content style={{ padding: '0 20px', minHeight: 500 }}>
-            <Tabs defaultActiveKey="0" onChange={callback}>
-              {renderDom}
-            </Tabs>
-            <Button onClick={clickTab}>确定</Button>
-          </Content>
+      <Skeleton active loading={this.state.loadingFlag} rows={20}>
+        <Layout className="main-content">
+          <Layout>
+            <Header className="header webkit-drag" onDoubleClick={(e) => { this.changeSize(e, "max") }}>
+              <CustomHeader />
+            </Header>
+            <Content style={{ padding: '0 20px', minHeight: 500 }}>
+              <Tabs defaultActiveKey="0" onChange={callback}>
+                {renderDom}
+              </Tabs>
+              <Button onClick={clickTab}>确定</Button>
+            </Content>
+          </Layout>
         </Layout>
-      </Layout>
+      </Skeleton>
     )
   }
 }
