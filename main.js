@@ -52,6 +52,7 @@ app.on('ready', () => {
   mainWindow = new BrowserWindow({
     width: 1024,
     height: 680,
+    transparent: true,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,

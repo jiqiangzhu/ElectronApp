@@ -1,4 +1,4 @@
-import { Row, Col, Input, Space, Tooltip, Image } from 'antd';
+import { Row, Col, Input, Space, Tooltip, Image, Slider, Dropdown } from 'antd';
 import React from 'react';
 import './index.less';
 import '../../App.less';
@@ -12,12 +12,17 @@ import {
     BorderOutlined,
     PushpinOutlined,
     HourglassOutlined,
+    AudioOutlined,
+    SkinOutlined,
     LeftOutlined
 } from '@ant-design/icons';
 
 const { Search } = Input;
 
-const onSearch = value => console.log(value);
+const onSearch = (value) => {
+    console.log(value);
+
+}
 
 // const routes = [
 //     {
@@ -33,10 +38,6 @@ const onSearch = value => console.log(value);
 //         breadcrumbName: 'Third-level Menu',
 //     },
 // ];
-// const { ipcRenderer } = require("electron");
-// const {ipcRenderer} = electron;
-
-// Renderer Process
 
 const { ipcRenderer } = window.require('electron')
 
@@ -44,9 +45,10 @@ class Header extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showMinOrMax: "normal",
+            showMinOrMax: "maximize",
             fixedTopFlag: "fixedOnTop",
-            nickname: ""
+            nickname: "",
+            value: 0
         }
     }
     async componentDidMount() {
@@ -78,9 +80,7 @@ class Header extends React.Component {
             }
         }
     }
-
     render() {
-
         return (
             <>
                 <Row className="site-page-header" align="middle">
@@ -89,9 +89,16 @@ class Header extends React.Component {
                             <Image width={40} src={imgPath} className="padding-top5 border-radius-5" />
                             <label className="my-font">{this.state.nickname}</label>
                         </Space>
-                        <Space className="flex-type flex-justify-end">
-                            <ReloadOutlined className="webkit-no-drag" />
-                            <LeftOutlined className="webkit-no-drag" />
+                        <Space className="flex-type flex-justify-end" size={10}>
+                            <Tooltip title="刷新" defaultVisible={false} placement="left" color="transparent">
+                                <ReloadOutlined className="webkit-no-drag" />
+                            </Tooltip>
+                            <Tooltip title="返回" defaultVisible={false} placement="bottom" color="transparent">
+                                <LeftOutlined className="webkit-no-drag" />
+                            </Tooltip>
+                            <Tooltip title="听歌识曲" defaultVisible={false} color="transparent">
+                                <AudioOutlined className="webkit-no-drag" />
+                            </Tooltip>
                         </Space>
                     </Col>
                     <Col offset={1} span={8} className="flex-type">
@@ -99,15 +106,16 @@ class Header extends React.Component {
                     </Col>
                     <Col span={8}>
                         <Space className="flex-type flex-justify-end">
-
+                            <SetOpacityCom changeOpacity={(value) => this.props.changeOpacity(value)} />
+                            {/* <SkinOutlined onClick={(e) => { this.changeOpacity(e) }} className="webkit-no-drag" /> */}
                             <TopByPropsCom renderCom={this.state.fixedTopFlag} onClick={(e) => { this.changeWindowSize(e, this.state.fixedTopFlag) }} />
-                            <Tooltip title="最小化窗口" defaultVisible={false} color="transparent">
-                                <MinusOutlined onClick={(e) => this.changeWindowSize(e, "minimize")} className="webkit-no-drag" />
-                            </Tooltip>
+                            {/* <Tooltip title="最小化" defaultVisible={false} color="transparent"> */}
+                            <MinusOutlined onClick={(e) => this.changeWindowSize(e, "minimize")} className="webkit-no-drag" />
+                            {/* </Tooltip> */}
                             <ShowMaxOrMinCom showWhat={this.state.showMinOrMax} onClick={(e) => this.changeWindowSize(e, this.state.showMinOrMax)} />
-                            <Tooltip title="退出" defaultVisible={false} color="transparent">
-                                <CloseOutlined onClick={(e) => this.changeWindowSize(e, "close")} className="webkit-no-drag" />
-                            </Tooltip>
+                            {/* <Tooltip title="退出" defaultVisible={false} color="transparent"> */}
+                            <CloseOutlined onClick={(e) => this.changeWindowSize(e, "close")} className="webkit-no-drag" />
+                            {/* </Tooltip> */}
                         </Space>
                     </Col>
                 </Row>
@@ -116,23 +124,57 @@ class Header extends React.Component {
     }
 }
 
+/**
+ * 设置窗口透明度
+ * @param {*} props 
+ * @returns 
+ */
+function SetOpacityCom(props) {
+    const style = {
+        display: 'inline-block',
+        height: 300,
+        marginLeft: 70,
+    };
+    const menu = (
+        <div style={style}>
+            <Slider vertical max={1} step={0.1} className="mySliderStyle" defaultValue={0.4} onChange={(value) => props.changeOpacity(value)} />
+        </div>
+    );
+    return (
+        <Dropdown overlay={menu} trigger={['click']} placement='topCenter'>
+            <SkinOutlined className="webkit-no-drag" />
+        </Dropdown>
+    )
+}
+
+/**
+ * 设置窗口最大最小化
+ * @param {*} props 
+ * @returns 
+ */
 function ShowMaxOrMinCom(props) {
     if (props.showWhat === "normal") {
         return (
-            <Tooltip title="最大化" trigger="hover" color="transparent">
-                <BorderOutlined onClick={props.onClick} className="webkit-no-drag" />
-            </Tooltip>
+            // <Tooltip title="最大化" trigger="hover" color="transparent">
+            <BorderOutlined onClick={props.onClick} className="webkit-no-drag" />
+            // </Tooltip>
         )
     } else if ((props.showWhat === "maximize")) {
         return (
-            <Tooltip title="恢复" trigger="hover" color="transparent">
-                <ExpandOutlined onClick={props.onClick} className="webkit-no-drag" />
-            </Tooltip>
+            // <Tooltip title="恢复" trigger="hover" color="transparent">
+            <ExpandOutlined onClick={props.onClick} className="webkit-no-drag" />
+            // </Tooltip>
         )
 
     }
 
 }
+
+/**
+ * 设置是否固定在最上方
+ * @param {*} props 
+ * @returns 
+ */
 function TopByPropsCom(props) {
     if (props.renderCom === "cancelOnTop") {
         return (
