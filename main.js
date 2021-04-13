@@ -19,6 +19,7 @@ ipcMain.on("changeWinSize", (event, args) => { //自定义改变窗口大小
         mainWindow.maximize();
         break;
       case "minimize": //最小化
+      
         if (mainWindow.isMinimized()) {
           return;
         }

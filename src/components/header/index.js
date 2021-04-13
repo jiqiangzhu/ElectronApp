@@ -24,21 +24,6 @@ const onSearch = (value) => {
 
 }
 
-// const routes = [
-//     {
-//         path: 'index',
-//         breadcrumbName: 'First-level Menu',
-//     },
-//     {
-//         path: 'first',
-//         breadcrumbName: 'Second-level Menu',
-//     },
-//     {
-//         path: 'second',
-//         breadcrumbName: 'Third-level Menu',
-//     },
-// ];
-
 const { ipcRenderer } = window.require('electron')
 
 class Header extends React.Component {
@@ -106,7 +91,7 @@ class Header extends React.Component {
                     </Col>
                     <Col span={8}>
                         <Space className="flex-type flex-justify-end">
-                            <SetOpacityCom changeOpacity={(value) => this.props.changeOpacity(value)} />
+                            <SetOpacityCom defaultValue={this.props.defaultValue} changeOpacity={(value) => this.props.changeOpacity(value)} />
                             {/* <SkinOutlined onClick={(e) => { this.changeOpacity(e) }} className="webkit-no-drag" /> */}
                             <TopByPropsCom renderCom={this.state.fixedTopFlag} onClick={(e) => { this.changeWindowSize(e, this.state.fixedTopFlag) }} />
                             {/* <Tooltip title="最小化" defaultVisible={false} color="transparent"> */}
@@ -137,7 +122,7 @@ function SetOpacityCom(props) {
     };
     const menu = (
         <div style={style}>
-            <Slider vertical max={1} step={0.1} className="mySliderStyle" defaultValue={0.4} onChange={(value) => props.changeOpacity(value)} />
+            <Slider vertical max={1} step={0.1} className="mySliderStyle" defaultValue={props.defaultValue} onChange={(value) => props.changeOpacity(value)} />
         </div>
     );
     return (

@@ -1,17 +1,16 @@
 import React from 'react';
+import { getMusicList } from '../../api';
 
 export default class Home extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            index: props.index
-        }
+    async componentDidMount() {
+        let result = await getMusicList();
+        console.log("获取播放列表---------------", result);
     }
     render() {
 
         return (
             <div>
-               {this.state.index} 
+               {this.props.index}
             </div>
         )
     }

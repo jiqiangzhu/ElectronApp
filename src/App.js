@@ -3,7 +3,7 @@ import './App.less';
 import React from 'react';
 import { CustomHeader } from './components/header';
 import Home from './components/home';
-import SetOpacity from './components/header/SetOpacity';
+// import SetOpacity from './components/header/SetOpacity';
 import {
   UserOutlined,
   SearchOutlined,
@@ -15,6 +15,20 @@ const { Content, Header } = Layout;
 const { TabPane } = Tabs;
 
 function callback(params) {
+  const routes = [
+    {
+      path: '/',
+      breadcrumbName: 'Home',
+    },
+    {
+      path: 'first',
+      breadcrumbName: 'Second-level Menu',
+    },
+    {
+      path: 'second',
+      breadcrumbName: 'Third-level Menu',
+    },
+  ];
 
 }
 function clickTab(e) {
@@ -31,8 +45,10 @@ export default class App extends React.Component {
         '探索',
         '手机Play'
       ],
-      loadingFlag: true
+      loadingFlag: true,
+      opacityVallue: 0
     };
+    this.myRef = React.createRef();
   }
   changeSize = (e, size) => {
     console.log("size");
@@ -43,9 +59,15 @@ export default class App extends React.Component {
         loadingFlag: false
       })
     }, 200)
+
+    // 设置透明度
+    if (localStorage.opacityVallue && localStorage.opacityVallue !== "0") {
+      this.changeOpacity(localStorage.opacityVallue * 1);
+    }
   }
   changeOpacity = (value) => {
     document.body.style.background = `rgba(46,103,156, ${value})`;
+    localStorage.opacityVallue = value
   }
   render() {
     let renderDom = this.state.tabs.map((item, index) => {
@@ -82,13 +104,13 @@ export default class App extends React.Component {
         <Layout className="main-content">
           <Layout>
             <Header className="header webkit-no-drag" onDoubleClick={(e) => { this.changeSize(e, "max") }}>
-              <CustomHeader changeOpacity={(value) => { this.changeOpacity(value) }} />
+              <CustomHeader defaultValue={localStorage.opacityVallue * 1} changeOpacity={(value) => { this.changeOpacity(value) }} />
             </Header>
             <Content style={{ padding: '15px 20px', minHeight: 500 }}>
               <Tabs defaultActiveKey="0" onChange={callback}>
                 {renderDom}
               </Tabs>
-              <SetOpacity />
+              {/* <SetOpacity /> */}
               <Button onClick={clickTab}>确定</Button>
             </Content>
           </Layout>
