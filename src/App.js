@@ -3,7 +3,6 @@ import './App.less';
 import React from 'react';
 import { CustomHeader } from './components/header';
 import Home from './components/home';
-// import SetOpacity from './components/header/SetOpacity';
 import {
   UserOutlined,
   SearchOutlined,
@@ -29,7 +28,7 @@ function callback(params) {
       breadcrumbName: 'Third-level Menu',
     },
   ];
-
+  return routes;
 }
 function clickTab(e) {
   console.log("e", e);
@@ -110,7 +109,6 @@ export default class App extends React.Component {
               <Tabs defaultActiveKey="0" onChange={callback}>
                 {renderDom}
               </Tabs>
-              {/* <SetOpacity /> */}
               <Button onClick={clickTab}>确定</Button>
             </Content>
           </Layout>

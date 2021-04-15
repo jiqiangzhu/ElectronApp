@@ -4,10 +4,13 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './mock/index';
+// import Router from './router/index';
 
 ReactDOM.render(
   // <React.StrictMode>
+  // <Router>
     <App />,
+  // </Router>,
   // </React.StrictMode>,
   document.getElementById('root')
 );
