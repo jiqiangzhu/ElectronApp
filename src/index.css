@@ -11,17 +11,8 @@ code {
     monospace;
 }
 #root {
-  background-image: url(./assets/img/logo.png);
+  background-image: url(./assets/img/logo.gif);
   background-position: right bottom;
   background-repeat: no-repeat;
   background-size: 350px auto;
-}
-@font-face {
-  font-family: 'iconfont';  /* project id 2494622 */
-  src: url('//at.alicdn.com/t/font_2494622_9x2ujfbisz.eot');
-  src: url('//at.alicdn.com/t/font_2494622_9x2ujfbisz.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_2494622_9x2ujfbisz.woff2') format('woff2'),
-  url('//at.alicdn.com/t/font_2494622_9x2ujfbisz.woff') format('woff'),
-  url('//at.alicdn.com/t/font_2494622_9x2ujfbisz.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_2494622_9x2ujfbisz.svg#iconfont') format('svg');
 }
