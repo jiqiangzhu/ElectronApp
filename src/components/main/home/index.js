@@ -4,17 +4,15 @@ import { getMusicList } from '../../../api';
 import { Menu } from 'antd';
 import { createFromIconfontCN } from '@ant-design/icons';
 
-const IconFont = createFromIconfontCN({
-    scriptUrl: [
-        '//at.alicdn.com/t/font_2494622_9x2ujfbisz.js'
-    ],
-});
+
+const IconFont = createFromIconfontCN();
 
 export default class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            memuItem: ['我的收藏', '我的电台', '本地与下载', '音乐云盘', '最近播放', '默认列表']
+            memuItem: ['我的收藏', '我的电台', '本地与下载', '音乐云盘', '最近播放', '默认列表'],
+            rightContent: ''
         }
     }
     async componentDidMount() {
