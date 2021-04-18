@@ -3,32 +3,38 @@ import './App.less';
 import React from 'react';
 import { CustomHeader } from './components/header';
 import Home from './components/home';
+import Detail from './components/detail';
 import {
   UserOutlined,
   SearchOutlined,
-  StarOutlined,
-
+  StarOutlined
 }
   from '@ant-design/icons';
+import { Route, Link, Switch } from 'react-router-dom'
 const { Content, Header } = Layout;
 const { TabPane } = Tabs;
 
 function callback(params) {
-  const routes = [
-    {
-      path: '/',
-      breadcrumbName: 'Home',
-    },
-    {
-      path: 'first',
-      breadcrumbName: 'Second-level Menu',
-    },
-    {
-      path: 'second',
-      breadcrumbName: 'Third-level Menu',
-    },
-  ];
-  return routes;
+  switch (params) {
+    case '0':
+      console.log("我的音乐页  home")
+      break;
+    case '1':
+      console.log("发现页  find")
+      break;
+    case '2':
+      console.log("直播页  live")
+      break;
+    case '3':
+      console.log("探索页  search")
+      break;
+    case '4':
+      console.log("手机Play页  mobile play")
+      break;
+    default:
+      break;
+  }
+  console.log(params)
 }
 function clickTab(e) {
   console.log("e", e);
@@ -47,7 +53,6 @@ export default class App extends React.Component {
       loadingFlag: true,
       opacityVallue: 0
     };
-    this.myRef = React.createRef();
   }
   changeSize = (e, size) => {
     console.log("size");
@@ -92,8 +97,13 @@ export default class App extends React.Component {
             {item}
           </span>
         } key={index} onClick={clickTab}>
-          {index + item}
-          <Home index={index} />
+          {/* <Link to='/home'>Home</Link>
+          <br />
+          <Link to='/detail'>Detail</Link>
+          <Switch>
+            <Route path='/detail' component={Detail} />
+            <Route path='/home' component={Home} />
+          </Switch> */}
         </TabPane>
       )
     })
@@ -106,7 +116,7 @@ export default class App extends React.Component {
               <CustomHeader defaultValue={localStorage.opacityVallue * 1} changeOpacity={(value) => { this.changeOpacity(value) }} />
             </Header>
             <Content style={{ padding: '15px 20px', minHeight: 500 }}>
-              <Tabs defaultActiveKey="0" onChange={callback}>
+              <Tabs defaultActiveKey="0" onChange={(params) => callback(params)}>
                 {renderDom}
               </Tabs>
               <Button onClick={clickTab}>确定</Button>

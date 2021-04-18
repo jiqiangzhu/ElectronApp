@@ -10,7 +10,7 @@ export default class Home extends React.Component {
 
         return (
             <div>
-               {this.props.index}
+               Home页面
             </div>
         )
     }

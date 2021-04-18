@@ -1,10 +1,10 @@
 import React from 'react';
-import {HashRouter, Route, Switch, hashHistory} from 'react-router-dom';
+import {HashRouter, Route, Switch} from 'react-router-dom';
 import Home from '../components/home';
 
 
 const BasicRoute = () => (
-    <HashRouter history={hashHistory}>
+    <HashRouter>
         <Switch>
             <Route exact path="/" component={Home}/>
         </Switch>

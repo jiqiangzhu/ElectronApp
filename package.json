@@ -1,5 +1,5 @@
 {
-  "name": "react-demo2",
+  "name": "electron-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
