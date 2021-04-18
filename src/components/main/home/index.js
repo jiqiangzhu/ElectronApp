@@ -1,0 +1,69 @@
+import React from 'react';
+import './index.less'
+import { getMusicList } from '../../../api';
+import { Menu } from 'antd';
+import { createFromIconfontCN } from '@ant-design/icons';
+
+const IconFont = createFromIconfontCN({
+    scriptUrl: [
+        '//at.alicdn.com/t/font_2494622_9x2ujfbisz.js'
+    ],
+});
+
+export default class Home extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            memuItem: ['我的收藏', '我的电台', '本地与下载', '音乐云盘', '最近播放', '默认列表']
+        }
+    }
+    async componentDidMount() {
+        let result = await getMusicList();
+        console.log("获取播放列表---------------", result);
+    }
+    chooseItem = (e, index)=>{
+        console.log(index)
+    }
+    render() {
+        const menuItemList = this.state.memuItem.map((item, index) => {
+            let iconItem;
+            switch (index) {
+                case 0:
+                    iconItem = <IconFont type="icon-ziyuan" />
+                    break;
+                case 1:
+                    iconItem = <IconFont type="icon-diantai" />
+                    break;
+                case 2:
+                    iconItem = <IconFont type="icon-icon_huabanfuben" />
+                    break;
+                case 3:
+                    iconItem = <IconFont type="icon-yunpan" />
+                    break;
+                case 4:
+                    iconItem = <IconFont type="icon-zuijinchangyong" />
+                    break;
+                case 5:
+                    iconItem = <IconFont type="icon-yinleliebiao-" />
+                    break;
+                default:
+                    break;
+            }
+            return (
+                <Menu.Item key={index} onClick={(e)=>{this.chooseItem(e, index)}} icon={iconItem}>
+                    {item}
+                </Menu.Item>
+            )
+        })
+        return (
+            <div className="home-main">
+                <Menu
+                    style={{ width: 173 }}
+                    defaultSelectedKeys={['1']}
+                >
+                    {menuItemList}
+                </Menu>
+            </div>
+        )
+    }
+}

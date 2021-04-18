@@ -30,7 +30,7 @@ class Header extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showMinOrMax: "maximize",
+            showMinOrMax: "normal",
             fixedTopFlag: "fixedOnTop",
             nickname: "",
             value: 0
@@ -75,15 +75,15 @@ class Header extends React.Component {
                             <label className="my-font">{this.state.nickname}</label>
                         </Space>
                         <Space className="flex-type flex-justify-end" size={10}>
-                            <Tooltip title="刷新" defaultVisible={false} placement="left" color="transparent">
-                                <ReloadOutlined className="webkit-no-drag" />
-                            </Tooltip>
-                            <Tooltip title="返回" defaultVisible={false} placement="bottom" color="transparent">
-                                <LeftOutlined className="webkit-no-drag" />
-                            </Tooltip>
-                            <Tooltip title="听歌识曲" defaultVisible={false} color="transparent">
-                                <AudioOutlined className="webkit-no-drag" />
-                            </Tooltip>
+                            {/* <Tooltip title="刷新" autoAdjustOverflow={false} defaultVisible={false} placement="left" color="transparent"> */}
+                            <ReloadOutlined className="webkit-no-drag" />
+                            {/* </Tooltip> */}
+                            {/* <Tooltip title="返回" defaultVisible={false} placement="bottom" color="transparent"> */}
+                            <LeftOutlined className="webkit-no-drag" />
+                            {/* </Tooltip> */}
+                            {/* <Tooltip title="听歌识曲" defaultVisible={false} color="transparent"> */}
+                            <AudioOutlined className="webkit-no-drag" />
+                            {/* </Tooltip> */}
                         </Space>
                     </Col>
                     <Col offset={1} span={8} className="flex-type">
@@ -138,17 +138,13 @@ function SetOpacityCom(props) {
  * @returns 
  */
 function ShowMaxOrMinCom(props) {
-    if (props.showWhat === "normal") {
+    if (props.showWhat === "maximize") {
         return (
-            // <Tooltip title="最大化" trigger="hover" color="transparent">
-            <BorderOutlined onClick={props.onClick} className="webkit-no-drag" />
-            // </Tooltip>
-        )
-    } else if ((props.showWhat === "maximize")) {
-        return (
-            // <Tooltip title="恢复" trigger="hover" color="transparent">
             <ExpandOutlined onClick={props.onClick} className="webkit-no-drag" />
-            // </Tooltip>
+        )
+    } else if ((props.showWhat === "normal")) {
+        return (
+            <BorderOutlined onClick={props.onClick} className="webkit-no-drag" />
         )
 
     }

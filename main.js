@@ -12,14 +12,13 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 ipcMain.on("changeWinSize", (event, args) => { //自定义改变窗口大小
   if (mainWindow) {
     switch (args) {
-      case "maximize": //最大化
-        if (mainWindow.isMaximized()) {
-          return;
-        }
-        mainWindow.maximize();
+      case "maximize": //当前是最大化，转为normal
+        // if (mainWindow.isMaximized()) {
+          mainWindow.setContentSize(1024, 680);
+          mainWindow.center();
+        // }
         break;
       case "minimize": //最小化
-      
         if (mainWindow.isMinimized()) {
           return;
         }
@@ -28,9 +27,13 @@ ipcMain.on("changeWinSize", (event, args) => { //自定义改变窗口大小
       case "close": //关闭
         mainWindow.close();
         break;
-      case "normal": //恢复默认
-        mainWindow.setContentSize(1024, 680);
-        mainWindow.center();
+      case "normal": //当前为默认，转为最大化
+        // mainWindow.setContentSize(1024, 680);
+        // mainWindow.center();
+        if (mainWindow.isMaximized()) {
+          return;
+        }
+        mainWindow.maximize();
         break;
       case "fixedOnTop":
         if (!mainWindow.isAlwaysOnTop()) {
