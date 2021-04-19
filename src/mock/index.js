@@ -28,7 +28,7 @@ Mock.mock(
                 "remarkName": null,
                 "authStatus": 0,
                 "nickname": "你管他那么多嘞",
-                "avatarUrl": "../../assets/img/avatar.jpg",
+                "avatarUrl": "avatar.jpg",
                 "detailDescription": "",
                 "experts": {},
                 "expertTags": null,

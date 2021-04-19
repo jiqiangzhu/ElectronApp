@@ -1,6 +1,5 @@
 import React from 'react';
 import './index.less'
-import { getMusicList } from '../../../api';
 import { Menu } from 'antd';
 import { createFromIconfontCN } from '@ant-design/icons';
 
@@ -11,17 +10,10 @@ export default class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            memuItem: ['我的收藏', '我的电台', '本地与下载', '音乐云盘', '最近播放', '默认列表'],
-            rightContent: ''
+            memuItem: ['我的收藏', '我的电台', '本地与下载', '音乐云盘', '最近播放', '默认列表']
         }
     }
-    async componentDidMount() {
-        let result = await getMusicList();
-        console.log("获取播放列表---------------", result);
-    }
-    chooseItem = (e, index)=>{
-        console.log(index)
-    }
+
     render() {
         const menuItemList = this.state.memuItem.map((item, index) => {
             let iconItem;
@@ -45,23 +37,24 @@ export default class Home extends React.Component {
                     iconItem = <IconFont type="icon-yinleliebiao-" />
                     break;
                 default:
+                    iconItem = <IconFont type="con-youxiang" />
                     break;
             }
             return (
-                <Menu.Item key={index} onClick={(e)=>{this.chooseItem(e, index)}} icon={iconItem}>
+                <Menu.Item key={index} onClick={(e)=>{this.props.onClick(e, index)}} icon={iconItem}>
                     {item}
                 </Menu.Item>
             )
         })
         return (
-            <div className="home-main">
+            <>
                 <Menu
                     style={{ width: 173 }}
-                    defaultSelectedKeys={['1']}
+                    defaultSelectedKeys={['2']}
                 >
                     {menuItemList}
                 </Menu>
-            </div>
+            </>
         )
     }
 }

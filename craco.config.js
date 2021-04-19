@@ -17,7 +17,15 @@ module.exports = {
                             '@menu-inline-submenu-bg': 'transparent',
                             '@text-color': '#FFFFFF',
                             '@layout-header-height': '40px',
-                            '@menu-item-active-bg': '#4B6E8F'
+                            '@menu-item-active-bg': '#4B6E8F',
+                            '@page-header-back-color': '#fff;',
+                            '@table-bg': 'transparent',
+                            '@table-header-bg': 'transparent',
+                            '@table-header-sort-bg': 'transparent',
+                            '@table-body-sort-bg': 'transparent',
+                            '@table-row-hover-bg': 'transparent',
+                            '@table-selected-row-color': 'transparent',
+                            '@table-selected-row-bg': 'transparent'
                         },
                         javascriptEnabled: true,
                     },

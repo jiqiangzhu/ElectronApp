@@ -1,15 +1,15 @@
 import { Layout, Tabs, Skeleton } from 'antd';
 import './App.less';
+import { getMusicList } from './api';
 import React from 'react';
 import { CustomHeader } from './components/header';
-import {LiveCom, DiscoveryCom, Home, MobilePlayCom, ExploreCom} from './components/main';
+import { LiveCom, DiscoveryCom, Home, MobilePlayCom, ExploreCom, LocalDownloadCom } from './components/main';
 import {
   UserOutlined,
   SearchOutlined,
   StarOutlined
 }
   from '@ant-design/icons';
-// import { Route, Link, Switch } from 'react-router-dom';
 const { Content, Header } = Layout;
 const { TabPane } = Tabs;
 
@@ -25,36 +25,84 @@ export default class App extends React.Component {
         '手机Play'
       ],
       loadingFlag: true,
-      opacityVallue: 0
+      opacityVallue: 0,
+      rightContent: ""
     };
   }
 
-  componentDidMount() {
-    setTimeout(() => {
+  async componentDidMount() {
+    setTimeout(async () => {
       this.setState({
         loadingFlag: false
       })
+      let result = await getMusicList();
+      console.log("获取播放列表---------------", result);
     }, 200)
 
     // 设置透明度
     if (localStorage.opacityVallue && localStorage.opacityVallue !== "0") {
       this.changeOpacity(localStorage.opacityVallue * 1);
     }
+    this.chooseItem(2)
   }
 
   changeOpacity = (value) => {
+    console.log("value----------",value)
     document.body.style.background = `rgba(46,103,156, ${value})`;
     localStorage.opacityVallue = value;
   }
-
+  chooseItem = (index) => {
+    console.log(index)
+    switch (index) {
+      case 0:
+        this.setState({
+          rightContent: "我的收藏"
+        })
+        break;
+      case 1:
+        this.setState({
+          rightContent: "我的电台"
+        })
+        break;
+      case 2:
+        this.setState({
+          rightContent: <LocalDownloadCom />
+        })
+        break;
+      case 3:
+        this.setState({
+          rightContent: "音乐云盘"
+        })
+        break;
+      case 4:
+        this.setState({
+          rightContent: "最近播放"
+        })
+        break;
+      case 5:
+        this.setState({
+          rightContent: "默认列表"
+        })
+        break;
+      default:
+        this.setState({
+          rightContent: "本地与下载"
+        })
+        break;
+    }
+  }
   render() {
     let renderDom = this.state.tabs.map((item, index) => {
       let nodeItem,
-          rendertab;
+        rendertab;
       switch (index) {
         case 0:
           nodeItem = <UserOutlined />
-          rendertab = <Home />
+          rendertab = <div className="flex-type">
+            <Home onClick={(e, index) => this.chooseItem(index)} />
+            {this.state.rightContent}
+          </div>
+
           break;
         case 1:
           nodeItem = <SearchOutlined />
@@ -85,6 +133,7 @@ export default class App extends React.Component {
           </span>
         } key={index} onClick={clickTab}>
           {rendertab}
+
         </TabPane>
       )
     })
@@ -100,6 +149,7 @@ export default class App extends React.Component {
               <Tabs defaultActiveKey="0" onChange={(params) => callback(params)}>
                 {renderDom}
               </Tabs>
+
             </Content>
           </Layout>
         </Layout>

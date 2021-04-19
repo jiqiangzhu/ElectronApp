@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, globalShortcut } = require('electron');
 const isDev = require('electron-is-dev')
 let mainWindow;
 let mainWindowId;
@@ -14,8 +14,8 @@ ipcMain.on("changeWinSize", (event, args) => { //自定义改变窗口大小
     switch (args) {
       case "maximize": //当前是最大化，转为normal
         // if (mainWindow.isMaximized()) {
-          mainWindow.setContentSize(1024, 680);
-          mainWindow.center();
+        mainWindow.setContentSize(1024, 680);
+        mainWindow.center();
         // }
         break;
       case "minimize": //最小化
@@ -61,16 +61,28 @@ app.on('ready', () => {
       nodeIntegration: true,
       enableRemoteModule: true,
       contextIsolation: false,
+      webSecurity: false,
     },
     titleBarStyle: 'customButtonsOnHover',
     frame: false,
-    resizable: false
+    resizable: false,
   })
 
   mainWindow.setMenu(null);
   const urlLocation = isDev ? 'http://localhost:3000' : 'dummyurl';
   mainWindow.loadURL(urlLocation);
-  mainWindow.webContents.openDevTools();
-
-
 })
+
+if (isDev) { // 开发者工具
+  app.whenReady().then(() => {
+    const ret = globalShortcut.register('Alt+F12', () => {
+      mainWindow.webContents.openDevTools();
+    })
+
+    if (!ret) {
+      console.log('registration failed')
+    }
+
+    console.log(globalShortcut.isRegistered('Alt+F12'))
+  })
+}

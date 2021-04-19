@@ -2,7 +2,6 @@ import { Row, Col, Input, Space, Tooltip, Image, Slider, Dropdown } from 'antd';
 import React from 'react';
 import './index.less';
 import '../../App.less';
-import imgPath from '../../assets/img/avatar.jpg';
 import { getUserInfor } from '../../api/index'
 import {
     MinusOutlined,
@@ -17,6 +16,7 @@ import {
     LeftOutlined
 } from '@ant-design/icons';
 
+import imgPath from '../../assets/img/avatar.jpg';
 const { Search } = Input;
 
 const onSearch = (value) => {
@@ -33,14 +33,16 @@ class Header extends React.Component {
             showMinOrMax: "normal",
             fixedTopFlag: "fixedOnTop",
             nickname: "",
-            value: 0
+            value: 0,
+            imgPath: ''
         }
     }
     async componentDidMount() {
         let result = await getUserInfor();
         console.log("获取用户个人信息-------------", result);
         this.setState({
-            nickname: result.data.profile.nickname
+            nickname: result.data.profile.nickname,
+            imgPath: result.data.profile.avatarUrl
         })
     }
     changeWindowSize = (e, todo) => {
@@ -66,6 +68,7 @@ class Header extends React.Component {
         }
     }
     render() {
+        // const imgpath = require(`../../assets/img/${this.state.imgPath}`)
         return (
             <>
                 <Row className="site-page-header" align="middle">
@@ -172,6 +175,8 @@ function TopByPropsCom(props) {
     }
 
 }
+
+
 export {
     Header as CustomHeader
 }
