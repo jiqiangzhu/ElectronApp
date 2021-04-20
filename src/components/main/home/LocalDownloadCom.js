@@ -1,13 +1,20 @@
 import React from 'react';
 import { Layout, Button, Table, Tag } from 'antd'
 import './index.less';
-import { CaretRightOutlined } from '@ant-design/icons';
+import { CaretRightOutlined, createFromIconfontCN } from '@ant-design/icons';
 import { Row, Col, Space } from 'antd';
 
-// const IconFont = createFromIconfontCN();
+const IconFont = createFromIconfontCN();
 const { Content, Header } = Layout;
 
 export default class LocalDownloadCom extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            columns: [],
+            data: []
+        }
+    }
     render() {
         return (
             <Layout>
@@ -18,15 +25,20 @@ export default class LocalDownloadCom extends React.Component {
                     <>
                         <Row align="middle">
 
-                            <Space size={10}>
+                            <Space size={16}>
                                 <Col span={12}>
                                     <Button className="play-button" icon={<CaretRightOutlined />}>
-                                        播放
+                                        全部播放
                                     </Button>
                                 </Col>
                                 <Col span={12}>
-                                    <Button icon={<CaretRightOutlined />}>
+                                    <Button>
                                         批量选择
+                                    </Button>
+                                </Col>
+                                <Col span={12}>
+                                    <Button icon={<IconFont type='icon-yunpan' />}>
+                                        本地导入
                                     </Button>
                                 </Col>
                             </Space>

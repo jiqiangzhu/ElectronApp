@@ -3,7 +3,6 @@ import './index.less'
 import { Menu } from 'antd';
 import { createFromIconfontCN } from '@ant-design/icons';
 
-
 const IconFont = createFromIconfontCN();
 
 export default class Home extends React.Component {
