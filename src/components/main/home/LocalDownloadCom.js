@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Button, Table, Tag } from 'antd'
+import { Layout, Button, Table, Tag } from 'antd';
 import './index.less';
 import { CaretRightOutlined, createFromIconfontCN } from '@ant-design/icons';
 import { Row, Col, Space } from 'antd';
@@ -44,6 +44,7 @@ export default class LocalDownloadCom extends React.Component {
                             </Space>
                         </Row>
                         <Table columns={columns} dataSource={data} />
+                        
                     </>
                 </Content>
             </Layout>
@@ -56,6 +57,7 @@ const columns = [
         title: '歌曲名',
         dataIndex: 'name',
         key: 'name',
+        width: 200,
         render: text => <span>{text}</span>,
     },
     {

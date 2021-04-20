@@ -3,6 +3,7 @@ import './App.less';
 import { getMusicList } from './api';
 import React from 'react';
 import { CustomHeader } from './components/header';
+import FooterCom from './components/footer';
 import { LiveCom, DiscoveryCom, Home, MobilePlayCom, ExploreCom, LocalDownloadCom } from './components/main';
 import {
   UserOutlined,
@@ -10,7 +11,7 @@ import {
   StarOutlined
 }
   from '@ant-design/icons';
-const { Content, Header } = Layout;
+const { Content, Header, Footer } = Layout;
 const { TabPane } = Tabs;
 
 export default class App extends React.Component {
@@ -47,7 +48,7 @@ export default class App extends React.Component {
   }
 
   changeOpacity = (value) => {
-    console.log("value----------",value)
+    console.log("opacity value---0~1-------", value)
     document.body.style.background = `rgba(46,103,156, ${value})`;
     localStorage.opacityVallue = value;
   }
@@ -91,6 +92,9 @@ export default class App extends React.Component {
         break;
     }
   }
+  playMusic = (index) => {
+    console.log("music index------------", index)
+  }
   render() {
     let renderDom = this.state.tabs.map((item, index) => {
       let nodeItem,
@@ -98,7 +102,7 @@ export default class App extends React.Component {
       switch (index) {
         case 0:
           nodeItem = <UserOutlined />
-          rendertab = <div className="flex-type">
+          rendertab = <div className="flex-type full">
             <Home onClick={(e, index) => this.chooseItem(index)} />
             {this.state.rightContent}
           </div>
@@ -141,17 +145,20 @@ export default class App extends React.Component {
     return (
       <Skeleton active loading={this.state.loadingFlag} rows={20}>
         <Layout className="main-content">
-          <Layout>
-            <Header className="header webkit-no-drag">
-              <CustomHeader defaultValue={localStorage.opacityVallue * 1} changeOpacity={(value) => { this.changeOpacity(value) }} />
-            </Header>
-            <Content style={{ padding: '15px 20px', minHeight: 500 }}>
-              <Tabs defaultActiveKey="0" onChange={(params) => callback(params)}>
-                {renderDom}
-              </Tabs>
+          {/* <Layout> */}
+          <Header className="header webkit-no-drag" style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+            <CustomHeader defaultValue={localStorage.opacityVallue * 1} changeOpacity={(value) => { this.changeOpacity(value) }} />
+          </Header>
+          <Content style={{ padding: '50px 20px 15px', minHeight: 500 }}>
+            <Tabs defaultActiveKey="0" onChange={(params) => callback(params)}>
+              {renderDom}
+            </Tabs>
 
-            </Content>
-          </Layout>
+          </Content>
+          <Footer style={{ textAlign: 'center', lineHeight: '72px' }}>
+            <FooterCom playMusic={(i) => this.playMusic(i)} />
+          </Footer>
+          {/* </Layout> */}
         </Layout>
       </Skeleton>
     )
