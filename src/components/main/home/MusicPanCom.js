@@ -3,11 +3,11 @@ import { Layout, Button, Table, Tag } from 'antd';
 import './index.less';
 import { CaretRightOutlined, createFromIconfontCN } from '@ant-design/icons';
 import { Row, Col, Space } from 'antd';
-// import fs from 'fs-extra'
+
 const IconFont = createFromIconfontCN();
 const { Content, Header } = Layout;
 
-export default class LocalDownloadCom extends React.Component {
+export default class MusicPanCom extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -15,14 +15,11 @@ export default class LocalDownloadCom extends React.Component {
             data: []
         }
     }
-    openDialog=()=>{
-        // dialog.showOpenDialog({ properties: ['openFile', 'multiSelections'] })
-    }
     render() {
         return (
             <Layout>
                 <Header className="local-download-header">
-                    本地与下载
+                    音乐云盘
                 </Header>
                 <Content>
                     <>
@@ -40,14 +37,14 @@ export default class LocalDownloadCom extends React.Component {
                                     </Button>
                                 </Col>
                                 <Col span={12}>
-                                    <Button onClick={() => this.openDialog()} icon={<IconFont type='icon-yunpan' />}>
+                                    <Button icon={<IconFont type='icon-yunpan' />}>
                                         本地导入
                                     </Button>
                                 </Col>
                             </Space>
                         </Row>
                         <Table columns={columns} dataSource={data} />
-
+                        
                     </>
                 </Content>
             </Layout>

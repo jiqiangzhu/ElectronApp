@@ -4,7 +4,8 @@ import { getMusicList } from './api';
 import React from 'react';
 import { CustomHeader } from './components/header';
 import FooterCom from './components/footer';
-import { LiveCom, DiscoveryCom, Home, MobilePlayCom, ExploreCom, LocalDownloadCom } from './components/main';
+import { LiveCom, DiscoveryCom, Home, MobilePlayCom, ExploreCom, LocalDownloadCom, DefaultListCom, MusicPanCom, 
+  MyCollectionCom, MyTVCom, RecentlyPlayCom } from './components/main';
 import {
   UserOutlined,
   SearchOutlined,
@@ -57,12 +58,12 @@ export default class App extends React.Component {
     switch (index) {
       case 0:
         this.setState({
-          rightContent: "我的收藏"
+          rightContent: <MyCollectionCom />
         })
         break;
       case 1:
         this.setState({
-          rightContent: "我的电台"
+          rightContent: <MyTVCom />
         })
         break;
       case 2:
@@ -72,22 +73,22 @@ export default class App extends React.Component {
         break;
       case 3:
         this.setState({
-          rightContent: "音乐云盘"
+          rightContent: <MusicPanCom />
         })
         break;
       case 4:
         this.setState({
-          rightContent: "最近播放"
+          rightContent: <RecentlyPlayCom />
         })
         break;
       case 5:
         this.setState({
-          rightContent: "默认列表"
+          rightContent: <DefaultListCom />
         })
         break;
       default:
         this.setState({
-          rightContent: "本地与下载"
+          rightContent: <LocalDownloadCom />
         })
         break;
     }
