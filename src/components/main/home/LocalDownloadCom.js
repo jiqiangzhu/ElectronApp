@@ -3,21 +3,65 @@ import { Layout, Button, Table, Tag } from 'antd';
 import './index.less';
 import { CaretRightOutlined, createFromIconfontCN } from '@ant-design/icons';
 import { Row, Col, Space } from 'antd';
-// import fs from 'fs-extra'
+
 const IconFont = createFromIconfontCN();
 const { Content, Header } = Layout;
+const { ipcRenderer } = window.require('electron')
+const fs = window.require('fs-extra');
 
 export default class LocalDownloadCom extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             columns: [],
-            data: []
+            data: [],
+            defaultMusicPath: localStorage.defaultMusicPath ? localStorage.defaultMusicPath : ""
         }
     }
-    openDialog=()=>{
-        // dialog.showOpenDialog({ properties: ['openFile', 'multiSelections'] })
+    componentDidMount = async () => {
+        if (this.state.defaultMusicPath) {
+            this.readMusicDir(localStorage.defaultMusicPath)
+        }
     }
+    openDialog = async (path = "D:\\programfile\\KuGou") => {
+        await ipcRenderer.send("openFolder", path);
+        ipcRenderer.once('asynchronous-reply', (event, arg) => {
+            console.log(arg)
+            this.readMusicDir(arg.filePaths[0])
+            localStorage.defaultMusicPath = arg.filePaths[0]
+        })
+    }
+    /**
+     * 读取文件夹路径中的所有文件
+     * @param {*} path 
+     */
+    readMusicDir = async (path) => { 
+        fs.readdir(path, (err, files) => {
+            if (err) {
+                console.log(err);
+            } else {
+                let dataarr = [];
+                files.filter((item, index) => {
+                    if (item.indexOf('.mp3') !== -1) {
+                        dataarr.push({
+                            key: index,
+                            name: item,
+                            singer: 32,
+                            album: 'New York No. 1 Lake Park',
+                            time: ['nice', 'developer'],
+                        })
+                        return true;
+                    }
+                    return false;
+                })
+
+                this.setState({
+                    data: dataarr
+                })
+            }
+        })
+    }
+    
     render() {
         return (
             <Layout>
@@ -46,7 +90,7 @@ export default class LocalDownloadCom extends React.Component {
                                 </Col>
                             </Space>
                         </Row>
-                        <Table columns={columns} dataSource={data} />
+                        <Table columns={columns} dataSource={this.state.data} />
 
                     </>
                 </Content>
@@ -65,18 +109,18 @@ const columns = [
     },
     {
         title: '歌手',
-        dataIndex: 'age',
-        key: 'age',
+        dataIndex: 'singer',
+        key: 'singer',
     },
     {
         title: '专辑',
-        dataIndex: 'address',
-        key: 'address',
+        dataIndex: 'album',
+        key: 'album',
     },
     {
         title: '时长',
-        key: 'tags',
-        dataIndex: 'tags',
+        key: 'time',
+        dataIndex: 'time',
         render: tags => (
             <>
                 {tags.map(tag => {
@@ -92,29 +136,5 @@ const columns = [
                 })}
             </>
         ),
-    },
-];
-
-const data = [
-    {
-        key: '1',
-        name: 'John Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-        tags: ['nice', 'developer'],
-    },
-    {
-        key: '2',
-        name: 'Jim Green',
-        age: 42,
-        address: 'London No. 1 Lake Park',
-        tags: ['loser'],
-    },
-    {
-        key: '3',
-        name: 'Joe Black',
-        age: 32,
-        address: 'Sidney No. 1 Lake Park',
-        tags: ['cool', 'teacher'],
     },
 ];

@@ -4,8 +4,10 @@ import { getMusicList } from './api';
 import React from 'react';
 import { CustomHeader } from './components/header';
 import FooterCom from './components/footer';
-import { LiveCom, DiscoveryCom, Home, MobilePlayCom, ExploreCom, LocalDownloadCom, DefaultListCom, MusicPanCom, 
-  MyCollectionCom, MyTVCom, RecentlyPlayCom } from './components/main';
+import {
+  LiveCom, DiscoveryCom, Home, MobilePlayCom, ExploreCom, LocalDownloadCom, DefaultListCom, MusicPanCom,
+  MyCollectionCom, MyTVCom, RecentlyPlayCom
+} from './components/main';
 import {
   UserOutlined,
   SearchOutlined,
@@ -146,20 +148,22 @@ export default class App extends React.Component {
     return (
       <Skeleton active loading={this.state.loadingFlag} rows={20}>
         <Layout className="main-content">
-          {/* <Layout> */}
           <Header className="header webkit-no-drag" style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
             <CustomHeader defaultValue={localStorage.opacityVallue * 1} changeOpacity={(value) => { this.changeOpacity(value) }} />
           </Header>
-          <Content style={{ padding: '50px 20px 15px', minHeight: 500 }}>
-            <Tabs defaultActiveKey="0" onChange={(params) => callback(params)}>
-              {renderDom}
-            </Tabs>
+          <Layout style={{ padding: '50px 20px 15px', minHeight: 500 }}>
+            <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+            </Header>
+            <Content>
+              <Tabs defaultActiveKey="0" onChange={(params) => callback(params)}>
+                {renderDom}
+              </Tabs>
 
-          </Content>
-          <Footer style={{ textAlign: 'center', lineHeight: '72px' }}>
+            </Content>
+          </Layout>
+          <Footer style={{ textAlign: 'center', lineHeight: '72px', position: 'fixed', bottom: 0, width: '100%' }}>
             <FooterCom playMusic={(i) => this.playMusic(i)} />
           </Footer>
-          {/* </Layout> */}
         </Layout>
       </Skeleton>
     )
