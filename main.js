@@ -55,7 +55,9 @@ ipcMain.on("changeWinSize", (event, args) => { //自定义改变窗口大小
 ipcMain.on("openFolder", async (event, args) => { // 打开本地文件夹
   let fileReturn = await dialog.showOpenDialog({ "title": "选择音乐文件夹路径", properties: ['openFile', 'openDirectory', 'showHiddenFiles', 'createDirectory ', 'multiSelections'], defaultPath: args })
   console.log("fileReturn-----------------------", fileReturn)
-  event.reply('asynchronous-reply', fileReturn)
+  if(!fileReturn.canceled) {
+    event.reply('asynchronous-reply', fileReturn)
+  }
 });
 
 app.on('ready', () => {

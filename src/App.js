@@ -5,15 +5,17 @@ import React from 'react';
 import { CustomHeader } from './components/header';
 import FooterCom from './components/footer';
 import {
-  LiveCom, DiscoveryCom, Home, MobilePlayCom, ExploreCom, LocalDownloadCom, DefaultListCom, MusicPanCom,
-  MyCollectionCom, MyTVCom, RecentlyPlayCom
+  LocalDownloadCom, DefaultListCom, MusicPanCom, Home,
+  MyCollectionCom, MyTVCom, RecentlyPlayCom, ExploreCom
 } from './components/main';
+// LiveCom, DiscoveryCom, , MobilePlayCom, ExploreCom,
 import {
   UserOutlined,
   SearchOutlined,
   StarOutlined
 }
   from '@ant-design/icons';
+import Sider from 'antd/lib/layout/Sider';
 const { Content, Header, Footer } = Layout;
 const { TabPane } = Tabs;
 
@@ -30,7 +32,8 @@ export default class App extends React.Component {
       ],
       loadingFlag: true,
       opacityVallue: 0,
-      rightContent: ""
+      rightContent: "",
+      renderContent: ""
     };
   }
 
@@ -47,7 +50,8 @@ export default class App extends React.Component {
     if (localStorage.opacityVallue && localStorage.opacityVallue !== "0") {
       this.changeOpacity(localStorage.opacityVallue * 1);
     }
-    this.chooseItem(2)
+    this.callback(0);
+    this.chooseItem(2);
   }
 
   changeOpacity = (value) => {
@@ -98,38 +102,61 @@ export default class App extends React.Component {
   playMusic = (index) => {
     console.log("music index------------", index)
   }
-  render() {
-    let renderDom = this.state.tabs.map((item, index) => {
-      let nodeItem,
-        rendertab;
-      switch (index) {
-        case 0:
-          nodeItem = <UserOutlined />
-          rendertab = <div className="flex-type full">
+  callback = (params) => {
+    switch (params) {
+      case 0:
+        this.setState({
+          renderContent: <div className="flex-type full">
             <Home onClick={(e, index) => this.chooseItem(index)} />
             {this.state.rightContent}
           </div>
+        })
+        break;
+      case 1:
+        this.setState({
+          renderContent: <div className="flex-type full">
+            <ExploreCom onClick={(e, index) => this.chooseItem(index)} />
+            {this.state.rightContent}
+          </div>
+        })
+        break
+      default:
+
+        break;
+    }
+  }
+  render() {
+    let renderDom = this.state.tabs.map((item, index) => {
+      let nodeItem;
+      // rendertab;
+      switch (index) {
+        case 0:
+          nodeItem = <UserOutlined />
+          // rendertab = <div className="flex-type full">
+          //   <Home onClick={(e, index) => this.chooseItem(index)} />
+          //   {this.state.rightContent}
+          // </div>
 
           break;
         case 1:
           nodeItem = <SearchOutlined />
-          rendertab = <DiscoveryCom />
+          // rendertab = <DiscoveryCom />
           break;
         case 2:
           nodeItem = <StarOutlined />
-          rendertab = <LiveCom />
+          // rendertab = <LiveCom />
           break;
         case 3:
           nodeItem = ''
-          rendertab = <ExploreCom />
+          // rendertab = <ExploreCom />
           break;
         case 4:
           nodeItem = ''
-          rendertab = <MobilePlayCom />
+          // rendertab = <MobilePlayCom />
           break;
         default:
           nodeItem = <UserOutlined />
-          rendertab = <Home />
+          // rendertab = <Home />
           break;
       }
       return (
@@ -139,7 +166,7 @@ export default class App extends React.Component {
             {item}
           </span>
         } key={index} onClick={clickTab}>
-          {rendertab}
+          {/* {rendertab} */}
 
         </TabPane>
       )
@@ -148,16 +175,29 @@ export default class App extends React.Component {
     return (
       <Skeleton active loading={this.state.loadingFlag} rows={20}>
         <Layout className="main-content">
-          <Header className="header webkit-no-drag" style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+          <Header className="header webkit-no-drag" style={{ position: 'fixed', zIndex: 10, width: '100%' }}>
             <CustomHeader defaultValue={localStorage.opacityVallue * 1} changeOpacity={(value) => { this.changeOpacity(value) }} />
+            <Tabs defaultActiveKey="0" animated={{ tabPane: true }} centered onChange={(params) => this.callback(params)}>
+              {renderDom}
+            </Tabs>
           </Header>
-          <Layout style={{ padding: '50px 20px 15px', minHeight: 500 }}>
-            <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
-            </Header>
+          <Layout style={{ paddingBottom: '72px' }} >
             <Content>
-              <Tabs defaultActiveKey="0" onChange={(params) => callback(params)}>
-                {renderDom}
-              </Tabs>
+              <Layout>
+                <Sider className="site-layout-background" width={200} style={{
+                  overflow: 'auto',
+                  height: '100vh',
+                  position: 'fixed',
+                  left: 0,
+                }}>
+                  {this.state.renderContent}
+                </Sider>
+                <Content style={{ padding: '0 24px 0 200px', minHeight: 280 }}>
+                  <Layout>
+                    {this.state.rightContent}
+                  </Layout>
+                </Content>
+              </Layout>
 
             </Content>
           </Layout>
@@ -170,32 +210,7 @@ export default class App extends React.Component {
   }
 }
 
-function callback(params) {
-  // let result;
-  // switch (params) {
-  //   case '0':
-  //     result = `<div>我的音乐页</div>`
-  //     break;
-  //   case '1':
-  //     result = `<div>发现页</div>`
-  //     break;
-  //   case '2':
-  //     result = `<div>直播页</div>`
-  //     break;
-  //   case '3':
-  //     result = `<div>探索页</div>`
-  //     break;
-  //   case '4':
-  //     result = `<div>手机Play页</div>`
-  //     break;
-  //   default:
-  //     result = `<div>我的音乐页</div>`
-  //     break;
-  // }
-  // return (
-  //   result
-  // )
-}
+
 function clickTab(e) {
   console.log("e", e);
 }

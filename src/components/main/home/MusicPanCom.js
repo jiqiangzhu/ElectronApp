@@ -15,6 +15,14 @@ export default class MusicPanCom extends React.Component {
             data: []
         }
     }
+    async componentDidMount() {
+
+
+
+
+        
+        console.log("音乐云盘组件被加载完毕----------------");
+    }
     render() {
         return (
             <Layout>
@@ -44,7 +52,7 @@ export default class MusicPanCom extends React.Component {
                             </Space>
                         </Row>
                         <Table columns={columns} dataSource={data} />
-                        
+
                     </>
                 </Content>
             </Layout>

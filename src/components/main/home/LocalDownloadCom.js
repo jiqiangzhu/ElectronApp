@@ -36,6 +36,9 @@ export default class LocalDownloadCom extends React.Component {
      * @param {*} path 
      */
     readMusicDir = async (path) => { 
+        if(!path) {
+            return;
+        }
         fs.readdir(path, (err, files) => {
             if (err) {
                 console.log(err);
@@ -64,11 +67,11 @@ export default class LocalDownloadCom extends React.Component {
     
     render() {
         return (
-            <Layout>
-                <Header className="local-download-header">
+            <Layout style={{ overflow: 'hidden' }}>
+                <Header style={{ position: 'fixed', zIndex: 10, width: '100%' }} className="local-download-header">
                     本地与下载
                 </Header>
-                <Content>
+                <Content style={{ paddingTop: '60px' }}>
                     <>
                         <Row align="middle">
 
