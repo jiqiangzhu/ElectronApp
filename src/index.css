@@ -4,6 +4,7 @@ body {
     "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: rgba(0,0,0,0);
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
@@ -15,6 +16,7 @@ code {
   background-repeat: no-repeat;
   background-size: 350px auto;
 }
+/* iconfont 通用样式  */
 .icon {
   width: 1em;
   height: 1em;

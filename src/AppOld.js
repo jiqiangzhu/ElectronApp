@@ -1,23 +1,23 @@
-import { Layout, Skeleton } from 'antd';
+import { Layout, Tabs, Skeleton } from 'antd';
 import './App.less';
 import { getMusicList } from './api';
 import React from 'react';
 import { CustomHeader } from './components/header';
-// import FooterCom from './components/footer';
+import FooterCom from './components/footer';
 import {
   LocalDownloadCom, DefaultListCom, MusicPanCom, Home,
   MyCollectionCom, MyTVCom, RecentlyPlayCom, ExploreCom
 } from './components/main';
 // LiveCom, DiscoveryCom, , MobilePlayCom, ExploreCom,
-// import {
-//   UserOutlined,
-//   SearchOutlined,
-//   StarOutlined
-// }
-//   from '@ant-design/icons';
-
+import {
+  UserOutlined,
+  SearchOutlined,
+  StarOutlined
+}
+  from '@ant-design/icons';
+import Sider from 'antd/lib/layout/Sider';
 const { Content, Header, Footer } = Layout;
-// const { TabPane } = Tabs;
+const { TabPane } = Tabs;
 
 export default class App extends React.Component {
   constructor(props) {
@@ -37,15 +37,14 @@ export default class App extends React.Component {
     };
   }
 
-  async componentWillMount() {
-    // 骨架屏
+  async componentDidMount() {
     setTimeout(async () => {
       this.setState({
         loadingFlag: false
       })
       let result = await getMusicList();
       console.log("获取播放列表---------------", result);
-    }, 1000)
+    }, 200)
 
     // 设置透明度
     if (localStorage.opacityVallue && localStorage.opacityVallue !== "0") {
@@ -57,7 +56,7 @@ export default class App extends React.Component {
 
   changeOpacity = (value) => {
     console.log("opacity value---0~1-------", value)
-    // document.body.style.background = `rgba(59,59,77, ${value})`;
+    document.body.style.background = `rgba(46,103,156, ${value})`;
     localStorage.opacityVallue = value;
   }
   chooseItem = (index) => {
@@ -127,64 +126,64 @@ export default class App extends React.Component {
     }
   }
   render() {
-    // let renderDom = this.state.tabs.map((item, index) => {
-    //   let nodeItem;
-    //   // rendertab;
-    //   switch (index) {
-    //     case 0:
-    //       nodeItem = <UserOutlined />
-    //       // rendertab = <div className="flex-type full">
-    //       //   <Home onClick={(e, index) => this.chooseItem(index)} />
-    //       //   {this.state.rightContent}
-    //       // </div>
+    let renderDom = this.state.tabs.map((item, index) => {
+      let nodeItem;
+      // rendertab;
+      switch (index) {
+        case 0:
+          nodeItem = <UserOutlined />
+          // rendertab = <div className="flex-type full">
+          //   <Home onClick={(e, index) => this.chooseItem(index)} />
+          //   {this.state.rightContent}
+          // </div>
 
-    //       break;
-    //     case 1:
-    //       nodeItem = <SearchOutlined />
-    //       // rendertab = <DiscoveryCom />
-    //       break;
-    //     case 2:
-    //       nodeItem = <StarOutlined />
-    //       // rendertab = <LiveCom />
-    //       break;
-    //     case 3:
-    //       nodeItem = ''
-    //       // rendertab = <ExploreCom />
-    //       break;
-    //     case 4:
-    //       nodeItem = ''
-    //       // rendertab = <MobilePlayCom />
-    //       break;
-    //     default:
-    //       nodeItem = <UserOutlined />
-    //       // rendertab = <Home />
-    //       break;
-    //   }
-    //   return (
-    //     <TabPane tab={
-    //       <span>
-    //         {nodeItem}
-    //         {item}
-    //       </span>
-    //     } key={index} onClick={clickTab}>
-    //       {/* {rendertab} */}
+          break;
+        case 1:
+          nodeItem = <SearchOutlined />
+          // rendertab = <DiscoveryCom />
+          break;
+        case 2:
+          nodeItem = <StarOutlined />
+          // rendertab = <LiveCom />
+          break;
+        case 3:
+          nodeItem = ''
+          // rendertab = <ExploreCom />
+          break;
+        case 4:
+          nodeItem = ''
+          // rendertab = <MobilePlayCom />
+          break;
+        default:
+          nodeItem = <UserOutlined />
+          // rendertab = <Home />
+          break;
+      }
+      return (
+        <TabPane tab={
+          <span>
+            {nodeItem}
+            {item}
+          </span>
+        } key={index} onClick={clickTab}>
+          {/* {rendertab} */}
 
-    //     </TabPane>
-    //   )
-    // })
+        </TabPane>
+      )
+    })
 
     return (
       <Skeleton active loading={this.state.loadingFlag} rows={20}>
         <Layout className="main-content">
-          <Header className="webkit-no-drag" style={{ position: 'fixed', zIndex: 10, width: '100%' }}> 
+          <Header className="header webkit-no-drag" style={{ position: 'fixed', zIndex: 10, width: '100%' }}>
             <CustomHeader defaultValue={localStorage.opacityVallue * 1} changeOpacity={(value) => { this.changeOpacity(value) }} />
-            {/* <Tabs defaultActiveKey="0" animated={{ tabPane: true }} centered onChange={(params) => this.callback(params)}>
+            <Tabs defaultActiveKey="0" animated={{ tabPane: true }} centered onChange={(params) => this.callback(params)}>
               {renderDom}
-            </Tabs> */}
+            </Tabs>
           </Header>
           <Layout style={{ paddingBottom: '72px' }} >
             <Content>
-              {/* <Layout>
+              <Layout>
                 <Sider className="site-layout-background" width={200} style={{
                   overflow: 'auto',
                   height: '100vh',
@@ -198,12 +197,12 @@ export default class App extends React.Component {
                     {this.state.rightContent}
                   </Layout>
                 </Content>
-              </Layout> */}
+              </Layout>
 
             </Content>
           </Layout>
           <Footer style={{ textAlign: 'center', lineHeight: '72px', position: 'fixed', bottom: 0, width: '100%' }}>
-            {/* <FooterCom playMusic={(i) => this.playMusic(i)} /> */}
+            <FooterCom playMusic={(i) => this.playMusic(i)} />
           </Footer>
         </Layout>
       </Skeleton>
@@ -212,6 +211,6 @@ export default class App extends React.Component {
 }
 
 
-// function clickTab(e) {
-//   console.log("e", e);
-// }
+function clickTab(e) {
+  console.log("e", e);
+}

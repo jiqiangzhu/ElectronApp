@@ -12,12 +12,6 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 ipcMain.on("changeWinSize", (event, args) => { //自定义改变窗口大小
   if (mainWindow) {
     switch (args) {
-      case "maximize": //当前是最大化，转为normal
-        // if (mainWindow.isMaximized()) {
-        mainWindow.setContentSize(1024, 680);
-        mainWindow.center();
-        // }
-        break;
       case "minimize": //最小化
         if (mainWindow.isMinimized()) {
           return;
@@ -27,13 +21,12 @@ ipcMain.on("changeWinSize", (event, args) => { //自定义改变窗口大小
       case "close": //关闭
         mainWindow.close();
         break;
-      case "normal": //当前为默认，转为最大化
-        // mainWindow.setContentSize(1024, 680);
-        // mainWindow.center();
-        if (mainWindow.isMaximized()) {
-          return;
-        }
-        mainWindow.maximize();
+      case "maxornormal": //全屏 非全屏切换
+        // if (mainWindow.fullScreen) {
+        //   mainWindow.setFullScreen();
+        // } else {
+        //   mainWindow.restore();
+        // }
         break;
       case "fixedOnTop":
         if (!mainWindow.isAlwaysOnTop()) {
@@ -44,6 +37,7 @@ ipcMain.on("changeWinSize", (event, args) => { //自定义改变窗口大小
         if (mainWindow.isAlwaysOnTop()) {
           mainWindow.setAlwaysOnTop(false);
         }
+        break;
       default:
         break;
     }
@@ -55,7 +49,7 @@ ipcMain.on("changeWinSize", (event, args) => { //自定义改变窗口大小
 ipcMain.on("openFolder", async (event, args) => { // 打开本地文件夹
   let fileReturn = await dialog.showOpenDialog({ "title": "选择音乐文件夹路径", properties: ['openFile', 'openDirectory', 'showHiddenFiles', 'createDirectory ', 'multiSelections'], defaultPath: args })
   console.log("fileReturn-----------------------", fileReturn)
-  if(!fileReturn.canceled) {
+  if (!fileReturn.canceled) {
     event.reply('asynchronous-reply', fileReturn)
   }
 });
