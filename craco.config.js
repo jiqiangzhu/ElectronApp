@@ -20,6 +20,7 @@ module.exports = {
                             '@text-color': '#FFFFFF',
                             '@menu-item-active-bg': '#4B6E8F',
                             '@page-header-back-color': '#fff;',
+                            '@tooltip-bg': '#87d068',
                             '@table-bg': 'transparent',
                             '@table-header-bg': 'transparent',
                             '@table-header-sort-bg': 'transparent',

@@ -21,20 +21,10 @@ ipcMain.on("changeWinSize", (event, args) => { //自定义改变窗口大小
       case "close": //关闭
         mainWindow.close();
         break;
-      case "maxornormal": //全屏 非全屏切换
-        // if (mainWindow.fullScreen) {
-        //   mainWindow.setFullScreen();
-        // } else {
-        //   mainWindow.restore();
-        // }
-        break;
       case "fixedOnTop":
         if (!mainWindow.isAlwaysOnTop()) {
           mainWindow.setAlwaysOnTop(true);
-        }
-        break;
-      case "cancelOnTop":
-        if (mainWindow.isAlwaysOnTop()) {
+        } else {
           mainWindow.setAlwaysOnTop(false);
         }
         break;
@@ -43,17 +33,25 @@ ipcMain.on("changeWinSize", (event, args) => { //自定义改变窗口大小
     }
 
   }
-  // win.webContents.send("maximize", "我是主进程已收到消息"); // 响应渲染进程
 });
 
 ipcMain.on("openFolder", async (event, args) => { // 打开本地文件夹
   let fileReturn = await dialog.showOpenDialog({ "title": "选择音乐文件夹路径", properties: ['openFile', 'openDirectory', 'showHiddenFiles', 'createDirectory ', 'multiSelections'], defaultPath: args })
-  console.log("fileReturn-----------------------", fileReturn)
   if (!fileReturn.canceled) {
     event.reply('asynchronous-reply', fileReturn)
   }
 });
-
+ipcMain.on("maximize", (event, args) => {
+  if (mainWindow) {
+    mainWindow.maximize();
+  }
+});
+ipcMain.on("restore", (event, args) => {
+  if (mainWindow) {
+    console.log("restore");
+    mainWindow.restore();
+  }
+});
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
     width: 1024,
@@ -67,12 +65,13 @@ app.on('ready', () => {
     },
     titleBarStyle: 'customButtonsOnHover',
     frame: false,
-    resizable: false,
+    resizable: true,
   })
 
   mainWindow.setMenu(null);
   const urlLocation = isDev ? 'http://localhost:3000' : 'dummyurl';
   mainWindow.loadURL(urlLocation);
+  // mainWindow.setMaximizable(false);
 })
 
 if (isDev) { // 开发者工具
