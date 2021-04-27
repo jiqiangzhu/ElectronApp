@@ -1,15 +1,13 @@
 const { app, BrowserWindow, ipcMain, globalShortcut, dialog } = require('electron');
 const isDev = require('electron-is-dev')
+const path = require('path');
 let mainWindow;
-let mainWindowId;
-process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
+// let mainWindowId;
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
-/**
- * 主进程 渲染进程之间通信 
- * 主进程添加监听
- * 最大化 最小化 关闭主窗口
- */
-ipcMain.on("changeWinSize", (event, args) => { //自定义改变窗口大小
+
+ipcMain.on("changeWinSize", function (event, args) {
+  console.log("操作----------", args);
   if (mainWindow) {
     switch (args) {
       case "minimize": //最小化
@@ -18,16 +16,15 @@ ipcMain.on("changeWinSize", (event, args) => { //自定义改变窗口大小
         }
         mainWindow.minimize();
         break;
-      case "close": //关闭
+      case "close":
         mainWindow.close();
         break;
-      case "max": //最大化
-        console.log("是否可以最大化", mainWindow.isMaximizable());
+      case "max":
         mainWindow.maximize();
-        console.log("窗口是否最大化了 true or false------------", mainWindow.isMaximized());
         break;
       case "restore":
-        mainWindow.restore();
+        mainWindow.setContentSize(1024, 680);
+        mainWindow.center();
         break;
       case "fixedOnTop":
         if (!mainWindow.isAlwaysOnTop()) {
@@ -43,8 +40,8 @@ ipcMain.on("changeWinSize", (event, args) => { //自定义改变窗口大小
   }
 });
 
-ipcMain.on("openFolder", async (event, args) => { // 打开本地文件夹
-  let fileReturn = await dialog.showOpenDialog({ "title": "选择音乐文件夹路径", properties: ['openFile', 'openDirectory', 'showHiddenFiles', 'createDirectory ', 'multiSelections'], defaultPath: args })
+ipcMain.on("openFolder", async (event, args) => {
+  let fileReturn = await dialog.showOpenDialog({ "title": "Choose Music DirPath", properties: ['openFile', 'openDirectory', 'showHiddenFiles', 'createDirectory ', 'multiSelections'], defaultPath: args })
   if (!fileReturn.canceled) {
     event.reply('asynchronous-reply', fileReturn)
   }
@@ -64,14 +61,17 @@ app.on('ready', () => {
     titleBarStyle: 'customButtonsOnHover',
     frame: false,
     resizable: true,
+    icon: path.join(__dirname, '/public/logo48.ico'),
+    title: "Cool Music"
   })
   mainWindow.setMenu(null);
   const urlLocation = isDev ? 'http://localhost:3000' : 'dummyurl';
   mainWindow.loadURL(urlLocation);
   mainWindow.setMaximizable(true);
+
 })
 
-if (isDev) { // 开发者工具
+if (isDev) {
   app.whenReady().then(() => {
     const ret = globalShortcut.register('Alt+F12', () => {
       mainWindow.webContents.openDevTools();
@@ -81,6 +81,6 @@ if (isDev) { // 开发者工具
       console.log('registration failed')
     }
 
-    console.log(globalShortcut.isRegistered('Alt+F12'))
+    console.log("Alt + F12打开控制台快捷键注册成功了吗", globalShortcut.isRegistered('Alt+F12'))
   })
 }
