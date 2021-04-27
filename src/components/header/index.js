@@ -1,4 +1,4 @@
-import { Row, Col, Input, Space, Modal } from 'antd';
+import { Row, Col, Input, Space, Modal, Tooltip } from 'antd';
 import React from 'react';
 import './index.less';
 import '../../App.less';
@@ -20,7 +20,9 @@ class Header extends React.Component {
         super(props);
         this.state = {
             visible: false,
-            nickname: ""
+            nickname: "",
+            fullScreen: false,
+            isTop: '置顶'
         }
     };
     showModal = () => {
@@ -36,7 +38,7 @@ class Header extends React.Component {
     };
     closeModal = () => {
         this.hideModal();
-        // ipcRenderer.send("changeWinSize", "close");
+        ipcRenderer.send("changeWinSize", "close");
     }
     async componentDidMount() {
         let result = await getUserInfor();
@@ -48,21 +50,29 @@ class Header extends React.Component {
     // 向主进程发送请求指令 最小化 最大化，关闭窗口
     changeWindowSize = (e, todo) => {
         if (todo) {
-            if (todo === "close") {
+            if (todo === "close") { // 如果指令为退出，弹窗提示是否确认退出
                 this.showModal();
+                return;
             }
-            ipcRenderer.send("changeWinSize", todo);
 
+            ipcRenderer.send("changeWinSize", todo);
+            if(todo === "fixedOnTop") {
+                this.setState({
+                    isTop: this.state.isTop === "置顶" ? "取消置顶" : "置顶"
+                })
+            }
         }
     };
     render() {
         return (
-            <>
+            <div className="cus-header">
                 <Row className="site-page-header" align="middle">
                     <Col span={5} className="flex-type flex-justify-evenly">
                         <Space >
                             <IconFont onClick={(e) => { this.changeWindowSize(e, 'close') }} style={{ fontSize: '16px' }} className="webkit-no-drag" type='icon-cuowuguanbiquxiao-yuankuang' />
-                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'maxornormal') }} style={{ fontSize: '14px' }} className="webkit-no-drag" type='icon-circle' />
+                            <Tooltip title={this.state.isTop} color="rgb(76, 78, 78, 0.3)" defaultVisible={true}>
+                                <IconFont onClick={(e) => { this.changeWindowSize(e, 'fixedOnTop') }} style={{ fontSize: '14px' }} className="webkit-no-drag" type='icon-circle' />
+                            </Tooltip>
                             <IconFont onClick={(e) => { this.changeWindowSize(e, 'minimize') }} style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-jian-yuankuang' />
                         </Space>
                     </Col>
@@ -83,16 +93,17 @@ class Header extends React.Component {
                     maskClosable={false}
                     cancelText="取消"
                     width="250px"
+                    centered
                     focusTriggerAfterClose={false}
                     bodyStyle={{
-                        backgroundColor: 'rgb(138, 145, 145)',
+                        backgroundColor: 'rgb(90, 94, 94)',
                         borderTopLeftRadius: '10px',
                         borderTopRightRadius: '10px'
                     }}
                 >
                     <p>确认退出吗？</p>
                 </Modal>
-            </>
+            </div>
         )
     }
 }
