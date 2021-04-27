@@ -21,6 +21,14 @@ ipcMain.on("changeWinSize", (event, args) => { //自定义改变窗口大小
       case "close": //关闭
         mainWindow.close();
         break;
+      case "max": //最大化
+        console.log("是否可以最大化", mainWindow.isMaximizable());
+        mainWindow.maximize();
+        console.log("窗口是否最大化了 true or false------------", mainWindow.isMaximized());
+        break;
+      case "restore":
+        mainWindow.restore();
+        break;
       case "fixedOnTop":
         if (!mainWindow.isAlwaysOnTop()) {
           mainWindow.setAlwaysOnTop(true);
@@ -41,17 +49,7 @@ ipcMain.on("openFolder", async (event, args) => { // 打开本地文件夹
     event.reply('asynchronous-reply', fileReturn)
   }
 });
-ipcMain.on("maximize", (event, args) => {
-  if (mainWindow) {
-    mainWindow.maximize();
-  }
-});
-ipcMain.on("restore", (event, args) => {
-  if (mainWindow) {
-    console.log("restore");
-    mainWindow.restore();
-  }
-});
+
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
     width: 1024,
@@ -67,11 +65,10 @@ app.on('ready', () => {
     frame: false,
     resizable: true,
   })
-
   mainWindow.setMenu(null);
   const urlLocation = isDev ? 'http://localhost:3000' : 'dummyurl';
   mainWindow.loadURL(urlLocation);
-  // mainWindow.setMaximizable(false);
+  mainWindow.setMaximizable(true);
 })
 
 if (isDev) { // 开发者工具

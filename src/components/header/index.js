@@ -22,7 +22,8 @@ class Header extends React.Component {
             visible: false,
             nickname: "",
             fullScreen: false,
-            isTop: '置顶'
+            isTop: '置顶',
+            isMax: true
         }
     };
     showModal = () => {
@@ -55,11 +56,23 @@ class Header extends React.Component {
                 return;
             }
 
-            ipcRenderer.send("changeWinSize", todo);
-            if(todo === "fixedOnTop") {
-                this.setState({
-                    isTop: this.state.isTop === "置顶" ? "取消置顶" : "置顶"
-                })
+            if (todo === "maxormin") {
+                try {
+                    if (this.state.isMax) {
+                        ipcRenderer.send("changeWinSize", "max");
+                    } else {
+                        ipcRenderer.send("changeWinSize", "restore");
+                    }
+                    this.setState({
+                        isMax: !this.state.isMax
+                    })
+                } catch (error) {
+                    console.error(error);
+                }
+
+
+            } else {
+                ipcRenderer.send("changeWinSize", todo);
             }
         }
     };
@@ -70,8 +83,8 @@ class Header extends React.Component {
                     <Col span={5} className="flex-type flex-justify-evenly">
                         <Space >
                             <IconFont onClick={(e) => { this.changeWindowSize(e, 'close') }} style={{ fontSize: '16px' }} className="webkit-no-drag" type='icon-cuowuguanbiquxiao-yuankuang' />
-                            <Tooltip title={this.state.isTop} color="rgb(76, 78, 78, 0.3)" defaultVisible={true}>
-                                <IconFont onClick={(e) => { this.changeWindowSize(e, 'fixedOnTop') }} style={{ fontSize: '14px' }} className="webkit-no-drag" type='icon-circle' />
+                            <Tooltip title={this.state.isMax === true ? "最大化" : "最小化"} color="rgb(76, 78, 78, 0.3)" defaultVisible={false}>
+                                <IconFont onClick={(e) => { this.changeWindowSize(e, 'maxormin') }} style={{ fontSize: '14px' }} className="webkit-no-drag" type='icon-circle' />
                             </Tooltip>
                             <IconFont onClick={(e) => { this.changeWindowSize(e, 'minimize') }} style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-jian-yuankuang' />
                         </Space>
