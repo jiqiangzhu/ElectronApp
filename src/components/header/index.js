@@ -1,10 +1,12 @@
-import { Row, Col, Input, Space, Modal, Tooltip } from 'antd';
+import { Row, Col, Input, Space, Modal, Tooltip, Slider, Dropdown } from 'antd';
 import React from 'react';
 import './index.less';
 import '../../App.less';
 import { getUserInfor } from '../../api/index'
 import { createFromIconfontCN } from '@ant-design/icons';
-
+import {
+    SkinOutlined
+} from '@ant-design/icons';
 const IconFont = createFromIconfontCN();
 const { Search } = Input;
 
@@ -59,8 +61,10 @@ class Header extends React.Component {
             if (todo === "maxormin") {
                 try {
                     if (this.state.isMax) {
+                        console.log("max-----------");
                         ipcRenderer.send("changeWinSize", "max");
                     } else {
+                        console.log("restore-----------");
                         ipcRenderer.send("changeWinSize", "restore");
                     }
                     this.setState({
@@ -78,10 +82,10 @@ class Header extends React.Component {
     };
     render() {
         return (
-            <div className="cus-header">
-                <Row className="site-page-header" align="middle">
-                    <Col span={5} className="flex-type flex-justify-evenly">
-                        <Space >
+            <>
+                <Row align="middle" style={{ width: "100%" }} className="webkit-drag">
+                    <Col style={{ position: 'fixed', left: '12px', top: '4px' }}>
+                        <Space>
                             <IconFont onClick={(e) => { this.changeWindowSize(e, 'close') }} style={{ fontSize: '16px' }} className="webkit-no-drag" type='icon-cuowuguanbiquxiao-yuankuang' />
                             <Tooltip title={this.state.isMax === true ? "最大化" : "最小化"} color="rgb(76, 78, 78, 0.3)" defaultVisible={false}>
                                 <IconFont onClick={(e) => { this.changeWindowSize(e, 'maxormin') }} style={{ fontSize: '14px' }} className="webkit-no-drag" type='icon-circle' />
@@ -89,12 +93,12 @@ class Header extends React.Component {
                             <IconFont onClick={(e) => { this.changeWindowSize(e, 'minimize') }} style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-jian-yuankuang' />
                         </Space>
                     </Col>
-                    <Col offset={1} span={8} className="flex-type">
+                    <Col offset={5} span={8} className="flex-type">
                         <Search size="small" className="flex-align-mid webkit-no-drag" placeholder="请输入..." onSearch={onSearch} style={{ width: 200 }} />
                     </Col>
                     <Col span={8}>
-                        <Space className="flex-type webkit-no-drag flex-justify-start flex-align-mid">
-
+                        <Space className="flex-type flex-justify-start flex-align-mid">
+                            <SetOpacityCom className="webkit-no-drag" defaultValue={this.props.defaultValue} changeOpacity={(value) => this.props.changeOpacity(value)} />
                         </Space>
                     </Col>
                 </Row>
@@ -116,7 +120,7 @@ class Header extends React.Component {
                 >
                     <p>确认退出吗？</p>
                 </Modal>
-            </div>
+            </>
         )
     }
 }
@@ -126,23 +130,23 @@ class Header extends React.Component {
  * @param {*} props 
  * @returns 
  */
-// function SetOpacityCom(props) {
-//     const style = {
-//         display: 'inline-block',
-//         height: 300,
-//         marginLeft: 70,
-//     };
-//     const menu = (
-//         <div style={style}>
-//             <Slider vertical max={1} step={0.1} className="mySliderStyle" defaultValue={props.defaultValue} onChange={(value) => props.changeOpacity(value)} />
-//         </div>
-//     );
-//     return (
-//         <Dropdown overlay={menu} trigger={['click']} placement='topCenter'>
-//             <SkinOutlined className="webkit-no-drag" />
-//         </Dropdown>
-//     )
-// }
+function SetOpacityCom(props) {
+    const style = {
+        display: 'inline-block',
+        height: 300,
+        marginLeft: 70,
+    };
+    const menu = (
+        <div style={style}>
+            <Slider vertical max={1} step={0.1} className="mySliderStyle" defaultValue={props.defaultValue} onChange={(value) => props.changeOpacity(value)} />
+        </div>
+    );
+    return (
+        <Dropdown overlay={menu} trigger={['click']} placement='topCenter'>
+            <SkinOutlined className="webkit-no-drag" />
+        </Dropdown>
+    )
+}
 
 /**
  * 设置窗口最大最小化

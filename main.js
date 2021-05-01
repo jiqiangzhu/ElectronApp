@@ -23,8 +23,9 @@ ipcMain.on("changeWinSize", function (event, args) {
         mainWindow.maximize();
         break;
       case "restore":
-        mainWindow.setContentSize(1024, 680);
-        mainWindow.center();
+        mainWindow.restore();
+        // mainWindow.setContentSize(1024, 680);
+        // mainWindow.center();
         break;
       case "fixedOnTop":
         if (!mainWindow.isAlwaysOnTop()) {
@@ -46,12 +47,15 @@ ipcMain.on("openFolder", async (event, args) => {
     event.reply('asynchronous-reply', fileReturn)
   }
 });
-
+ipcMain.on("changeOpacity", async (event, args) => { //改变透明度
+  mainWindow.setOpacity(args);
+})
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
     width: 1024,
     height: 680,
-    transparent: true,
+    // transparent: true,
+    backgroundColor: "#3B3B4D",
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
