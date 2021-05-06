@@ -170,9 +170,8 @@ export default class App extends React.Component {
     return (
       <Skeleton active loading={this.state.loadingFlag} rows={40}>
         <Layout className="main-content">
-          <Header className="lay-header" style={{ position: 'fixed', zIndex: 10, width: '100%' }}>
+          <Header className="lay-header webkit-drag" style={{ position: 'fixed', zIndex: 10, width: '100%' }}>
             <CustomHeader defaultValue={localStorage.opacityVallue * 1} changeOpacity={(value) => { this.changeOpacity(value) }} />
-            
           </Header>
           <Layout style={{ flex: 1 }} >
             <Content>

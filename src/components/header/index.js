@@ -83,8 +83,9 @@ class Header extends React.Component {
     render() {
         return (
             <>
-                <Row align="middle" style={{ width: "100%" }} className="webkit-drag">
-                    <Col style={{ position: 'fixed', left: '12px', top: '4px' }}>
+                <Row align="middle" style={{ width: "100%" }} >
+                    {/* <Col style={{ position: 'fixed', left: '12px', top: '4px' }}> */}
+                    <Col span={2}>
                         <Space>
                             <IconFont onClick={(e) => { this.changeWindowSize(e, 'close') }} style={{ fontSize: '16px' }} className="webkit-no-drag" type='icon-cuowuguanbiquxiao-yuankuang' />
                             <Tooltip title={this.state.isMax === true ? "最大化" : "最小化"} color="rgb(76, 78, 78, 0.3)" defaultVisible={false}>
@@ -93,12 +94,18 @@ class Header extends React.Component {
                             <IconFont onClick={(e) => { this.changeWindowSize(e, 'minimize') }} style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-jian-yuankuang' />
                         </Space>
                     </Col>
-                    <Col offset={5} span={8} className="flex-type">
-                        <Search size="small" className="flex-align-mid webkit-no-drag" placeholder="请输入..." onSearch={onSearch} style={{ width: 200 }} />
+                    <Col offset={0} span={20} >
+                        <Space className="flex-type flex-align-mid">
+                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'minimize') }} style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-ziyuan1' />
+                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'minimize') }} style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-you' />
+                            <Search size="small" className="flex-align-mid webkit-no-drag" placeholder="请输入..." onSearch={onSearch} style={{ width: 200 }} />
+                        </Space>
                     </Col>
-                    <Col span={8}>
+                    <Col span={2}>
                         <Space className="flex-type flex-justify-start flex-align-mid">
                             <SetOpacityCom className="webkit-no-drag" defaultValue={this.props.defaultValue} changeOpacity={(value) => this.props.changeOpacity(value)} />
+                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'minimize') }} style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-zhiding1' />
+                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'minimize') }} style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-quxiaozhiding' />
                         </Space>
                     </Col>
                 </Row>
