@@ -1,0 +1,34 @@
+/**
+ * 操作窗口
+ */
+
+// 渲染进程
+const { ipcRenderer } = window.require('electron');
+
+const windowUtils = {
+    /**
+     * 窗口最大化
+     * @returns 
+     */
+    setWindowMax: async function () {
+        return await ipcRenderer.send("setMax");
+    },
+
+    /**
+     * 窗口恢复之前大小
+     * @returns 
+     */
+    setWindowRestore: async function () {
+        return await ipcRenderer.send("setRestore");
+    },
+
+    /**
+     * 关闭窗口
+     * @returns 
+     */
+    setWindowClosed: async function() {
+        return await ipcRenderer.send("setClose")
+    }
+}
+
+export default windowUtils;

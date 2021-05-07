@@ -7,9 +7,9 @@ import {
   LocalDownloadCom, DefaultListCom, MusicPanCom, Home,
   MyCollectionCom, MyTVCom, RecentlyPlayCom, ExploreCom
 } from './components/main';
-import { createFromIconfontCN } from '@ant-design/icons';
+// import { createFromIconfontCN } from '@ant-design/icons';
 
-const IconFont = createFromIconfontCN();
+// const IconFont = createFromIconfontCN();
 const { Content, Header, Footer } = Layout;
 // 渲染进程
 const { ipcRenderer } = window.require('electron')
@@ -190,7 +190,7 @@ export default class App extends React.Component {
                   </Layout>
                 </Content>
               </Layout> */}
-              <IconFont onClick={()=>console.log("OK")} style={{ fontSize: '16px', position: 'absolute', bottom: '20px', right:'20px' }} className="webkit-no-drag" type='icon-cuowuguanbiquxiao-yuankuang' />
+              {/* <IconFont onClick={()=>console.log("OK")} style={{ fontSize: '16px', position: 'absolute', bottom: '20px', right:'20px' }} className="webkit-no-drag" type='icon-cuowuguanbiquxiao-yuankuang' /> */}
             </Content>
           </Layout>
           {/* 后续删除Footer height */}

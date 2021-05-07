@@ -2,60 +2,17 @@ const { app, BrowserWindow, ipcMain, globalShortcut, dialog } = require('electro
 const isDev = require('electron-is-dev')
 const path = require('path');
 let mainWindow;
-// let mainWindowId;
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
-
-ipcMain.on("changeWinSize", function (event, args) {
-  console.log("操作----------", args);
-  if (mainWindow) {
-    switch (args) {
-      case "minimize": //最小化
-        if (mainWindow.isMinimized()) {
-          return;
-        }
-        mainWindow.minimize();
-        break;
-      case "close":
-        mainWindow.close();
-        break;
-      case "max":
-        mainWindow.maximize();
-        break;
-      case "restore":
-        mainWindow.restore();
-        // mainWindow.setContentSize(1024, 680);
-        // mainWindow.center();
-        break;
-      case "fixedOnTop":
-        if (!mainWindow.isAlwaysOnTop()) {
-          mainWindow.setAlwaysOnTop(true);
-        } else {
-          mainWindow.setAlwaysOnTop(false);
-        }
-        break;
-      default:
-        break;
-    }
-
-  }
-});
-
-ipcMain.on("openFolder", async (event, args) => {
-  let fileReturn = await dialog.showOpenDialog({ "title": "Choose Music DirPath", properties: ['openFile', 'openDirectory', 'showHiddenFiles', 'createDirectory ', 'multiSelections'], defaultPath: args })
-  if (!fileReturn.canceled) {
-    event.reply('asynchronous-reply', fileReturn)
-  }
-});
-ipcMain.on("changeOpacity", async (event, args) => { //改变透明度
-  mainWindow.setOpacity(args);
-})
+/**
+ * 初始化窗口
+ */
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
     width: 1024,
     height: 680,
-    // transparent: true,
-    backgroundColor: "#3B3B4D",
+    // transparent: true, //设置透明后窗口最大化会出现问题
+    backgroundColor: "#3B3B4D", //设置背景色，在未被完全加载前加载出颜色
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
@@ -75,6 +32,43 @@ app.on('ready', () => {
 
 })
 
+//  case "fixedOnTop":
+//    if (!mainWindow.isAlwaysOnTop()) {
+//      mainWindow.setAlwaysOnTop(true);
+//    } else {
+//      mainWindow.setAlwaysOnTop(false);
+//    }
+
+
+
+/**
+ * 添加 改变窗口透明度 窗口大小 打开文件夹路径等监听
+ */
+ipcMain.on("changeOpacity", async (event, args) => {
+  await mainWindow.setOpacity(args);
+})
+ipcMain.on("setMax", async (event, args) => {
+  await mainWindow.maximize();
+})
+ipcMain.on("setRestore", async (event, args) => {
+  await mainWindow.restore();
+})
+ipcMain.on("setClose", async (event, args) => {
+  await mainWindow.close();
+})
+ipcMain.on("openFolder", async (event, args) => {
+  let fileReturn = await dialog.showOpenDialog({ "title": "Choose Music DirPath", properties: ['openFile', 'openDirectory', 'showHiddenFiles', 'createDirectory ', 'multiSelections'], defaultPath: args })
+  if (!fileReturn.canceled) {
+    await event.reply('asynchronous-reply', fileReturn)
+  }
+});
+
+
+
+
+/**
+ * 仅在开发环境注册打开控制台的快捷键
+ */
 if (isDev) {
   app.whenReady().then(() => {
     const ret = globalShortcut.register('Alt+F12', () => {

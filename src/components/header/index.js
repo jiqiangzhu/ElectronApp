@@ -1,7 +1,8 @@
-import { Row, Col, Input, Space, Modal, Tooltip, Slider, Dropdown } from 'antd';
+import { Row, Col, Input, Space, Modal, Tooltip, Slider, Dropdown, Menu } from 'antd';
 import React from 'react';
 import './index.less';
 import '../../App.less';
+import windowUtils from '@localUtils/windowUtils.js';
 import { getUserInfor } from '../../api/index'
 import { createFromIconfontCN } from '@ant-design/icons';
 import {
@@ -25,8 +26,19 @@ class Header extends React.Component {
             nickname: "",
             fullScreen: false,
             isTop: '置顶',
-            isMax: true
+            isMax: true,
+            showMenu: true
         }
+    };
+
+    handleMenuClick = e => {
+        if (e.key === '3') {
+            this.setState({ showMenu: false });
+        }
+    };
+
+    handleVisibleChange = flag => {
+        this.setState({ showMenu: flag });
     };
     showModal = () => {
         this.setState({
@@ -51,36 +63,36 @@ class Header extends React.Component {
         })
     };
     // 向主进程发送请求指令 最小化 最大化，关闭窗口
-    changeWindowSize = (e, todo) => {
-        if (todo) {
-            if (todo === "close") { // 如果指令为退出，弹窗提示是否确认退出
-                this.showModal();
-                return;
-            }
-
-            if (todo === "maxormin") {
-                try {
-                    if (this.state.isMax) {
-                        console.log("max-----------");
-                        ipcRenderer.send("changeWinSize", "max");
-                    } else {
-                        console.log("restore-----------");
-                        ipcRenderer.send("changeWinSize", "restore");
-                    }
-                    this.setState({
-                        isMax: !this.state.isMax
-                    })
-                } catch (error) {
-                    console.error(error);
-                }
-
-
+    changeWindowSize = async (e, todo) => {
+        if (todo === "maxormin") {
+            if (this.state.isMax) {
+                await windowUtils.setWindowMax();
             } else {
-                ipcRenderer.send("changeWinSize", todo);
+                await windowUtils.setWindowRestore();
             }
+            this.setState({
+                isMax: !this.state.isMax
+            })
+        } else if (todo === "close") {
+            this.showModal();
+            return;
         }
+
     };
     render() {
+        const menu = (
+            <Menu onClick={this.handleMenuClick} theme="dark">
+                <Menu.Item key="1">
+                    <SetOpacityCom className="webkit-no-drag" defaultValue={this.props.defaultValue} changeOpacity={(value) => this.props.changeOpacity(value)} />
+                </Menu.Item>
+                <Menu.Item key="2">
+
+                </Menu.Item>
+                <Menu.Item key="3">
+
+                </Menu.Item>
+            </Menu>
+        );
         return (
             <>
                 <Row align="middle" style={{ width: "100%" }} >
@@ -96,19 +108,25 @@ class Header extends React.Component {
                     </Col>
                     <Col offset={0} span={20} >
                         <Space className="flex-type flex-align-mid">
-                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'minimize') }} style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-ziyuan1' />
-                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'minimize') }} style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-you' />
+                            <IconFont style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-ziyuan1' />
+                            <IconFont style={{ fontSize: '16px' }} className="webkit-no-drag" type='icon-you' />
                             <Search size="small" className="flex-align-mid webkit-no-drag" placeholder="请输入..." onSearch={onSearch} style={{ width: 200 }} />
                         </Space>
                     </Col>
                     <Col span={2}>
                         <Space className="flex-type flex-justify-start flex-align-mid">
-                            <SetOpacityCom className="webkit-no-drag" defaultValue={this.props.defaultValue} changeOpacity={(value) => this.props.changeOpacity(value)} />
-                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'minimize') }} style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-zhiding1' />
-                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'minimize') }} style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-quxiaozhiding' />
+                            <Dropdown
+                                overlay={menu}
+                                onVisibleChange={this.handleVisibleChange}
+                                visible={this.state.showMenu}
+                                placement="bottomCenter"
+                            >
+                                <IconFont onClick={e => e.preventDefault()} style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-icon_huabanfuben1' />
+                            </Dropdown>
                         </Space>
                     </Col>
                 </Row>
+                {/* 退出确认弹框 */}
                 <Modal
                     visible={this.state.visible}
                     onOk={this.closeModal}
@@ -150,7 +168,10 @@ function SetOpacityCom(props) {
     );
     return (
         <Dropdown overlay={menu} trigger={['click']} placement='topCenter'>
-            <SkinOutlined className="webkit-no-drag" />
+            <Space className="webkit-no-drag">
+                <SkinOutlined />
+                <span>设置窗口透明度</span>
+            </Space>
         </Dropdown>
     )
 }
