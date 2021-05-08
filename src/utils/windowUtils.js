@@ -26,9 +26,25 @@ const windowUtils = {
      * 关闭窗口
      * @returns 
      */
-    setWindowClosed: async function() {
+    setWindowClosed: async function () {
         return await ipcRenderer.send("setClose")
+    },
+    /**
+     * 设置窗口透明度
+     * @param {*} value 
+     * @returns 
+     */
+    setWindowOpacity: async function(value) {
+        return await ipcRenderer.send("setOpacity", value);
+    },
+    /**
+     * 
+     * @returns 设置窗口最小化
+     */
+    setWindowMin: async function() {
+        return await ipcRenderer.send("setMin");
     }
+
 }
 
 export default windowUtils;

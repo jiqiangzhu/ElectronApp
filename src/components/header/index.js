@@ -1,4 +1,4 @@
-import { Row, Col, Input, Space, Modal, Tooltip, Slider, Dropdown, Menu } from 'antd';
+import { Row, Col, Input, Space, Modal, Slider, Dropdown, Menu } from 'antd';
 import React from 'react';
 import './index.less';
 import '../../App.less';
@@ -15,8 +15,6 @@ const onSearch = (value) => {
     console.log(value);
 
 }
-// 渲染进程
-const { ipcRenderer } = window.require('electron')
 
 class Header extends React.Component {
     constructor(props) {
@@ -26,8 +24,7 @@ class Header extends React.Component {
             nickname: "",
             fullScreen: false,
             isTop: '置顶',
-            isMax: true,
-            showMenu: true
+            isMax: true
         }
     };
 
@@ -53,7 +50,7 @@ class Header extends React.Component {
     };
     closeModal = () => {
         this.hideModal();
-        ipcRenderer.send("changeWinSize", "close");
+        windowUtils.setWindowClosed();
     }
     async componentDidMount() {
         let result = await getUserInfor();
@@ -76,6 +73,8 @@ class Header extends React.Component {
         } else if (todo === "close") {
             this.showModal();
             return;
+        } else if (todo === "minimize") {
+            await windowUtils.setWindowMin();
         }
 
     };
@@ -85,8 +84,9 @@ class Header extends React.Component {
                 <Menu.Item key="1">
                     <SetOpacityCom className="webkit-no-drag" defaultValue={this.props.defaultValue} changeOpacity={(value) => this.props.changeOpacity(value)} />
                 </Menu.Item>
-                <Menu.Item key="2">
-
+                <Menu.Item key="2" style={{ fontSize: '15px' }} onClick={(e) => { this.changeWindowSize(e, 'close') }} >
+                    <IconFont className="webkit-no-drag" type='icon-setting' />
+                    设置中心
                 </Menu.Item>
                 <Menu.Item key="3">
 
@@ -99,11 +99,11 @@ class Header extends React.Component {
                     {/* <Col style={{ position: 'fixed', left: '12px', top: '4px' }}> */}
                     <Col span={2}>
                         <Space>
-                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'close') }} style={{ fontSize: '16px' }} className="webkit-no-drag" type='icon-cuowuguanbiquxiao-yuankuang' />
-                            <Tooltip title={this.state.isMax === true ? "最大化" : "最小化"} color="rgb(76, 78, 78, 0.3)" defaultVisible={false}>
-                                <IconFont onClick={(e) => { this.changeWindowSize(e, 'maxormin') }} style={{ fontSize: '14px' }} className="webkit-no-drag" type='icon-circle' />
-                            </Tooltip>
-                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'minimize') }} style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-jian-yuankuang' />
+                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'close') }} className="webkit-no-drag" type='icon-circle-copy-red' />
+                            {/* <Tooltip title={this.state.isMax === true ? "最大化" : "最小化"} color="rgb(76, 78, 78, 0.3)" defaultVisible={false}> */}
+                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'maxormin') }} className="webkit-no-drag" type='icon-circle' />
+                            {/* </Tooltip> */}
+                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'minimize') }} className="webkit-no-drag" type='icon-circle-copy-green' />
                         </Space>
                     </Col>
                     <Col offset={0} span={20} >
@@ -118,11 +118,11 @@ class Header extends React.Component {
                             <Dropdown
                                 overlay={menu}
                                 onVisibleChange={this.handleVisibleChange}
-                                visible={this.state.showMenu}
                                 placement="bottomCenter"
                             >
-                                <IconFont onClick={e => e.preventDefault()} style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-icon_huabanfuben1' />
+                                <IconFont onClick={e => e.preventDefault()} style={{ fontSize: '17px' }} className="webkit-no-drag" type='icon-icon_huabanfuben1' />
                             </Dropdown>
+
                         </Space>
                     </Col>
                 </Row>
@@ -170,7 +170,7 @@ function SetOpacityCom(props) {
         <Dropdown overlay={menu} trigger={['click']} placement='topCenter'>
             <Space className="webkit-no-drag">
                 <SkinOutlined />
-                <span>设置窗口透明度</span>
+                窗口透明度
             </Space>
         </Dropdown>
     )

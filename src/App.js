@@ -2,6 +2,7 @@ import { Layout, Skeleton } from 'antd';
 import './App.less';
 import { getMusicList } from './api';
 import React from 'react';
+import windowUtils from '@localUtils/windowUtils.js';
 import { CustomHeader } from './components/header';
 import {
   LocalDownloadCom, DefaultListCom, MusicPanCom, Home,
@@ -11,8 +12,7 @@ import {
 
 // const IconFont = createFromIconfontCN();
 const { Content, Header, Footer } = Layout;
-// 渲染进程
-const { ipcRenderer } = window.require('electron')
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -51,7 +51,7 @@ export default class App extends React.Component {
 
   changeOpacity = (value) => {
     console.log("opacity value---0~1-------", value);
-    ipcRenderer.send("changeOpacity", value);
+    windowUtils.setWindowOpacity(value);
     localStorage.opacityVallue = value;
   }
   chooseItem = (index) => {

@@ -12,9 +12,9 @@ app.on('ready', () => {
     width: 1024,
     height: 680,
     // transparent: true, //设置透明后窗口最大化会出现问题
-    backgroundColor: "#3B3B4D", //设置背景色，在未被完全加载前加载出颜色
+    backgroundColor: "#3B3B4D", //设置背景色，在未被完全加载前加载出框架颜色
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: true, //允许在前端调用node
       enableRemoteModule: true,
       contextIsolation: false,
       webSecurity: false,
@@ -44,7 +44,7 @@ app.on('ready', () => {
 /**
  * 添加 改变窗口透明度 窗口大小 打开文件夹路径等监听
  */
-ipcMain.on("changeOpacity", async (event, args) => {
+ipcMain.on("setOpacity", async (event, args) => {
   await mainWindow.setOpacity(args);
 })
 ipcMain.on("setMax", async (event, args) => {
@@ -53,8 +53,12 @@ ipcMain.on("setMax", async (event, args) => {
 ipcMain.on("setRestore", async (event, args) => {
   await mainWindow.restore();
 })
+ipcMain.on("setMin", async (event, args) => {
+  await mainWindow.minimize();
+})
 ipcMain.on("setClose", async (event, args) => {
   await mainWindow.close();
+  app.quit();
 })
 ipcMain.on("openFolder", async (event, args) => {
   let fileReturn = await dialog.showOpenDialog({ "title": "Choose Music DirPath", properties: ['openFile', 'openDirectory', 'showHiddenFiles', 'createDirectory ', 'multiSelections'], defaultPath: args })
