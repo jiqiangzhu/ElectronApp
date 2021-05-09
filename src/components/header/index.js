@@ -5,16 +5,13 @@ import '../../App.less';
 import windowUtils from '@localUtils/windowUtils.js';
 import { getUserInfor } from '../../api/index'
 import { createFromIconfontCN } from '@ant-design/icons';
-import {
-    SkinOutlined
-} from '@ant-design/icons';
+import { SkinOutlined } from '@ant-design/icons';
+
 const IconFont = createFromIconfontCN();
 const { Search } = Input;
-
-const onSearch = (value) => {
-    console.log(value);
-
-}
+// const warning = (content) => {
+//     message.warning(content, 1);
+// };
 
 class Header extends React.Component {
     constructor(props) {
@@ -24,10 +21,15 @@ class Header extends React.Component {
             nickname: "",
             fullScreen: false,
             isTop: '置顶',
-            isMax: true
-        }
+            isMax: true,
+            inputValue: ""
+        };
     };
-
+    onInputChange = e => {
+        this.setState({
+            inputValue: e.target.dataset.defaultValue
+        })
+    };
     handleMenuClick = e => {
         if (e.key === '3') {
             this.setState({ showMenu: false });
@@ -78,6 +80,18 @@ class Header extends React.Component {
         }
 
     };
+    onChange = (e) => {
+        this.setState({
+            inputValue: e.target.value
+        })
+    };
+    onSearch = (value) => {
+        console.log("onSearch--------", value);
+        if (!value) {
+            // warning("搜索内容不可为空，请检查");
+            return;
+        }
+    };
     render() {
         const menu = (
             <Menu onClick={this.handleMenuClick} theme="dark">
@@ -96,7 +110,6 @@ class Header extends React.Component {
         return (
             <>
                 <Row align="middle" style={{ width: "100%" }} >
-                    {/* <Col style={{ position: 'fixed', left: '12px', top: '4px' }}> */}
                     <Col span={2}>
                         <Space>
                             <IconFont onClick={(e) => { this.changeWindowSize(e, 'close') }} className="webkit-no-drag" type='icon-circle-copy-red' />
@@ -110,7 +123,16 @@ class Header extends React.Component {
                         <Space className="flex-type flex-align-mid">
                             <IconFont style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-ziyuan1' />
                             <IconFont style={{ fontSize: '16px' }} className="webkit-no-drag" type='icon-you' />
-                            <Search size="small" className="flex-align-mid webkit-no-drag" placeholder="请输入..." onSearch={onSearch} style={{ width: 200 }} />
+                            <Search
+                                allowClear={true}
+                                className="webkit-no-drag flex-type flex-align-mid"
+                                placeholder="请输入..."
+                                size="small"
+                                prefix={<IconFont onClick={() => this.onSearch(this.state.inputValue)} style={{ fontSize: '16px' }} type='icon-sousuo' />}
+                                onSearch={this.onSearch}
+                                onChange={this.onChange}
+                                style={{ width: 200 }}
+                            />
                         </Space>
                     </Col>
                     <Col span={2}>
@@ -163,7 +185,7 @@ function SetOpacityCom(props) {
     };
     const menu = (
         <div style={style}>
-            <Slider vertical max={1} step={0.1} className="mySliderStyle" defaultValue={props.defaultValue} onChange={(value) => props.changeOpacity(value)} />
+            <Slider vertical max={100} min={78} step={1} style={{height: '50%'}} defaultValue={props.defaultValue * 100} onChange={(value) => props.changeOpacity(value / 100)} />
         </div>
     );
     return (
