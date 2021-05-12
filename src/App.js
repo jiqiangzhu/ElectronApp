@@ -1,6 +1,7 @@
 import { Layout, Skeleton } from 'antd';
 import './App.less';
 import { getMusicList } from './api';
+import FooterCom from './components/footer'
 import React from 'react';
 import windowUtils from '@localUtils/windowUtils.js';
 import { CustomHeader } from './components/header';
@@ -195,7 +196,7 @@ export default class App extends React.Component {
           </Layout>
           {/* 后续删除Footer height */}
           <Footer style={{ height: "40px", lineHeight: '40px', position: 'fixed', zIndex: 10, bottom: 0, width: '100%' }}>
-            {/* <FooterCom playMusic={(i) => this.playMusic(i)} /> */}
+            <FooterCom playMusic={(i) => this.playMusic(i)} />
           </Footer>
         </Layout>
       </Skeleton>

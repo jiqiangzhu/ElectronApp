@@ -6,6 +6,7 @@ module.exports = {
     webpack: {
         alias: {
             '@localUtils': pathResolve('src/utils'),
+            '@': pathResolve('src')
         }
     },
     plugins: [
