@@ -98,8 +98,6 @@ export default function FooterCom(props) {
                     <Space size={10}>
                         <StepBackwardOutlined style={{ fontSize: "24px", cursor: "pointer" }} />
                         <PlayStatusCom playStatus={playFlag} onClick={(flag) => playMusic.bind(this, flag)} />
-                        {/* <CaretRightOutlined style={{ fontSize: "30px", cursor: "pointer" }} onClick={playMusic.bind(this)} /> */}
-                        {/* <IconFont type="icon-bofang" style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }} onClick={setPlayMode.bind(this)} className="webkit-no-drag" /> */}
                         <StepForwardOutlined style={{ fontSize: "24px", cursor: "pointer" }} />
                     </Space>
                 </Col>
