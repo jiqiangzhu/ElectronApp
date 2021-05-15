@@ -1,4 +1,4 @@
-import { Layout, Skeleton } from 'antd';
+import { Layout, Skeleton, List } from 'antd';
 import './App.less';
 import { getMusicList } from './api';
 import FooterCom from './components/footer'
@@ -28,7 +28,9 @@ export default class App extends React.Component {
       loadingFlag: true,
       opacityVallue: 0,
       rightContent: "",
-      renderContent: ""
+      renderContent: "",
+      musicList: [],
+      musicDom: ""
     };
   }
 
@@ -121,6 +123,17 @@ export default class App extends React.Component {
         break;
     }
   }
+  setMusicList = (musicList) => {
+    console.log("musicList-----", musicList);
+    this.setState({
+      musicDom: musicList.map((item, index) => {
+        return (
+          <p key={index}>{item}</p>
+        )
+      })
+    })
+
+  }
   render() {
     // let renderDom = this.state.tabs.map((item, index) => {
     //   let nodeItem;
@@ -174,8 +187,17 @@ export default class App extends React.Component {
           <Header className="lay-header webkit-drag" style={{ position: 'fixed', zIndex: 10, width: '100%' }}>
             <CustomHeader defaultValue={localStorage.opacityVallue * 1} changeOpacity={(value) => { this.changeOpacity(value) }} />
           </Header>
-          <Layout style={{ flex: 1 }} >
+          <Layout className="my-content">
             <Content>
+                <List
+                  bordered
+                  dataSource={this.state.musicDom}
+                  renderItem={item => (
+                    <List.Item>
+                      {item}
+                    </List.Item>
+                  )}
+                />
               {/* <Layout>
                 <Sider className="site-layout-background" width={200} style={{
                   overflow: 'auto',
@@ -196,7 +218,7 @@ export default class App extends React.Component {
           </Layout>
           {/* 后续删除Footer height */}
           <Footer style={{ height: "40px", lineHeight: '40px', position: 'fixed', zIndex: 10, bottom: 0, width: '100%' }}>
-            <FooterCom playMusic={(i) => this.playMusic(i)} />
+            <FooterCom playMusic={(i) => this.playMusic(i)} getMusicListFromFooterCom={(musicList) => this.setMusicList(musicList)} />
           </Footer>
         </Layout>
       </Skeleton>

@@ -61,7 +61,7 @@ ipcMain.on("setClose", async (event, args) => {
   app.quit();
 })
 ipcMain.on("openFolder", async (event, args) => {
-  let fileReturn = await dialog.showOpenDialog({ "title": "Choose Music DirPath", properties: ['openFile', 'openDirectory', 'showHiddenFiles', 'createDirectory ', 'multiSelections'], defaultPath: args })
+  let fileReturn = await dialog.showOpenDialog({ "title": "Choose Music DirPath", properties: ['openFile', 'openDirectory', 'multiSelections'], defaultPath: args })
   if (!fileReturn.canceled) {
     await event.reply('asynchronous-reply', fileReturn)
   }

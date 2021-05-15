@@ -2,6 +2,9 @@ import { Space, Row, Col, Progress } from 'antd';
 import React, { useEffect, useState } from 'react';
 import './index.less';
 import '@/App.less';
+import commonUtils from '@localUtils/commonUtils.js';
+import windowUtils from '@localUtils/windowUtils.js';
+import fsUtils from '@localUtils/fs-utils.js';
 import mp3Path from '../../assets/audio/test.mp3'
 import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import { createFromIconfontCN } from '@ant-design/icons';
@@ -18,6 +21,7 @@ export default function FooterCom(props) {
     const progressRef = React.createRef();
     const [playFlag, setPlayFlag] = useState("play");
     const [duration, setDuration] = useState(0);
+    // const [musicList, setMusicList] = useState([]);
     // const getDuration = () => {
 
     // }
@@ -56,7 +60,25 @@ export default function FooterCom(props) {
     // const playNext = () => {
     //     setCurrentIndex(currentIndex + 1)
     // }
+    const importLocal = async () => {
+        await windowUtils.openFolder(async (event, arg) => {
+            let path = arg.filePaths[0];
+            await fsUtils.readMusicDir(path, (err, files) => {
+                console.log("files----", files);
+                if (files.length > 0) {
+                    let list = files.filter((item, index) => {
+                        if(item.indexOf('.mp3') !== -1) {
+                            return true;
+                        }
+                        return false;
+                    })
+                    props.getMusicListFromFooterCom(list);
+                }
+            })
+        });
 
+
+    }
     return (
         <>
             {/* 
@@ -83,7 +105,7 @@ export default function FooterCom(props) {
                     </Space>
                 </Col>
                 <Col span={1} style={{ paddingBottom: '10px', paddingRight: '10px' }} className="flex-type flex-justify-end">
-                    {secondsFormat(beginTime)}
+                    {commonUtils.secondsFormat(beginTime)}
                 </Col>
                 <Col span={12}>
                     <div ref={progressRef}>
@@ -94,10 +116,13 @@ export default function FooterCom(props) {
                     </div>
                 </Col>
                 <Col style={{ paddingBottom: '10px', paddingLeft: '10px' }} span={1}>
-                    {secondsFormat(parseInt(duration) ? parseInt(duration) : 0)}
+                    {commonUtils.secondsFormat(parseInt(duration) ? parseInt(duration) : 0)}
                 </Col>
                 <Col span={2} className="flex-type flex-justify-end">
-                    <IconFont style={{ paddingBottom: '10px', fontSize: '16px' }} type="icon-hanhan-01-011" onClick={setPlayMode.bind(this)} className="webkit-no-drag" />
+                    <Space style={{ paddingBottom: '10px', }}>
+                        <IconFont style={{ fontSize: '16px' }} type="icon-hanhan-01-011" onClick={setPlayMode.bind(this)} className="webkit-no-drag" />
+                        <IconFont style={{ fontSize: '16px' }} type="icon-jia" onClick={importLocal.bind(this)} className="webkit-no-drag" />
+                    </Space>
                 </Col>
             </Row>
 
@@ -118,29 +143,3 @@ function PlayStatusCom(props) {
     }
 
 }
-function secondsFormat(sec){
-    let hour = Math.floor(sec / 3600);
-    let minute = Math.floor((sec - hour * 3600) / 60);
-    let second = sec - hour * 3600 - minute * 60;
-    if (hour < 10) {
-        hour = "0" + hour;
-    }
-    if (minute < 10) {
-        minute = "0" + minute;
-    }
-    if (second < 10) {
-        second = "0" + second;
-    }
-    return minute + ":" + second;
- }
-// function Counter(props) {
-//     const [count, setCount] = useState(props.initialCount);
-//     return (
-//       <>
-//         Count: {count}
-//         <button onClick={() => setCount(props.initialCount)}>Reset</button>
-//         <button onClick={() => setCount(prevCount => prevCount - 1)}>-</button>
-//         <button onClick={() => setCount(prevCount => prevCount + 1)}>+</button>
-//       </>
-//     );
-//   }

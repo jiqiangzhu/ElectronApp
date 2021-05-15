@@ -5,6 +5,7 @@
 // 渲染进程
 const { ipcRenderer } = window.require('electron');
 
+
 const windowUtils = {
     /**
      * 窗口最大化
@@ -43,6 +44,15 @@ const windowUtils = {
      */
     setWindowMin: async function() {
         return await ipcRenderer.send("setMin");
+    },
+
+    /**
+     * 
+     * @returns 导入本地文件
+     */
+     openFolder: async function(resolve) {
+        await ipcRenderer.send("openFolder", "D:/");
+        ipcRenderer.once('asynchronous-reply', resolve)
     }
 
 }
