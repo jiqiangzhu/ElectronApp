@@ -83,7 +83,6 @@ export default function FooterCom(props) {
         <>
             {/* 
                 onCanPlay={getDuration.bind(this)}
-                onTimeUpdate={updateTime.bind(this)} 
                 onEnded={playNext.bind(this, currentIndex)}    
             */}
             <audio
