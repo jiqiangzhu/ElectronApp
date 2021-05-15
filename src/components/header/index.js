@@ -1,19 +1,17 @@
-import { Row, Col, Input, Space, Modal, Tooltip } from 'antd';
+import { Row, Col, Input, Space, Modal, Slider, Dropdown, Menu } from 'antd';
 import React from 'react';
 import './index.less';
 import '../../App.less';
+import windowUtils from '@localUtils/windowUtils.js';
 import { getUserInfor } from '../../api/index'
 import { createFromIconfontCN } from '@ant-design/icons';
+import { SkinOutlined } from '@ant-design/icons';
 
 const IconFont = createFromIconfontCN();
 const { Search } = Input;
-
-const onSearch = (value) => {
-    console.log(value);
-
-}
-// 渲染进程
-const { ipcRenderer } = window.require('electron')
+// const warning = (content) => {
+//     message.warning(content, 1);
+// };
 
 class Header extends React.Component {
     constructor(props) {
@@ -23,8 +21,23 @@ class Header extends React.Component {
             nickname: "",
             fullScreen: false,
             isTop: '置顶',
-            isMax: true
+            isMax: true,
+            inputValue: ""
+        };
+    };
+    onInputChange = e => {
+        this.setState({
+            inputValue: e.target.dataset.defaultValue
+        })
+    };
+    handleMenuClick = e => {
+        if (e.key === '3') {
+            this.setState({ showMenu: false });
         }
+    };
+
+    handleVisibleChange = flag => {
+        this.setState({ showMenu: flag });
     };
     showModal = () => {
         this.setState({
@@ -39,7 +52,7 @@ class Header extends React.Component {
     };
     closeModal = () => {
         this.hideModal();
-        ipcRenderer.send("changeWinSize", "close");
+        windowUtils.setWindowClosed();
     }
     async componentDidMount() {
         let result = await getUserInfor();
@@ -49,55 +62,93 @@ class Header extends React.Component {
         })
     };
     // 向主进程发送请求指令 最小化 最大化，关闭窗口
-    changeWindowSize = (e, todo) => {
-        if (todo) {
-            if (todo === "close") { // 如果指令为退出，弹窗提示是否确认退出
-                this.showModal();
-                return;
-            }
-
-            if (todo === "maxormin") {
-                try {
-                    if (this.state.isMax) {
-                        ipcRenderer.send("changeWinSize", "max");
-                    } else {
-                        ipcRenderer.send("changeWinSize", "restore");
-                    }
-                    this.setState({
-                        isMax: !this.state.isMax
-                    })
-                } catch (error) {
-                    console.error(error);
-                }
-
-
+    changeWindowSize = async (e, todo) => {
+        if (todo === "maxormin") {
+            if (this.state.isMax) {
+                await windowUtils.setWindowMax();
             } else {
-                ipcRenderer.send("changeWinSize", todo);
+                await windowUtils.setWindowRestore();
             }
+            this.setState({
+                isMax: !this.state.isMax
+            })
+        } else if (todo === "close") {
+            this.showModal();
+            return;
+        } else if (todo === "minimize") {
+            await windowUtils.setWindowMin();
+        }
+
+    };
+    onChange = (e) => {
+        this.setState({
+            inputValue: e.target.value
+        })
+    };
+    onSearch = (value) => {
+        console.log("onSearch--------", value);
+        if (!value) {
+            // warning("搜索内容不可为空，请检查");
+            return;
         }
     };
     render() {
+        const menu = (
+            <Menu onClick={this.handleMenuClick} theme="dark">
+                <Menu.Item key="1">
+                    <SetOpacityCom className="webkit-no-drag" defaultValue={this.props.defaultValue} changeOpacity={(value) => this.props.changeOpacity(value)} />
+                </Menu.Item>
+                <Menu.Item key="2" style={{ fontSize: '15px' }} onClick={(e) => { this.changeWindowSize(e, 'close') }} >
+                    <IconFont className="webkit-no-drag" type='icon-setting' />
+                    设置中心
+                </Menu.Item>
+                <Menu.Item key="3">
+
+                </Menu.Item>
+            </Menu>
+        );
         return (
-            <div className="cus-header">
-                <Row className="site-page-header" align="middle">
-                    <Col span={5} className="flex-type flex-justify-evenly">
-                        <Space >
-                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'close') }} style={{ fontSize: '16px' }} className="webkit-no-drag" type='icon-cuowuguanbiquxiao-yuankuang' />
-                            <Tooltip title={this.state.isMax === true ? "最大化" : "最小化"} color="rgb(76, 78, 78, 0.3)" defaultVisible={false}>
-                                <IconFont onClick={(e) => { this.changeWindowSize(e, 'maxormin') }} style={{ fontSize: '14px' }} className="webkit-no-drag" type='icon-circle' />
-                            </Tooltip>
-                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'minimize') }} style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-jian-yuankuang' />
+            <>
+                <Row align="middle" style={{ width: "100%" }} >
+                    <Col span={2}>
+                        <Space>
+                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'close') }} className="webkit-no-drag" type='icon-circle-copy-red' />
+                            {/* <Tooltip title={this.state.isMax === true ? "最大化" : "最小化"} color="rgb(76, 78, 78, 0.3)" defaultVisible={false}> */}
+                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'maxormin') }} className="webkit-no-drag" type='icon-circle' />
+                            {/* </Tooltip> */}
+                            <IconFont onClick={(e) => { this.changeWindowSize(e, 'minimize') }} className="webkit-no-drag" type='icon-circle-copy-green' />
                         </Space>
                     </Col>
-                    <Col offset={1} span={8} className="flex-type">
-                        <Search size="small" className="flex-align-mid webkit-no-drag" placeholder="请输入..." onSearch={onSearch} style={{ width: 200 }} />
+                    <Col offset={0} span={20} >
+                        <Space className="flex-type flex-align-mid">
+                            <IconFont style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-ziyuan1' />
+                            <IconFont style={{ fontSize: '16px' }} className="webkit-no-drag" type='icon-you' />
+                            <Search
+                                allowClear={true}
+                                className="webkit-no-drag flex-type flex-align-mid"
+                                placeholder="请输入..."
+                                size="small"
+                                prefix={<IconFont onClick={() => this.onSearch(this.state.inputValue)} style={{ fontSize: '16px' }} type='icon-sousuo' />}
+                                onSearch={this.onSearch}
+                                onChange={this.onChange}
+                                style={{ width: 200 }}
+                            />
+                        </Space>
                     </Col>
-                    <Col span={8}>
-                        <Space className="flex-type webkit-no-drag flex-justify-start flex-align-mid">
+                    <Col span={2}>
+                        <Space className="flex-type flex-justify-start flex-align-mid">
+                            <Dropdown
+                                overlay={menu}
+                                onVisibleChange={this.handleVisibleChange}
+                                placement="bottomCenter"
+                            >
+                                <IconFont onClick={e => e.preventDefault()} style={{ fontSize: '17px' }} className="webkit-no-drag" type='icon-icon_huabanfuben1' />
+                            </Dropdown>
 
                         </Space>
                     </Col>
                 </Row>
+                {/* 退出确认弹框 */}
                 <Modal
                     visible={this.state.visible}
                     onOk={this.closeModal}
@@ -116,7 +167,7 @@ class Header extends React.Component {
                 >
                     <p>确认退出吗？</p>
                 </Modal>
-            </div>
+            </>
         )
     }
 }
@@ -126,23 +177,26 @@ class Header extends React.Component {
  * @param {*} props 
  * @returns 
  */
-// function SetOpacityCom(props) {
-//     const style = {
-//         display: 'inline-block',
-//         height: 300,
-//         marginLeft: 70,
-//     };
-//     const menu = (
-//         <div style={style}>
-//             <Slider vertical max={1} step={0.1} className="mySliderStyle" defaultValue={props.defaultValue} onChange={(value) => props.changeOpacity(value)} />
-//         </div>
-//     );
-//     return (
-//         <Dropdown overlay={menu} trigger={['click']} placement='topCenter'>
-//             <SkinOutlined className="webkit-no-drag" />
-//         </Dropdown>
-//     )
-// }
+function SetOpacityCom(props) {
+    const style = {
+        display: 'inline-block',
+        height: 300,
+        marginLeft: 70,
+    };
+    const menu = (
+        <div style={style}>
+            <Slider vertical max={100} min={78} step={1} style={{height: '50%'}} defaultValue={props.defaultValue * 100} onChange={(value) => props.changeOpacity(value / 100)} />
+        </div>
+    );
+    return (
+        <Dropdown overlay={menu} trigger={['click']} placement='topCenter'>
+            <Space className="webkit-no-drag">
+                <SkinOutlined />
+                窗口透明度
+            </Space>
+        </Dropdown>
+    )
+}
 
 /**
  * 设置窗口最大最小化

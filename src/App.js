@@ -1,23 +1,18 @@
-import { Layout, Skeleton } from 'antd';
+import { Layout, Skeleton, List } from 'antd';
 import './App.less';
 import { getMusicList } from './api';
+import FooterCom from './components/footer'
 import React from 'react';
+import windowUtils from '@localUtils/windowUtils.js';
 import { CustomHeader } from './components/header';
-// import FooterCom from './components/footer';
 import {
   LocalDownloadCom, DefaultListCom, MusicPanCom, Home,
   MyCollectionCom, MyTVCom, RecentlyPlayCom, ExploreCom
 } from './components/main';
-// LiveCom, DiscoveryCom, , MobilePlayCom, ExploreCom,
-// import {
-//   UserOutlined,
-//   SearchOutlined,
-//   StarOutlined
-// }
-//   from '@ant-design/icons';
+// import { createFromIconfontCN } from '@ant-design/icons';
 
+// const IconFont = createFromIconfontCN();
 const { Content, Header, Footer } = Layout;
-// const { TabPane } = Tabs;
 
 export default class App extends React.Component {
   constructor(props) {
@@ -33,7 +28,9 @@ export default class App extends React.Component {
       loadingFlag: true,
       opacityVallue: 0,
       rightContent: "",
-      renderContent: ""
+      renderContent: "",
+      musicList: [],
+      musicDom: ""
     };
   }
 
@@ -56,8 +53,8 @@ export default class App extends React.Component {
   }
 
   changeOpacity = (value) => {
-    console.log("opacity value---0~1-------", value)
-    // document.body.style.background = `rgba(59,59,77, ${value})`;
+    console.log("opacity value---0~1-------", value);
+    windowUtils.setWindowOpacity(value);
     localStorage.opacityVallue = value;
   }
   chooseItem = (index) => {
@@ -126,6 +123,17 @@ export default class App extends React.Component {
         break;
     }
   }
+  setMusicList = (musicList) => {
+    console.log("musicList-----", musicList);
+    this.setState({
+      musicDom: musicList.map((item, index) => {
+        return (
+          <p key={index}>{item}</p>
+        )
+      })
+    })
+
+  }
   render() {
     // let renderDom = this.state.tabs.map((item, index) => {
     //   let nodeItem;
@@ -174,16 +182,22 @@ export default class App extends React.Component {
     // })
 
     return (
-      <Skeleton active loading={this.state.loadingFlag} rows={20}>
+      <Skeleton active loading={this.state.loadingFlag} rows={40}>
         <Layout className="main-content">
-          <Header className="webkit-no-drag" style={{ position: 'fixed', zIndex: 10, width: '100%' }}> 
+          <Header className="lay-header webkit-drag" style={{ position: 'fixed', zIndex: 10, width: '100%' }}>
             <CustomHeader defaultValue={localStorage.opacityVallue * 1} changeOpacity={(value) => { this.changeOpacity(value) }} />
-            {/* <Tabs defaultActiveKey="0" animated={{ tabPane: true }} centered onChange={(params) => this.callback(params)}>
-              {renderDom}
-            </Tabs> */}
           </Header>
-          <Layout style={{ paddingBottom: '72px' }} >
+          <Layout className="my-content">
             <Content>
+                <List
+                  bordered
+                  dataSource={this.state.musicDom}
+                  renderItem={item => (
+                    <List.Item>
+                      {item}
+                    </List.Item>
+                  )}
+                />
               {/* <Layout>
                 <Sider className="site-layout-background" width={200} style={{
                   overflow: 'auto',
@@ -199,11 +213,12 @@ export default class App extends React.Component {
                   </Layout>
                 </Content>
               </Layout> */}
-
+              {/* <IconFont onClick={()=>console.log("OK")} style={{ fontSize: '16px', position: 'absolute', bottom: '20px', right:'20px' }} className="webkit-no-drag" type='icon-cuowuguanbiquxiao-yuankuang' /> */}
             </Content>
           </Layout>
-          <Footer style={{ textAlign: 'center', lineHeight: '72px', position: 'fixed', bottom: 0, width: '100%' }}>
-            {/* <FooterCom playMusic={(i) => this.playMusic(i)} /> */}
+          {/* 后续删除Footer height */}
+          <Footer style={{ height: "40px", lineHeight: '40px', position: 'fixed', zIndex: 10, bottom: 0, width: '100%' }}>
+            <FooterCom playMusic={(i) => this.playMusic(i)} getMusicListFromFooterCom={(musicList) => this.setMusicList(musicList)} />
           </Footer>
         </Layout>
       </Skeleton>

@@ -1,51 +1,79 @@
 @import '~antd/dist/antd.less';
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.my-content {
+  overflow-y: scroll
+}
+.my-content::-webkit-scrollbar{
+  display: none;
+}
 .main-content {
-  height: 100vh;
+  height: 680px;
+  padding: 13px 15px;
+  display: flex;
+  flex-direction: column;
   .ant-tabs-tab-active .anticon svg {
     color: #00CED1;
   }
+  .lay-header {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 0;
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    z-index: 10;
+    width: 100%;
+    left: 15px;
+    top: 6px;
+  }
+
 }
+
 .ant-layout {
   border-radius: 20px;
+  padding-top: 30px;
 }
+
 .ant-tabs-tabpane {
   display: flex;
 }
+
 .webkit-no-drag {
   -webkit-app-region: no-drag;
   cursor: pointer;
 }
+
 .webkit-drag {
   -webkit-app-region: drag;
 }
+
 .anticon svg {
   color: #fff;
 }
-.ant-input-group-addon{
+
+.ant-input-group-addon {
   .ant-input-search-button {
     border: 2px #EFEFEF solid;
     border-left: none;
     border-bottom-right-radius: 1px;
     border-top-right-radius: 1px;
   }
-} 
+}
+
 .ant-layout-footer {
-  padding: 0 50px;
-  background: rgba(46, 103, 156, 0.2);
+  padding: 0 30px;
+  // background: rgba(46, 103, 156, 0.2);
 }
-.ant-layout-header {
-  line-height: 0;
-  height: auto;
-  margin: 13px 15px 0;
-  padding: 0 0;
-}
-.ant-layout-content {
-  padding-top: 110px;
-}
+
 // 预定义样式
 .flex-align-mid {
   align-items: center;
 }
+
 .flex-align-self-start {
   align-items: flex-start;
 }
@@ -53,9 +81,11 @@
 .flex-justify-end {
   justify-content: flex-end;
 }
+
 .full {
   width: 100%;
 }
+
 .item-fixed {
   position: fixed;
 }
@@ -63,9 +93,13 @@
 .flex-type {
   display: flex;
 }
+.align-self-start {
+  align-self: flex-start;
+}
 .flex-justify-start {
   justify-content: flex-start;
 }
+
 .flex-justify-evenly {
   justify-content: space-between;
 }
@@ -73,6 +107,7 @@
 .border-radius-5 {
   border-radius: 50%;
 }
+
 .padding-top5 {
   padding-top: 5px;
-}	
+}
