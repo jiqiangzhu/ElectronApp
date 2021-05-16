@@ -16,19 +16,14 @@ export default function FooterCom(props) {
     const IconFont = createFromIconfontCN();
     const [beginTime, setBeginTime] = useState(0);
     const [loopFlag, setLoopFlag] = useState(true);
-    // const [currentIndex, setCurrentIndex] = useState(1);
+    // const [currentIndex, setCurrentIndex] = useState(0);
     const audioRef = React.createRef();
     const progressRef = React.createRef();
     const [playFlag, setPlayFlag] = useState("play");
     const [duration, setDuration] = useState(0);
-    // const [musicList, setMusicList] = useState([]);
-    // const getDuration = () => {
-
-    // }
     const [persent, setPersent] = useState(0);
 
     const updateTime = () => {
-        // const duration = audioRef.current.duration;
         let temPersent = (audioRef.current.currentTime / duration) * 100;
         setPersent(temPersent)
         setBeginTime(parseInt(audioRef.current.currentTime))
@@ -66,8 +61,10 @@ export default function FooterCom(props) {
             await fsUtils.readMusicDir(path, (err, files) => {
                 console.log("files----", files);
                 if (files.length > 0) {
-                    let list = files.filter((item, index) => {
+                    let list = [];
+                    files.filter((item, index) => {
                         if(item.indexOf('.mp3') !== -1) {
+                            list.push(item.substr(0, item.indexOf('.mp3')));
                             return true;
                         }
                         return false;
