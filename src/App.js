@@ -190,7 +190,7 @@ export default class App extends React.Component {
           <Layout className="my-content">
             <Content>
                 <List
-                  bordered
+                  
                   dataSource={this.state.musicDom}
                   renderItem={item => (
                     <List.Item>
