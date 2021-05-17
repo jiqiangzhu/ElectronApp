@@ -10,18 +10,20 @@ import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import { createFromIconfontCN } from '@ant-design/icons';
 
 export default function FooterCom(props) {
-    useEffect(() => {
-        setDuration(audioRef.current.duration)
-    })
     const IconFont = createFromIconfontCN();
     const [beginTime, setBeginTime] = useState(0);
     const [loopFlag, setLoopFlag] = useState(true);
-    // const [currentIndex, setCurrentIndex] = useState(0);
+    const [currentIndex, setCurrentIndex] = useState(0);
     const audioRef = React.createRef();
     const progressRef = React.createRef();
     const [playFlag, setPlayFlag] = useState("play");
     const [duration, setDuration] = useState(0);
     const [persent, setPersent] = useState(0);
+
+    useEffect(() => {
+        setDuration(audioRef.current.duration);
+    }, [audioRef])
+
 
     const updateTime = () => {
         let temPersent = (audioRef.current.currentTime / duration) * 100;
@@ -52,9 +54,10 @@ export default function FooterCom(props) {
         let setCurrentTime = (duration * currentRate) / 100
         audioRef.current.currentTime = setCurrentTime;
     }
-    // const playNext = () => {
-    //     setCurrentIndex(currentIndex + 1)
-    // }
+    const playNext = (value) => {
+        setCurrentIndex(currentIndex + value);
+        props.playMusic(currentIndex)
+    }
     const importLocal = async () => {
         await windowUtils.openFolder(async (event, arg) => {
             let path = arg.filePaths[0];
@@ -84,6 +87,7 @@ export default function FooterCom(props) {
             */}
             <audio
                 onTimeUpdate={updateTime.bind(this)}
+                onError={playMusic.bind(this, "pause")}
                 ref={audioRef}
                 preload="true"
                 loop={loopFlag}
@@ -93,9 +97,9 @@ export default function FooterCom(props) {
             <Row align="middle" style={{ width: "100%" }} >
                 <Col span={3}>
                     <Space size={10}>
-                        <StepBackwardOutlined style={{ fontSize: "24px", cursor: "pointer" }} />
+                        <StepBackwardOutlined onClick={playNext.bind(this, -1)} style={{ fontSize: "24px", cursor: "pointer" }} />
                         <PlayStatusCom playStatus={playFlag} onClick={(flag) => playMusic.bind(this, flag)} />
-                        <StepForwardOutlined style={{ fontSize: "24px", cursor: "pointer" }} />
+                        <StepForwardOutlined onClick={playNext.bind(this, 1)}  style={{ fontSize: "24px", cursor: "pointer" }} />
                     </Space>
                 </Col>
                 <Col span={1} style={{ paddingBottom: '10px', paddingRight: '10px' }} className="flex-type flex-justify-end">
