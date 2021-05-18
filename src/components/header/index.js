@@ -2,7 +2,7 @@ import { Row, Col, Input, Space, Modal, Slider, Dropdown, Menu } from 'antd';
 import React from 'react';
 import './index.less';
 import '../../App.less';
-import windowUtils from '@localUtils/windowUtils.js';
+import windowUtils from '@localUtils/window-util';
 import { getUserInfor } from '../../api/index'
 import { createFromIconfontCN } from '@ant-design/icons';
 import { SkinOutlined } from '@ant-design/icons';

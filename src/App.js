@@ -3,7 +3,7 @@ import './App.less';
 import { getMusicList } from './api';
 import FooterCom from './components/footer'
 import React from 'react';
-import windowUtils from '@localUtils/windowUtils.js';
+import windowUtils from '@localUtils/window-util';
 import { CustomHeader } from './components/header';
 
 const { Content, Header, Footer } = Layout;
@@ -47,7 +47,6 @@ export default class App extends React.Component {
   }
 
   setMusicList = (musicList) => {
-    console.log("musicList-----", musicList);
     this.setState({
       musicList: musicList,
       musicDom: musicList.map((item, index) => {

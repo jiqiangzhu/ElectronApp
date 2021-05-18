@@ -2,9 +2,9 @@ import { Space, Row, Col, Progress } from 'antd';
 import React, { useEffect, useState } from 'react';
 import './index.less';
 import '@/App.less';
-import commonUtils from '@localUtils/commonUtils.js';
-import windowUtils from '@localUtils/windowUtils.js';
-import fsUtils from '@localUtils/fs-utils.js';
+import commonUtils from '@localUtils/common-util';
+import windowUtils from '@localUtils/window-util';
+import fsUtils from '@localUtils/fs-util';
 import mp3Path from '../../assets/audio/test.mp3'
 import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import { createFromIconfontCN } from '@ant-design/icons';
@@ -62,7 +62,7 @@ export default function FooterCom(props) {
         await windowUtils.openFolder(async (event, arg) => {
             let path = arg.filePaths[0];
             await fsUtils.readMusicDir(path, (err, files) => {
-                console.log("files----", files);
+                console.log(`${path}路径下的文件集合-------`, files);
                 if (files.length > 0) {
                     let list = [];
                     files.filter((item, index) => {
