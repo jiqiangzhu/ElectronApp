@@ -19,6 +19,7 @@ export default function FooterCom(props) {
     const [playFlag, setPlayFlag] = useState("play");
     const [duration, setDuration] = useState(0);
     const [persent, setPersent] = useState(0);
+    const [filePathArray, setFilePathArray] = useState([]);
 
     useEffect(() => {
         setDuration(audioRef.current.duration);
@@ -34,7 +35,7 @@ export default function FooterCom(props) {
     const setPlayMode = () => {
         console.log("this", this);
         setLoopFlag(!loopFlag);
-        console.log("当前播放模式 单曲循环 true  否则 false", loopFlag);
+        console.log("play mode if true single cycle else false----->>>>", loopFlag);
     }
     const playMusic = (flag) => {
         setPlayFlag(flag);
@@ -58,15 +59,17 @@ export default function FooterCom(props) {
         setCurrentIndex(currentIndex + value);
         props.playMusic(currentIndex)
     }
-    const importLocal = async () => {
-        await windowUtils.openFolder(async (event, arg) => {
+    const importLocal = async (e, dirPath = "D:/") => {
+        console.log("dirPath------->>>>", dirPath);
+        await windowUtils.openFolder(dirPath, async (event, arg) => {
             let path = arg.filePaths[0];
+            // console.log("the path of user choosed----->>>>>", path);
             await fsUtils.readMusicDir(path, (err, files) => {
-                console.log(`${path}路径下的文件集合-------`, files);
+                console.log(`list of files from ${path}------->>>>>>>`, files);
                 if (files.length > 0) {
                     let list = [];
                     files.filter((item, index) => {
-                        if(item.indexOf('.mp3') !== -1) {
+                        if (item.indexOf('.mp3') !== -1) {
                             list.push(item.substr(0, item.indexOf('.mp3')));
                             return true;
                         }
@@ -76,9 +79,8 @@ export default function FooterCom(props) {
                 }
             })
         });
-
-
     }
+
     return (
         <>
             {/* 
@@ -97,20 +99,30 @@ export default function FooterCom(props) {
             <Row align="middle" style={{ width: "100%" }} >
                 <Col span={3}>
                     <Space size={10}>
-                        <StepBackwardOutlined onClick={playNext.bind(this, -1)} style={{ fontSize: "24px", cursor: "pointer" }} />
-                        <PlayStatusCom playStatus={playFlag} onClick={(flag) => playMusic.bind(this, flag)} />
-                        <StepForwardOutlined onClick={playNext.bind(this, 1)}  style={{ fontSize: "24px", cursor: "pointer" }} />
+                        <StepBackwardOutlined
+                            onClick={playNext.bind(this, -1)}
+                            style={{ fontSize: "24px", cursor: "pointer" }} />
+                        <PlayStatusCom
+                            playStatus={playFlag}
+                            onClick={(flag) => playMusic.bind(this, flag)} />
+                        <StepForwardOutlined
+                            onClick={playNext.bind(this, 1)}
+                            style={{ fontSize: "24px", cursor: "pointer" }} />
                     </Space>
                 </Col>
-                <Col span={1} style={{ paddingBottom: '10px', paddingRight: '10px' }} className="flex-type flex-justify-end">
+                <Col span={1} style={{ paddingBottom: '10px', paddingRight: '10px' }}
+                    className="flex-type flex-justify-end">
                     {commonUtils.secondsFormat(beginTime)}
                 </Col>
                 <Col span={12}>
                     <div ref={progressRef}>
-                        <Progress percent={persent} onClick={setCurrentPlayTime.bind(this)} className="audio-process" showInfo={false} strokeColor={{
-                            '0%': '#108ee9',
-                            '100%': '#87d068',
-                        }} />
+                        <Progress percent={persent}
+                            onClick={setCurrentPlayTime.bind(this)}
+                            className="audio-process"
+                            showInfo={false} strokeColor={{
+                                '0%': '#108ee9',
+                                '100%': '#87d068',
+                            }} />
                     </div>
                 </Col>
                 <Col style={{ paddingBottom: '10px', paddingLeft: '10px' }} span={1}>
@@ -118,8 +130,14 @@ export default function FooterCom(props) {
                 </Col>
                 <Col span={2} className="flex-type flex-justify-end">
                     <Space style={{ paddingBottom: '10px', }}>
-                        <IconFont style={{ fontSize: '16px' }} type="icon-hanhan-01-011" onClick={setPlayMode.bind(this)} className="webkit-no-drag" />
-                        <IconFont style={{ fontSize: '16px' }} type="icon-jia" onClick={importLocal.bind(this)} className="webkit-no-drag" />
+                        <IconFont style={{ fontSize: '16px' }}
+                            type="icon-hanhan-01-011"
+                            onClick={setPlayMode.bind(this)}
+                            className="webkit-no-drag" />
+                        <IconFont style={{ fontSize: '16px' }}
+                            type="icon-jia"
+                            onClick={importLocal.bind(this)}
+                            className="webkit-no-drag" />
                     </Space>
                 </Col>
             </Row>
@@ -127,16 +145,24 @@ export default function FooterCom(props) {
         </>
     )
 }
-
+/**
+ * set play or pause
+ * @param {*} props 
+ * @returns 
+ */
 function PlayStatusCom(props) {
     const IconFont = createFromIconfontCN();
     if (props.playStatus === "play") {
         return (
-            <IconFont type="icon-bofang" style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }} onClick={props.onClick("pause")} className="webkit-no-drag" />
+            <IconFont type="icon-bofang"
+                style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }}
+                onClick={props.onClick("pause")} className="webkit-no-drag" />
         )
     } else {
         return (
-            <IconFont type="icon-zanting-xianxingyuankuang" style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }} onClick={props.onClick("play")} className="webkit-no-drag" />
+            <IconFont type="icon-zanting-xianxingyuankuang"
+                style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }}
+                onClick={props.onClick("play")} className="webkit-no-drag" />
         )
     }
 

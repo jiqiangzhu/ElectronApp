@@ -1,14 +1,13 @@
 /**
- * 操作窗口工具
+ * window-util
  */
 
-// 渲染进程
+// electron render process
 const { ipcRenderer } = window.require('electron');
-
 
 const windowUtils = {
     /**
-     * 窗口最大化
+     * set window max
      * @returns 
      */
     setWindowMax: async function () {
@@ -16,7 +15,7 @@ const windowUtils = {
     },
 
     /**
-     * 窗口恢复之前大小
+     * set window restore
      * @returns 
      */
     setWindowRestore: async function () {
@@ -24,34 +23,36 @@ const windowUtils = {
     },
 
     /**
-     * 关闭窗口
+     * close window
      * @returns 
      */
     setWindowClosed: async function () {
         return await ipcRenderer.send("setClose")
     },
     /**
-     * 设置窗口透明度
+     * set opacity of window
      * @param {*} value 
      * @returns 
      */
-    setWindowOpacity: async function(value) {
+    setWindowOpacity: async function (value) {
         return await ipcRenderer.send("setOpacity", value);
     },
     /**
-     * 设置窗口最小化
+     * set window min
      * @returns 
      */
-    setWindowMin: async function() {
+    setWindowMin: async function () {
         return await ipcRenderer.send("setMin");
     },
 
     /**
-     * 导入本地文件
-     * @returns 
+     * import local files from path
+     * @param {*} path 
+     * @param {*} resolve 
      */
-     openFolder: async function(resolve) {
-        await ipcRenderer.send("openFolder", "D:/");
+    openFolder: async function (path, resolve) {
+        console.log("path-----------", path);
+        await ipcRenderer.send("openFolder", path);
         ipcRenderer.once('asynchronous-reply', resolve)
     }
 
