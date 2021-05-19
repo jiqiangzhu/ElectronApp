@@ -62,7 +62,6 @@ export default function FooterCom(props) {
         console.log("dirPath------->>>>", dirPath);
         await windowUtils.openFolder(dirPath, async (event, arg) => {
             let path = arg.filePaths[0];
-            // console.log("the path of user choosed----->>>>>", path);
             await fsUtils.readMusicDir(path, (err, files) => {
                 console.log(`list of files from ${path}------->>>>>>>`, files);
                 if (files.length > 0) {
