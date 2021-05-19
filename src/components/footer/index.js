@@ -25,7 +25,6 @@ export default function FooterCom(props) {
         setDuration(audioRef.current.duration);
     }, [audioRef])
 
-
     const updateTime = () => {
         let temPersent = (audioRef.current.currentTime / duration) * 100;
         setPersent(temPersent)
