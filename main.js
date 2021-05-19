@@ -39,8 +39,6 @@ app.on('ready', () => {
 //      mainWindow.setAlwaysOnTop(false);
 //    }
 
-
-
 /**
  * 添加 改变窗口透明度 窗口大小 打开文件夹路径等监听
  */
@@ -61,14 +59,15 @@ ipcMain.on("setClose", async (event, args) => {
   app.quit();
 })
 ipcMain.on("openFolder", async (event, args) => {
-  let fileReturn = await dialog.showOpenDialog({ "title": "Choose Music DirPath", properties: ['openFile', 'openDirectory', 'multiSelections'], defaultPath: args })
+  let fileReturn = await dialog.showOpenDialog({
+    "title": "Choose Music DirPath",
+    properties: ['openFile', 'openDirectory', 'multiSelections'],
+    defaultPath: args
+  })
   if (!fileReturn.canceled) {
     await event.reply('asynchronous-reply', fileReturn)
   }
 });
-
-
-
 
 /**
  * 仅在开发环境注册打开控制台的快捷键

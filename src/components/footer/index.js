@@ -2,33 +2,26 @@ import { Space, Row, Col, Progress } from 'antd';
 import React, { useEffect, useState } from 'react';
 import './index.less';
 import '@/App.less';
-import commonUtils from '@localUtils/commonUtils.js';
-import windowUtils from '@localUtils/windowUtils.js';
-import fsUtils from '@localUtils/fs-utils.js';
-import mp3Path from '../../assets/audio/test.mp3'
+import commonUtils from '@localUtils/common-util';
+import windowUtils from '@localUtils/window-util';
+import fsUtils from '@localUtils/fs-util';
+// import mp3Path from '../../assets/audio/test.mp3'
 import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import { createFromIconfontCN } from '@ant-design/icons';
 
 export default function FooterCom(props) {
-    useEffect(() => {
-        setDuration(audioRef.current.duration)
-    })
     const IconFont = createFromIconfontCN();
     const [beginTime, setBeginTime] = useState(0);
-    const [loopFlag, setLoopFlag] = useState(true);
-    // const [currentIndex, setCurrentIndex] = useState(1);
+    const [loopFlag, setLoopFlag] = useState(false);
+    const [currentIndex, setCurrentIndex] = useState(0);
     const audioRef = React.createRef();
     const progressRef = React.createRef();
-    const [playFlag, setPlayFlag] = useState("play");
+    const [playFlag, setPlayFlag] = useState("pause");
     const [duration, setDuration] = useState(0);
-    // const [musicList, setMusicList] = useState([]);
-    // const getDuration = () => {
-
-    // }
     const [persent, setPersent] = useState(0);
+    const [filePathArray, setFilePathArray] = useState([]);
 
     const updateTime = () => {
-        // const duration = audioRef.current.duration;
         let temPersent = (audioRef.current.currentTime / duration) * 100;
         setPersent(temPersent)
         setBeginTime(parseInt(audioRef.current.currentTime))
@@ -37,15 +30,7 @@ export default function FooterCom(props) {
     const setPlayMode = () => {
         console.log("this", this);
         setLoopFlag(!loopFlag);
-        console.log("当前播放模式 单曲循环 true  否则 false", loopFlag);
-    }
-    const playMusic = (flag) => {
-        setPlayFlag(flag);
-        if (playFlag === "play") {
-            audioRef.current.play();
-        } else if (playFlag === "pause") {
-            audioRef.current.pause();
-        }
+        console.log("play mode if true single cycle else false----->>>>", loopFlag);
     }
 
     const setCurrentPlayTime = (event) => { //205
@@ -56,29 +41,69 @@ export default function FooterCom(props) {
         let currentRate = parseInt(currentProgress / progressRef.current.offsetWidth * 100);
         let setCurrentTime = (duration * currentRate) / 100
         audioRef.current.currentTime = setCurrentTime;
+        if (playFlag === "pause") {
+            playMusic("play")
+        }
     }
-    // const playNext = () => {
-    //     setCurrentIndex(currentIndex + 1)
-    // }
-    const importLocal = async () => {
-        await windowUtils.openFolder(async (event, arg) => {
-            let path = arg.filePaths[0];
-            await fsUtils.readMusicDir(path, (err, files) => {
-                console.log("files----", files);
-                if (files.length > 0) {
-                    let list = files.filter((item, index) => {
-                        if(item.indexOf('.mp3') !== -1) {
-                            return true;
-                        }
-                        return false;
-                    })
-                    props.getMusicListFromFooterCom(list);
-                }
-            })
-        });
-
-
+    const playNext = (value) => {
+        let tempIndex = currentIndex + value;
+        console.log("tempIndex----->>>>>>>>>>", tempIndex);
+        if (tempIndex > filePathArray.length) {
+            setCurrentIndex(0);
+        } else if (tempIndex < 0) {
+            setCurrentIndex(filePathArray.length);
+        } else {
+            setCurrentIndex(tempIndex)
+        }
+        console.log("audioRef.current---->>>>>>>>>>>", audioRef.current);
+        // audioRef.current.currentTime = 0;
+        // if(playFlag === "pause" || playFlag === "play") {
+        playMusic("play")
+        // }
     }
+    const playMusic = (flag) => {
+        console.log("-------------flag", flag);
+        setPlayFlag(flag);
+        if (playFlag === "pause") {
+            console.log("play之前>>>>>>>>>>>>", audioRef.current);
+            audioRef.current.play();
+            console.log("play之后>>>>>>>>>>>>", audioRef.current);
+        } else if (playFlag === "play") {
+            console.log("pause之前>>>>>>>>>>>>", audioRef.current);
+            audioRef.current.pause();
+            console.log("pause之后>>>>>>>>>>>>", audioRef.current);
+        }
+    }
+    const importLocal = async (e, dirPath = "D:/") => {
+        console.log("dirPath------->>>>", dirPath);
+        await windowUtils.openFolder(dirPath, readDir.bind(this));
+    }
+    const readDir = async (event, arg) => {
+        let musicPathList = [];
+        let path = arg.filePaths[0];
+        await fsUtils.readMusicDir(path, (err, files) => {
+            console.log(`list of files from ${path}------->>>>>>>`, files);
+            if (files.length > 0) {
+                let list = [];
+                files.filter((item, index) => {
+                    if (item.indexOf('.mp3') !== -1) {
+                        list.push(item.substr(0, item.indexOf('.mp3')));
+                        musicPathList.push(path + '\\' + item)
+                        return true;
+                    }
+                    return false;
+                })
+                props.getMusicListFromFooterCom(list);
+                setFilePathArray(musicPathList);
+            }
+        })
+    }
+
+    useEffect(() => {
+        setDuration(audioRef.current.duration);
+        // setCurrentIndex(currentIndex)
+    }, [audioRef, currentIndex])
+
     return (
         <>
             {/* 
@@ -87,29 +112,41 @@ export default function FooterCom(props) {
             */}
             <audio
                 onTimeUpdate={updateTime.bind(this)}
+                onError={playMusic.bind(this, "pause")}
                 ref={audioRef}
                 preload="true"
                 loop={loopFlag}
                 controls={false}
-                src={mp3Path}
+                onEnded={playNext.bind(this, 1)}
+                src={filePathArray[currentIndex]}
             ></audio>
             <Row align="middle" style={{ width: "100%" }} >
                 <Col span={3}>
                     <Space size={10}>
-                        <StepBackwardOutlined style={{ fontSize: "24px", cursor: "pointer" }} />
-                        <PlayStatusCom playStatus={playFlag} onClick={(flag) => playMusic.bind(this, flag)} />
-                        <StepForwardOutlined style={{ fontSize: "24px", cursor: "pointer" }} />
+                        <StepBackwardOutlined
+                            onClick={playNext.bind(this, -1)}
+                            style={{ fontSize: "24px", cursor: "pointer" }} />
+                        <PlayStatusCom
+                            playStatus={playFlag}
+                            onClick={(flag) => playMusic.bind(this, flag)} />
+                        <StepForwardOutlined
+                            onClick={playNext.bind(this, 1)}
+                            style={{ fontSize: "24px", cursor: "pointer" }} />
                     </Space>
                 </Col>
-                <Col span={1} style={{ paddingBottom: '10px', paddingRight: '10px' }} className="flex-type flex-justify-end">
+                <Col span={1} style={{ paddingBottom: '10px', paddingRight: '10px' }}
+                    className="flex-type flex-justify-end">
                     {commonUtils.secondsFormat(beginTime)}
                 </Col>
                 <Col span={12}>
                     <div ref={progressRef}>
-                        <Progress percent={persent} onClick={setCurrentPlayTime.bind(this)} className="audio-process" showInfo={false} strokeColor={{
-                            '0%': '#108ee9',
-                            '100%': '#87d068',
-                        }} />
+                        <Progress percent={persent}
+                            onClick={setCurrentPlayTime.bind(this)}
+                            className="audio-process"
+                            showInfo={false} strokeColor={{
+                                '0%': '#108ee9',
+                                '100%': '#87d068',
+                            }} />
                     </div>
                 </Col>
                 <Col style={{ paddingBottom: '10px', paddingLeft: '10px' }} span={1}>
@@ -117,8 +154,14 @@ export default function FooterCom(props) {
                 </Col>
                 <Col span={2} className="flex-type flex-justify-end">
                     <Space style={{ paddingBottom: '10px', }}>
-                        <IconFont style={{ fontSize: '16px' }} type="icon-hanhan-01-011" onClick={setPlayMode.bind(this)} className="webkit-no-drag" />
-                        <IconFont style={{ fontSize: '16px' }} type="icon-jia" onClick={importLocal.bind(this)} className="webkit-no-drag" />
+                        <IconFont style={{ fontSize: '16px' }}
+                            type="icon-hanhan-01-011"
+                            onClick={setPlayMode.bind(this)}
+                            className="webkit-no-drag" />
+                        <IconFont style={{ fontSize: '16px' }}
+                            type="icon-jia"
+                            onClick={importLocal.bind(this)}
+                            className="webkit-no-drag" />
                     </Space>
                 </Col>
             </Row>
@@ -126,16 +169,24 @@ export default function FooterCom(props) {
         </>
     )
 }
-
+/**
+ * set play or pause
+ * @param {*} props
+ * @returns
+ */
 function PlayStatusCom(props) {
     const IconFont = createFromIconfontCN();
-    if (props.playStatus === "play") {
+    if (props.playStatus === "pause") {
         return (
-            <IconFont type="icon-bofang" style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }} onClick={props.onClick("pause")} className="webkit-no-drag" />
+            <IconFont type="icon-bofang"
+                style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }}
+                onClick={props.onClick("play")} className="webkit-no-drag" />
         )
     } else {
         return (
-            <IconFont type="icon-zanting-xianxingyuankuang" style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }} onClick={props.onClick("play")} className="webkit-no-drag" />
+            <IconFont type="icon-zanting-xianxingyuankuang"
+                style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }}
+                onClick={props.onClick("pause")} className="webkit-no-drag" />
         )
     }
 
