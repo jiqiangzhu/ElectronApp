@@ -19,7 +19,7 @@ export default function FooterCom(props) {
     const [playFlag, setPlayFlag] = useState("play");
     const [duration, setDuration] = useState(0);
     const [persent, setPersent] = useState(0);
-    const [filePathArray, setFilePathArray] = useState([]);
+    // const [filePathArray, setFilePathArray] = useState([]);
 
     useEffect(() => {
         setDuration(audioRef.current.duration);

@@ -20,7 +20,7 @@ export default class App extends React.Component {
   }
 
   async UNSAFE_componentWillMount() {
-    // 骨架屏
+    // Skeleton
     setTimeout(async () => {
       this.setState({
         loadingFlag: false
@@ -29,7 +29,7 @@ export default class App extends React.Component {
       console.log("获取播放列表---------------", result);
     }, 1000)
 
-    // 设置透明度
+    // set Opacity
     if (localStorage.opacityVallue && localStorage.opacityVallue !== "0") {
       this.changeOpacity(localStorage.opacityVallue * 1);
     }
@@ -82,7 +82,6 @@ export default class App extends React.Component {
           <Footer style={{ height: "40px", lineHeight: '40px', position: 'fixed', zIndex: 10, bottom: 0, width: '100%' }}>
             <FooterCom playMusic={(i) => this.playMusic(i)} 
                        getMusicListFromFooterCom={(musicList) => this.setMusicList(musicList)} 
-                       
             />
           </Footer>
         </Layout>
