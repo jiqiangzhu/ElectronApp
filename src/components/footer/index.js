@@ -29,13 +29,14 @@ export default function FooterCom(props) {
         let temPersent = (audioRef.current.currentTime / duration) * 100;
         setPersent(temPersent)
         setBeginTime(parseInt(audioRef.current.currentTime))
-
     }
+
     const setPlayMode = () => {
         console.log("this", this);
         setLoopFlag(!loopFlag);
         console.log("play mode if true single cycle else false----->>>>", loopFlag);
     }
+
     const playMusic = (flag) => {
         setPlayFlag(flag);
         if (playFlag === "play") {
@@ -54,10 +55,12 @@ export default function FooterCom(props) {
         let setCurrentTime = (duration * currentRate) / 100
         audioRef.current.currentTime = setCurrentTime;
     }
+
     const playNext = (value) => {
         setCurrentIndex(currentIndex + value);
         props.playMusic(currentIndex)
     }
+    
     const importLocal = async (e, dirPath = "D:/") => {
         console.log("dirPath------->>>>", dirPath);
         await windowUtils.openFolder(dirPath, async (event, arg) => {
