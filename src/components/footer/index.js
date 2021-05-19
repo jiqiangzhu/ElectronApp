@@ -33,15 +33,6 @@ export default function FooterCom(props) {
         console.log("play mode if true single cycle else false----->>>>", loopFlag);
     }
 
-    const playMusic = (flag) => {
-        setPlayFlag(flag);
-        if (playFlag === "play") {
-            audioRef.current.play();
-        } else if (playFlag === "pause") {
-            audioRef.current.pause();
-        }
-    }
-
     const setCurrentPlayTime = (event) => { //205
         console.log("event---------", event.pageX);
         console.log("progressRef.current.offsetLeft--------", progressRef.current.offsetLeft + 205);
