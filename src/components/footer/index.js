@@ -8,6 +8,11 @@ import fsUtils from '@localUtils/fs-util';
 import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import { createFromIconfontCN } from '@ant-design/icons';
 
+/**
+ * Footer Play Controller
+ * @param {Object} props 
+ * @returns 
+ */
 export default function FooterCom(props) {
     const IconFont = createFromIconfontCN();
     const [beginTime, setBeginTime] = useState(0);
