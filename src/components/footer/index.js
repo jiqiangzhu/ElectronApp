@@ -25,8 +25,8 @@ export default function FooterCom(props) {
         let temPersent = (audioRef.current.currentTime / duration) * 100;
         setPersent(temPersent)
         setBeginTime(parseInt(audioRef.current.currentTime))
-
     }
+
     const setPlayMode = () => {
         console.log("this", this);
         setLoopFlag(!loopFlag);
@@ -45,6 +45,7 @@ export default function FooterCom(props) {
             playMusic("play")
         }
     }
+
     const playNext = (value) => {
         let tempIndex = currentIndex + value;
         console.log("tempIndex----->>>>>>>>>>", tempIndex);
@@ -74,6 +75,7 @@ export default function FooterCom(props) {
             console.log("pause之后>>>>>>>>>>>>", audioRef.current);
         }
     }
+    
     const importLocal = async (e, dirPath = "D:/") => {
         console.log("dirPath------->>>>", dirPath);
         await windowUtils.openFolder(dirPath, readDir.bind(this));
