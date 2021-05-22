@@ -1,11 +1,10 @@
-import { Space, Row, Col, Progress } from 'antd';
+import { Space, Row, Col, Progress, message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import './index.less';
 import '@/App.less';
 import commonUtils from '@localUtils/common-util';
 import windowUtils from '@localUtils/window-util';
 import fsUtils from '@localUtils/fs-util';
-// import mp3Path from '../../assets/audio/test.mp3'
 import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import { createFromIconfontCN } from '@ant-design/icons';
 
@@ -21,6 +20,20 @@ export default function FooterCom(props) {
     const [persent, setPersent] = useState(0);
     const [filePathArray, setFilePathArray] = useState([]);
 
+    useEffect(() => {
+        setDuration(duration);
+        try {
+            if (playFlag === "play" && audioRef.current.paused) {
+                audioRef.current.play();
+            } else if (playFlag === "pause") {
+                audioRef.current.pause();
+            }
+        } catch (e) {
+            console.error(`The program reported an error when playing song\n${e}`);
+        }
+
+    }, [duration, audioRef, playFlag])
+
     const updateTime = () => {
         let temPersent = (audioRef.current.currentTime / duration) * 100;
         setPersent(temPersent)
@@ -28,9 +41,8 @@ export default function FooterCom(props) {
     }
 
     const setPlayMode = () => {
-        console.log("this", this);
         setLoopFlag(!loopFlag);
-        console.log("play mode if true single cycle else false----->>>>", loopFlag);
+        console.log("play mode, if true single cycle else false----->>>>", loopFlag);
     }
 
     const setCurrentPlayTime = (event) => { //205
@@ -39,50 +51,63 @@ export default function FooterCom(props) {
         console.log("progressRef.current.width--------", progressRef.current.offsetWidth + 205);
         let currentProgress = event.pageX - (progressRef.current.offsetLeft + 205);
         let currentRate = parseInt(currentProgress / progressRef.current.offsetWidth * 100);
-        let setCurrentTime = (duration * currentRate) / 100
+        let setCurrentTime = (duration * currentRate) / 100;
         audioRef.current.currentTime = setCurrentTime;
-        if (playFlag === "pause") {
-            playMusic("play")
-        }
+        setPlayFlag("play");
     }
 
     const playNext = (value) => {
-        let tempIndex = currentIndex + value;
-        console.log("tempIndex----->>>>>>>>>>", tempIndex);
-        if (tempIndex > filePathArray.length) {
-            setCurrentIndex(0);
-        } else if (tempIndex < 0) {
-            setCurrentIndex(filePathArray.length);
-        } else {
-            setCurrentIndex(tempIndex)
-        }
-        console.log("audioRef.current---->>>>>>>>>>>", audioRef.current);
-        // audioRef.current.currentTime = 0;
-        // if(playFlag === "pause" || playFlag === "play") {
-        playMusic("play")
-        // }
-    }
-    const playMusic = (flag) => {
-        console.log("-------------flag", flag);
-        setPlayFlag(flag);
-        if (playFlag === "pause") {
-            console.log("play之前>>>>>>>>>>>>", audioRef.current);
-            audioRef.current.play();
-            console.log("play之后>>>>>>>>>>>>", audioRef.current);
-        } else if (playFlag === "play") {
-            console.log("pause之前>>>>>>>>>>>>", audioRef.current);
+        try {
             audioRef.current.pause();
-            console.log("pause之后>>>>>>>>>>>>", audioRef.current);
+            if (value === 1) {
+                if ((currentIndex + 1) >= filePathArray.length) {
+                    setCurrentIndex(0);
+                } else {
+                    setCurrentIndex(currentIndex + 1)
+                }
+            } else if (value === -1) {
+                if ((currentIndex - 1) < 0) {
+                    setCurrentIndex(filePathArray.length - 1);
+                } else {
+                    setCurrentIndex((currentIndex - 1) * 1)
+                }
+            }
+        } catch (e) {
+            console.error(`The program reported an error when switching songs\n${e}`);
         }
     }
-    
+
+    const playMusic = (flag) => {
+        if (!audioRef.current.currentSrc) {
+            message.error({
+                content: "valid music url",
+                style: {
+                    marginTop: '40vh',
+                },
+            });
+            return;
+        }
+        setPlayFlag(flag)
+    }
+
     const importLocal = async (e, dirPath = "D:/") => {
         console.log("dirPath------->>>>", dirPath);
+        localStorage.dirPath = dirPath;
         await windowUtils.openFolder(dirPath, readDir.bind(this));
     }
+
+    const getDuration = () => {
+        setDuration(audioRef.current.duration);
+    }
+
     const readDir = async (event, arg) => {
         let musicPathList = [];
-        let path = arg.filePaths[0];
+        let path;
+        if (typeof arg === "string") {
+            path = arg;
+        } else if (typeof arg === "object") {
+            path = arg.filePaths[0];
+        }
         await fsUtils.readMusicDir(path, (err, files) => {
             console.log(`list of files from ${path}------->>>>>>>`, files);
             if (files.length > 0) {
@@ -101,17 +126,8 @@ export default function FooterCom(props) {
         })
     }
 
-    useEffect(() => {
-        setDuration(audioRef.current.duration);
-        // setCurrentIndex(currentIndex)
-    }, [audioRef, currentIndex])
-
     return (
         <>
-            {/* 
-                onCanPlay={getDuration.bind(this)}
-                onEnded={playNext.bind(this, currentIndex)}    
-            */}
             <audio
                 onTimeUpdate={updateTime.bind(this)}
                 onError={playMusic.bind(this, "pause")}
@@ -121,6 +137,7 @@ export default function FooterCom(props) {
                 controls={false}
                 onEnded={playNext.bind(this, 1)}
                 src={filePathArray[currentIndex]}
+                onCanPlay={getDuration.bind(this)}
             ></audio>
             <Row align="middle" style={{ width: "100%" }} >
                 <Col span={3}>
