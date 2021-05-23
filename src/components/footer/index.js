@@ -1,4 +1,4 @@
-import { Space, Row, Col, Progress, message, Slider, Dropdown } from 'antd';
+import { Space, Row, Col, Progress, message, Slider, Dropdown, Menu } from 'antd';
 import React, { useEffect, useState } from 'react';
 import './index.less';
 import '@/App.less';
@@ -8,10 +8,22 @@ import fsUtils from '@localUtils/fs-util';
 import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import { createFromIconfontCN } from '@ant-design/icons';
 
-
-
 const IconFont = createFromIconfontCN();
-
+const playModeArr = [
+    {
+        type: "icon-hanhan-01-011",
+        desc: "List Loop",
+        index: "1"
+    }, {
+        type: "icon-hanhan-01-01",
+        desc: "Single Circle",
+        index: "2"
+    }, {
+        type: "icon-hanhan-01-012",
+        desc: "Random",
+        index: "3"
+    },
+];
 /**
  * Footer Play Controller Component
  * @param {Object} props 
@@ -19,7 +31,8 @@ const IconFont = createFromIconfontCN();
  */
 export default function FooterCom(props) {
     const [beginTime, setBeginTime] = useState(0);
-    const [loopFlag, setLoopFlag] = useState(false);
+    // 1 list loop 2 single circle 3 random default 1
+    const [playMode, setPlayMode] = useState("1");
     const [currentIndex, setCurrentIndex] = useState(0);
     const audioRef = React.createRef();
     const progressRef = React.createRef();
@@ -40,6 +53,7 @@ export default function FooterCom(props) {
         } catch (e) {
             console.error(`The program reported an error when playing song\n${e}`);
         }
+        setPlayMode(localStorage.playMode ? localStorage.playMode : "1");
 
     }, [duration, audioRef, playFlag])
 
@@ -49,12 +63,12 @@ export default function FooterCom(props) {
         setBeginTime(parseInt(audioRef.current.currentTime))
     }
 
-    const setPlayMode = () => {
-        setLoopFlag(!loopFlag);
-        console.log("play mode, if true single cycle else false----->>>>", loopFlag);
+    const changePlayMode = (e) => {
+        setPlayMode(e.key);
+        localStorage.playMode = e.key;
     }
 
-    const setCurrentPlayTime = (event) => { //205
+    const setCurrentPlayTime = (event) => {
         console.log("event---------", event.pageX);
         console.log("progressRef.current.offsetLeft--------", progressRef.current.offsetLeft + 205);
         console.log("progressRef.current.width--------", progressRef.current.offsetWidth + 205);
@@ -100,8 +114,6 @@ export default function FooterCom(props) {
     }
 
     const importLocal = async (e, dirPath = "D:/") => {
-        console.log("dirPath------->>>>", dirPath);
-        localStorage.dirPath = dirPath;
         await windowUtils.openFolder(dirPath, readDir.bind(this));
     }
 
@@ -151,7 +163,7 @@ export default function FooterCom(props) {
                 onError={playMusic.bind(this, "pause")}
                 ref={audioRef}
                 preload="true"
-                loop={loopFlag}
+                loop={playMode === "2" ? true : false}
                 controls={false}
                 onEnded={playNext.bind(this, 1)}
                 src={filePathArray[currentIndex]}
@@ -191,10 +203,9 @@ export default function FooterCom(props) {
                 </Col>
                 <Col span={4} className="flex-type flex-justify-end">
                     <Space size="middle" style={{ paddingBottom: '10px', }}>
-                        <IconFont style={{ fontSize: '16px' }}
-                            type="icon-hanhan-01-011"
-                            onClick={setPlayMode.bind(this)}
-                            className="webkit-no-drag" />
+                        <SetPlayModeCom changePlayMode={changePlayMode.bind(this)}
+                            playMode={playMode}
+                        />
                         <IconFont style={{ fontSize: '16px' }}
                             type="icon-jia"
                             onClick={importLocal.bind(this)}
@@ -248,10 +259,44 @@ function SetVolumeCom(props) {
         </div>
     );
     return (
-        <Dropdown overlay={menu} trigger={['click']} placement='topCenter'>
+        <Dropdown overlay={menu} trigger={['hover']} placement='topCenter'>
             <Space className="webkit-no-drag">
                 <IconFont style={{ fontSize: '16px' }}
                     type="icon-yinliang"
+                    className="webkit-no-drag" />
+            </Space>
+        </Dropdown>
+    )
+}
+
+/**
+ * set play mode
+ * @param {Object} props 
+ * @returns 
+ */
+function SetPlayModeCom(props) {
+
+    const menu = (
+        <Menu theme="dark"
+            onClick={props.changePlayMode}
+        >
+            {playModeArr.map((item, index) => {
+                return (
+                    <Menu.Item key={item.index}>
+                        <IconFont style={{ fontSize: '16px' }}
+                            type={item.type}
+                            className="webkit-no-drag" /> {item.desc}
+                    </Menu.Item>
+                )
+            })}
+        </Menu >
+    );
+    let playMode = props.playMode * 1;
+    return (
+        <Dropdown overlay={menu} trigger={['click']} placement='topCenter'>
+            <Space className="webkit-no-drag">
+                <IconFont style={{ fontSize: '16px' }}
+                    type={playModeArr[playMode - 1].type}
                     className="webkit-no-drag" />
             </Space>
         </Dropdown>
