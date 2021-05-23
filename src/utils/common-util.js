@@ -1,11 +1,11 @@
 const commonUtils = {
 
     /**
-     * 秒 转 分:秒 工具
-     * @param {秒} sec 
+     * Seconds to minutes: seconds
+     * @param {seconds} sec 
      * @returns 
      */
-    secondsFormat: function (sec){
+    secondsFormat: function (sec) {
         let hour = Math.floor(sec / 3600);
         let minute = Math.floor((sec - hour * 3600) / 60);
         let second = sec - hour * 3600 - minute * 60;
@@ -19,7 +19,17 @@ const commonUtils = {
             second = "0" + second;
         }
         return minute + ":" + second;
+    },
+    /**
+     * Generate any number from 1 to max 
+     * [) close left open right
+     * @param {max integer} max 
+     * @returns 
+     */
+    randomInteger: function (max) {
+        return parseInt(Math.random() * max, 10);;
     }
+
 }
 
 export default commonUtils;

@@ -46,6 +46,7 @@ export default function FooterCom(props) {
         try {
             if (playFlag === "play" && audioRef.current.paused) {
                 audioRef.current.volume = localStorage.defalutVolume;
+                // console.log("readyState>>>>>>>", audioRef.current.readyState);
                 audioRef.current.play();
             } else if (playFlag === "pause") {
                 audioRef.current.pause();
@@ -80,37 +81,56 @@ export default function FooterCom(props) {
     }
 
     const playNext = (value) => {
-        try {
-            audioRef.current.pause();
-            if (value === 1) {
-                if ((currentIndex + 1) >= filePathArray.length) {
-                    setCurrentIndex(0);
-                } else {
-                    setCurrentIndex(currentIndex + 1)
-                }
-            } else if (value === -1) {
-                if ((currentIndex - 1) < 0) {
-                    setCurrentIndex(filePathArray.length - 1);
-                } else {
-                    setCurrentIndex((currentIndex - 1) * 1)
-                }
-            }
-        } catch (e) {
-            console.error(`The program reported an error when switching songs\n${e}`);
-        }
-    }
-
-    const playMusic = (flag) => {
-        if (!audioRef.current.currentSrc) {
+        if (filePathArray.length <= 0) {
             message.error({
-                content: "valid music url",
+                content: "music list is null",
                 style: {
                     marginTop: '40vh',
                 },
             });
             return;
         }
-        setPlayFlag(flag)
+        try {
+            if (playMode !== "3") {
+                if (value === 1) {
+                    if ((currentIndex + 1) >= filePathArray.length) {
+                        setCurrentIndex(0);
+                    } else {
+                        setCurrentIndex(currentIndex + 1)
+                    }
+                } else if (value === -1) {
+                    if ((currentIndex - 1) < 0) {
+                        setCurrentIndex(filePathArray.length - 1);
+                    } else {
+                        setCurrentIndex((currentIndex - 1) * 1)
+                    }
+                }
+            } else {
+                let tempIndex = commonUtils.randomInteger(filePathArray.length);
+                console.log("tempIndex", tempIndex);
+                setCurrentIndex(tempIndex);
+            }
+
+        } catch (e) {
+            console.error(`The program reported an error when switching songs\n${e}`);
+        }
+    }
+
+    const playMusic = (flag) => {
+        try {
+            if (!audioRef.current.currentSrc) {
+                message.error({
+                    content: "valid music url",
+                    style: {
+                        marginTop: '40vh',
+                    },
+                });
+                return;
+            }
+            setPlayFlag(flag);
+        } catch (e) {
+            console.error(`The program reported an error when playing songs\n${e}`);
+        }
     }
 
     const importLocal = async (e, dirPath = "D:/") => {
