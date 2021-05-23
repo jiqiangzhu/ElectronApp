@@ -1,4 +1,4 @@
-import { Space, Row, Col, Progress, message } from 'antd';
+import { Space, Row, Col, Progress, message, Slider, Dropdown } from 'antd';
 import React, { useEffect, useState } from 'react';
 import './index.less';
 import '@/App.less';
@@ -8,13 +8,16 @@ import fsUtils from '@localUtils/fs-util';
 import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import { createFromIconfontCN } from '@ant-design/icons';
 
+
+
+const IconFont = createFromIconfontCN();
+
 /**
- * Footer Play Controller
+ * Footer Play Controller Component
  * @param {Object} props 
  * @returns 
  */
 export default function FooterCom(props) {
-    const IconFont = createFromIconfontCN();
     const [beginTime, setBeginTime] = useState(0);
     const [loopFlag, setLoopFlag] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -22,13 +25,14 @@ export default function FooterCom(props) {
     const progressRef = React.createRef();
     const [playFlag, setPlayFlag] = useState("pause");
     const [duration, setDuration] = useState(0);
-    const [persent, setPersent] = useState(0);
+    const [percent, setPercent] = useState(0);
     const [filePathArray, setFilePathArray] = useState([]);
 
     useEffect(() => {
         setDuration(duration);
         try {
             if (playFlag === "play" && audioRef.current.paused) {
+                audioRef.current.volume = localStorage.defalutVolume;
                 audioRef.current.play();
             } else if (playFlag === "pause") {
                 audioRef.current.pause();
@@ -40,8 +44,8 @@ export default function FooterCom(props) {
     }, [duration, audioRef, playFlag])
 
     const updateTime = () => {
-        let temPersent = (audioRef.current.currentTime / duration) * 100;
-        setPersent(temPersent)
+        let temPercent = (audioRef.current.currentTime / duration) * 100;
+        setPercent(temPercent)
         setBeginTime(parseInt(audioRef.current.currentTime))
     }
 
@@ -131,6 +135,15 @@ export default function FooterCom(props) {
         })
     }
 
+    const setVolume = (value) => {
+        localStorage.defalutVolume = value;
+        try {
+            audioRef.current.volume = localStorage.defalutVolume;
+        } catch (e) {
+            console.log("program reported an error when set ");
+        }
+    }
+
     return (
         <>
             <audio
@@ -152,7 +165,7 @@ export default function FooterCom(props) {
                             style={{ fontSize: "24px", cursor: "pointer" }} />
                         <PlayStatusCom
                             playStatus={playFlag}
-                            onClick={(flag) => playMusic.bind(this, flag)} />
+                            onClick={playMusic.bind(this)} />
                         <StepForwardOutlined
                             onClick={playNext.bind(this, 1)}
                             style={{ fontSize: "24px", cursor: "pointer" }} />
@@ -164,7 +177,7 @@ export default function FooterCom(props) {
                 </Col>
                 <Col span={12}>
                     <div ref={progressRef}>
-                        <Progress percent={persent}
+                        <Progress percent={percent}
                             onClick={setCurrentPlayTime.bind(this)}
                             className="audio-process"
                             showInfo={false} strokeColor={{
@@ -176,8 +189,8 @@ export default function FooterCom(props) {
                 <Col style={{ paddingBottom: '10px', paddingLeft: '10px' }} span={1}>
                     {commonUtils.secondsFormat(parseInt(duration) ? parseInt(duration) : 0)}
                 </Col>
-                <Col span={2} className="flex-type flex-justify-end">
-                    <Space style={{ paddingBottom: '10px', }}>
+                <Col span={4} className="flex-type flex-justify-end">
+                    <Space size="middle" style={{ paddingBottom: '10px', }}>
                         <IconFont style={{ fontSize: '16px' }}
                             type="icon-hanhan-01-011"
                             onClick={setPlayMode.bind(this)}
@@ -186,10 +199,12 @@ export default function FooterCom(props) {
                             type="icon-jia"
                             onClick={importLocal.bind(this)}
                             className="webkit-no-drag" />
+                        <SetVolumeCom defaultValue={localStorage.defalutVolume ? localStorage.defalutVolume : 1}
+                            setVolume={setVolume.bind(this)}
+                        />
                     </Space>
                 </Col>
             </Row>
-
         </>
     )
 }
@@ -204,14 +219,41 @@ function PlayStatusCom(props) {
         return (
             <IconFont type="icon-bofang"
                 style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }}
-                onClick={props.onClick("play")} className="webkit-no-drag" />
+                onClick={() => props.onClick("play")} className="webkit-no-drag" />
         )
     } else {
         return (
             <IconFont type="icon-zanting-xianxingyuankuang"
                 style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }}
-                onClick={props.onClick("pause")} className="webkit-no-drag" />
+                onClick={() => props.onClick("pause")} className="webkit-no-drag" />
         )
     }
 
+}
+
+/**
+ * set media volume
+ * @param {Object} props 
+ * @returns 
+ */
+function SetVolumeCom(props) {
+    const style = {
+        display: 'inline-block',
+        height: 80
+    };
+    const menu = (
+        <div style={style}>
+            <Slider vertical max={10} min={0} step={1} defaultValue={props.defaultValue * 10}
+                onChange={(value) => props.setVolume(value / 10)} />
+        </div>
+    );
+    return (
+        <Dropdown overlay={menu} trigger={['click']} placement='topCenter'>
+            <Space className="webkit-no-drag">
+                <IconFont style={{ fontSize: '16px' }}
+                    type="icon-yinliang"
+                    className="webkit-no-drag" />
+            </Space>
+        </Dropdown>
+    )
 }
