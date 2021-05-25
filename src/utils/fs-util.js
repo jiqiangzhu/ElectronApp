@@ -14,7 +14,8 @@ const fsUtils = {
         if (!path) {
             return;
         }
-        fs.readdir(path, resolve)
+        localStorage.defaultMusicPath = path;
+        fs.readdir(path, resolve);
     }
 }
 
