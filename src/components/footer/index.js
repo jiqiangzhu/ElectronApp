@@ -71,9 +71,9 @@ export default function FooterCom(props) {
 
     const setCurrentPlayTime = (event) => {
         console.log("event---------", event.pageX);
-        console.log("progressRef.current.offsetLeft--------", progressRef.current.offsetLeft + 205);
-        console.log("progressRef.current.width--------", progressRef.current.offsetWidth + 205);
-        let currentProgress = event.pageX - (progressRef.current.offsetLeft + 205);
+        console.log("progressRef.current.offsetLeft--------", progressRef.current.offsetLeft + 190);
+        console.log("progressRef.current.width--------", progressRef.current.offsetWidth + 190);
+        let currentProgress = event.pageX - (progressRef.current.offsetLeft + 190);
         let currentRate = parseInt(currentProgress / progressRef.current.offsetWidth * 100);
         let setCurrentTime = (duration * currentRate) / 100;
         audioRef.current.currentTime = setCurrentTime;
@@ -106,8 +106,7 @@ export default function FooterCom(props) {
                     }
                 }
             } else {
-                let tempIndex = commonUtils.randomInteger(filePathArray.length);
-                console.log("tempIndex", tempIndex);
+                let tempIndex = commonUtils.randomInteger(currentIndex, filePathArray.length);
                 setCurrentIndex(tempIndex);
             }
 
@@ -143,6 +142,7 @@ export default function FooterCom(props) {
 
     const readDir = async (event, arg) => {
         let musicPathList = [];
+        // let musicList = filePathArray;
         let path;
         if (typeof arg === "string") {
             path = arg;
@@ -157,12 +157,18 @@ export default function FooterCom(props) {
                     if (item.indexOf('.mp3') !== -1) {
                         list.push(item.substr(0, item.indexOf('.mp3')));
                         musicPathList.push(path + '\\' + item)
+
+                        // let fileName = item.substr(0, item.indexOf('.mp3'))
+                        // musicPathList.push({ fullPath: path + '\\' + item, fileName: fileName })
                         return true;
                     }
                     return false;
                 })
                 props.getMusicListFromFooterCom(list);
                 setFilePathArray(musicPathList);
+                // if(!audioRef.current.paused) {
+
+                // }
             }
         })
     }

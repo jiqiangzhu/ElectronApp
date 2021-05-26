@@ -26,8 +26,13 @@ const commonUtils = {
      * @param {max integer} max 
      * @returns 
      */
-    randomInteger: function (max) {
-        return parseInt(Math.random() * max, 10);;
+    randomInteger: function (currentIndex, max) {
+        let result = parseInt(Math.random() * max, 10);
+        // if result equals currentIndex, recursion
+        if(result === currentIndex) {
+            return this.randomInteger(currentIndex, max);
+        }
+        return result;
     }
 
 }
