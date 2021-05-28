@@ -96,7 +96,7 @@ export default function FooterCom(props) {
                     if ((currentIndex + 1) >= filePathArray.length) {
                         setCurrentIndex(0);
                     } else {
-                        setCurrentIndex(currentIndex + 1)
+                        setCurrentIndex(currentIndex + 1);
                     }
                 } else if (value === -1) {
                     if ((currentIndex - 1) < 0) {
@@ -113,6 +113,7 @@ export default function FooterCom(props) {
         } catch (e) {
             console.error(`The program reported an error when switching songs\n${e}`);
         }
+
     }
 
     const playMusic = (flag) => {
@@ -142,7 +143,7 @@ export default function FooterCom(props) {
 
     const readDir = async (event, arg) => {
         let musicPathList = [];
-        // let musicList = filePathArray;
+        let musicList = filePathArray;
         let path;
         if (typeof arg === "string") {
             path = arg;
@@ -156,8 +157,8 @@ export default function FooterCom(props) {
                 files.filter((item, index) => {
                     if (item.indexOf('.mp3') !== -1) {
                         list.push(item.substr(0, item.indexOf('.mp3')));
-                        musicPathList.push(path + '\\' + item)
-
+                        musicPathList.push(path + '\\' + item);
+                        musicList.push(item);
                         // let fileName = item.substr(0, item.indexOf('.mp3'))
                         // musicPathList.push({ fullPath: path + '\\' + item, fileName: fileName })
                         return true;
@@ -165,7 +166,7 @@ export default function FooterCom(props) {
                     return false;
                 })
                 props.getMusicListFromFooterCom(list);
-                setFilePathArray(musicPathList);
+                setFilePathArray(musicPathList.concat());
                 // if(!audioRef.current.paused) {
 
                 // }
@@ -245,6 +246,7 @@ export default function FooterCom(props) {
         </>
     )
 }
+
 /**
  * set play or pause
  * @param {*} props
@@ -252,20 +254,13 @@ export default function FooterCom(props) {
  */
 function PlayStatusCom(props) {
     const IconFont = createFromIconfontCN();
-    if (props.playStatus === "pause") {
-        return (
-            <IconFont type="icon-bofang"
-                style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }}
-                onClick={() => props.onClick("play")} className="webkit-no-drag" />
-        )
-    } else {
-        return (
-            <IconFont type="icon-zanting-xianxingyuankuang"
-                style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }}
-                onClick={() => props.onClick("pause")} className="webkit-no-drag" />
-        )
-    }
-
+    let action = props.playStatus === "pause" ? "play" : "pause";
+    let type = props.playStatus === "pause" ? "icon-bofang" : "icon-zanting-xianxingyuankuang";
+    return (
+        <IconFont type={type}
+            style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }}
+            onClick={() => props.onClick(action)} className="webkit-no-drag" />
+    )
 }
 
 /**
@@ -277,13 +272,15 @@ function SetVolumeCom(props) {
     const style = {
         display: 'inline-block',
         height: 80
-    };
+    }
+
     const menu = (
         <div style={style}>
             <Slider vertical max={10} min={0} step={1} defaultValue={props.defaultValue * 10}
                 onChange={(value) => props.setVolume(value / 10)} />
         </div>
-    );
+    )
+
     return (
         <Dropdown overlay={menu} trigger={['hover']} placement='topCenter'>
             <Space className="webkit-no-drag">
@@ -316,8 +313,10 @@ function SetPlayModeCom(props) {
                 )
             })}
         </Menu >
-    );
+    )
+
     let playMode = props.playMode * 1;
+
     return (
         <Dropdown overlay={menu} trigger={['click']} placement='topCenter'>
             <Space className="webkit-no-drag">
