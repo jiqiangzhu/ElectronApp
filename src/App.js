@@ -1,7 +1,7 @@
 import { Layout, Skeleton, List } from 'antd';
 import './App.less';
 import { getMusicList } from './api';
-import FooterCom from './components/footer'
+import FooterCom from './components/footer';
 import React from 'react';
 import windowUtils from '@localUtils/window-util';
 import { CustomHeader } from './components/header';
@@ -51,7 +51,7 @@ export default class App extends React.Component {
       musicList: musicList,
       musicDom: musicList.map((item, index) => {
         return (
-          <p key={index}>{item}</p>
+          <p onClick={()=>this.playMusic(index)} key={index}>{item}</p>
         )
       })
     })

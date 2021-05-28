@@ -167,9 +167,6 @@ export default function FooterCom(props) {
                 })
                 props.getMusicListFromFooterCom(list);
                 setFilePathArray(musicPathList.concat());
-                // if(!audioRef.current.paused) {
-
-                // }
             }
         })
     }
