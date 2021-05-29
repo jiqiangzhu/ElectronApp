@@ -172,11 +172,15 @@ export default function FooterCom(props) {
     }
 
     const setVolume = (value) => {
-        localStorage.defalutVolume = value;
         try {
-            audioRef.current.volume = localStorage.defalutVolume;
+            if (!isNaN(value)) {
+                localStorage.defalutVolume = value;
+                audioRef.current.volume = localStorage.defalutVolume;
+            } else {
+                throw new Error('value is not a number')
+            }
         } catch (e) {
-            console.log("program reported an error when set ");
+            console.log(`program reported an error when set volume \n ${e}`);
         }
     }
 
@@ -266,15 +270,22 @@ function PlayStatusCom(props) {
  * @returns 
  */
 function SetVolumeCom(props) {
+    const [currentVolume, setCurrentVolume] = useState(props.defaultValue * 10);
     const style = {
         display: 'inline-block',
         height: 80
     }
 
+    const setVolume = (value) => {
+        props.setVolume(value / 10);
+        setCurrentVolume(value);
+    }
+
     const menu = (
         <div style={style}>
             <Slider vertical max={10} min={0} step={1} defaultValue={props.defaultValue * 10}
-                onChange={(value) => props.setVolume(value / 10)} />
+                value={currentVolume}
+                onChange={(value) => setVolume(value)} />
         </div>
     )
 
@@ -282,7 +293,7 @@ function SetVolumeCom(props) {
         <Dropdown overlay={menu} trigger={['hover']} placement='topCenter'>
             <Space className="webkit-no-drag">
                 <IconFont style={{ fontSize: '16px' }}
-                    type="icon-yinliang"
+                    type={currentVolume === 0 ? "icon-mute" : 'icon-yinliang'}
                     className="webkit-no-drag" />
             </Space>
         </Dropdown>
