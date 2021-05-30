@@ -174,8 +174,12 @@ export default function FooterCom(props) {
     const setVolume = (value) => {
         try {
             if (!isNaN(value)) {
-                localStorage.defalutVolume = value;
-                audioRef.current.volume = localStorage.defalutVolume;
+                if (value === 0) {
+                    audioRef.current.volume = 0;
+                } else {
+                    localStorage.defalutVolume = value;
+                    audioRef.current.volume = localStorage.defalutVolume;
+                }
             } else {
                 throw new Error('value is not a number')
             }
@@ -277,6 +281,16 @@ function SetVolumeCom(props) {
     }
 
     const setVolume = (value) => {
+        if (value === 0) {
+            if (currentVolume === 0) {
+                props.setVolume(localStorage.defalutVolume);
+                setCurrentVolume(localStorage.defalutVolume * 10);
+            } else {
+                props.setVolume(0);
+                setCurrentVolume(0);
+            }
+            return;
+        }
         props.setVolume(value / 10);
         setCurrentVolume(value);
     }
@@ -293,6 +307,7 @@ function SetVolumeCom(props) {
         <Dropdown overlay={menu} trigger={['hover']} placement='topCenter'>
             <Space className="webkit-no-drag">
                 <IconFont style={{ fontSize: '16px' }}
+                    onClick={() => setVolume(0)}
                     type={currentVolume === 0 ? "icon-mute" : 'icon-yinliang'}
                     className="webkit-no-drag" />
             </Space>
