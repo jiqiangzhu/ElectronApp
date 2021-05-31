@@ -35,6 +35,7 @@ export default function FooterCom(props) {
     const [playMode, setPlayMode] = useState("1");
     const [currentIndex, setCurrentIndex] = useState(0);
     const audioRef = React.createRef();
+    const beginRef = React.createRef();
     const progressRef = React.createRef();
     const [playFlag, setPlayFlag] = useState("pause");
     const [duration, setDuration] = useState(0);
@@ -70,14 +71,30 @@ export default function FooterCom(props) {
     }
 
     const setCurrentPlayTime = (event) => {
-        console.log("event---------", event.pageX);
-        console.log("progressRef.current.offsetLeft--------", progressRef.current.offsetLeft + 190);
-        console.log("progressRef.current.width--------", progressRef.current.offsetWidth + 190);
-        let currentProgress = event.pageX - (progressRef.current.offsetLeft + 190);
-        let currentRate = parseInt(currentProgress / progressRef.current.offsetWidth * 100);
-        let setCurrentTime = (duration * currentRate) / 100;
-        audioRef.current.currentTime = setCurrentTime;
-        setPlayFlag("play");
+        try {
+            if (!audioRef.current.currentSrc) {
+                message.error({
+                    content: "url is unvalid",
+                    style: {
+                        marginTop: '40vh',
+                    },
+                });
+                return;
+            }
+            // console.log('beginRef', beginRef.current.offsetWidth);
+            // console.log('beginRef', beginRef.current.offsetLeft);
+            console.log("event---------", event.pageX);
+            // console.log("progressRef.current.offsetLeft--------", progressRef.current.offsetLeft);
+            // console.log("progressRef.current.width--------", progressRef.current.offsetWidth);
+            // 10 paddingRight
+            let currentProgress = event.pageX - (beginRef.current.offsetWidth + beginRef.current.offsetLeft + 10);
+            let currentRate = (currentProgress / progressRef.current.offsetWidth * 100);
+            let setCurrentTime = (duration * currentRate) / 100;
+            audioRef.current.currentTime = setCurrentTime;
+            setPlayFlag("play");
+        } catch (e) {
+            console.error(`The program reported an error on progress bar\n${e}`);
+        }
     }
 
     const playNext = (value) => {
@@ -120,7 +137,7 @@ export default function FooterCom(props) {
         try {
             if (!audioRef.current.currentSrc) {
                 message.error({
-                    content: "valid music url",
+                    content: "unvalid music url",
                     style: {
                         marginTop: '40vh',
                     },
@@ -215,12 +232,15 @@ export default function FooterCom(props) {
                             style={{ fontSize: "24px", cursor: "pointer" }} />
                     </Space>
                 </Col>
-                <Col span={1} style={{ paddingBottom: '10px', paddingRight: '10px' }}
+                {/* <Col span={1} style={{ paddingBottom: '10px', paddingRight: '10px' }}
                     className="flex-type flex-justify-end">
                     {commonUtils.secondsFormat(beginTime)}
-                </Col>
+                </Col> */}
+                <span ref={beginRef} style={{ paddingBottom: '10px', paddingRight: '10px' }}>
+                    {commonUtils.secondsFormat(beginTime)}
+                </span>
                 <Col span={12}>
-                    <div ref={progressRef}>
+                    <div className="progress" ref={progressRef}>
                         <Progress percent={percent}
                             onClick={setCurrentPlayTime.bind(this)}
                             className="audio-process"
@@ -230,9 +250,12 @@ export default function FooterCom(props) {
                             }} />
                     </div>
                 </Col>
-                <Col style={{ paddingBottom: '10px', paddingLeft: '10px' }} span={1}>
+                <span style={{ paddingBottom: '10px', paddingLeft: '10px' }}>
                     {commonUtils.secondsFormat(parseInt(duration) ? parseInt(duration) : 0)}
-                </Col>
+                </span>
+                {/* <Col style={{ paddingBottom: '10px', paddingLeft: '10px' }} span={1}>
+                    {commonUtils.secondsFormat(parseInt(duration) ? parseInt(duration) : 0)}
+                </Col> */}
                 <Col span={4} className="flex-type flex-justify-end">
                     <Space size="middle" style={{ paddingBottom: '10px', }}>
                         <SetPlayModeCom changePlayMode={changePlayMode.bind(this)}
@@ -341,7 +364,7 @@ function SetPlayModeCom(props) {
     let playMode = props.playMode * 1;
 
     return (
-        <Dropdown overlay={menu} trigger={['click']} placement='topCenter'>
+        <Dropdown overlay={menu} trigger={['hover']} placement='topCenter'>
             <Space className="webkit-no-drag">
                 <IconFont style={{ fontSize: '16px' }}
                     type={playModeArr[playMode - 1].type}

@@ -12,7 +12,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loadingFlag: false,
+      loadingFlag: true,
       opacityVallue: 0,
       musicList: [],
       musicDom: ""
@@ -26,7 +26,7 @@ export default class App extends React.Component {
         loadingFlag: false
       })
       let result = await getMusicList();
-      console.log("获取播放列表---------------", result);
+      console.log("get playlist---------------", result);
     }, 1000)
 
     // set Opacity
@@ -78,7 +78,7 @@ export default class App extends React.Component {
             
             </Content>
           </Layout>
-          {/* 后续删除Footer height */}
+          
           <Footer style={{ height: "40px", lineHeight: '40px', position: 'fixed', zIndex: 10, bottom: 0, width: '100%' }}>
             <FooterCom playMusic={(i) => this.playMusic(i)} 
                        getMusicListFromFooterCom={(musicList) => this.setMusicList(musicList)} 

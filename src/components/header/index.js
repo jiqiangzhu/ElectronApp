@@ -140,7 +140,7 @@ class Header extends React.Component {
                             <Dropdown
                                 overlay={menu}
                                 onVisibleChange={this.handleVisibleChange}
-                                placement="bottomCenter"
+                                placement="bottomLeft"
                             >
                                 <IconFont onClick={e => e.preventDefault()} style={{ fontSize: '17px' }} className="webkit-no-drag" type='icon-icon_huabanfuben1' />
                             </Dropdown>
