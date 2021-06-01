@@ -1,5 +1,5 @@
 /**
- * window-util
+ * app window-util
  */
 
 // electron render process

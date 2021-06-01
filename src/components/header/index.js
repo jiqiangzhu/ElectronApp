@@ -9,9 +9,6 @@ import { SkinOutlined } from '@ant-design/icons';
 
 const IconFont = createFromIconfontCN();
 const { Search } = Input;
-// const warning = (content) => {
-//     message.warning(content, 1);
-// };
 
 class Header extends React.Component {
     constructor(props) {
@@ -19,8 +16,6 @@ class Header extends React.Component {
         this.state = {
             visible: false,
             nickname: "",
-            fullScreen: false,
-            isTop: '置顶',
             isMax: true,
             inputValue: ""
         };
@@ -56,12 +51,12 @@ class Header extends React.Component {
     }
     async componentDidMount() {
         let result = await getUserInfor();
-        console.log("获取用户个人信息-------------", result);
+        console.log("get user info-------------", result);
         this.setState({
             nickname: result.data.profile.nickname
         })
     };
-    // 向主进程发送请求指令 最小化 最大化，关闭窗口
+    // Send the command to MainProgress min max restore window
     changeWindowSize = async (e, todo) => {
         if (todo === "maxormin") {
             if (this.state.isMax) {
@@ -100,7 +95,7 @@ class Header extends React.Component {
                 </Menu.Item>
                 <Menu.Item key="2" style={{ fontSize: '15px' }} onClick={(e) => { this.changeWindowSize(e, 'close') }} >
                     <IconFont className="webkit-no-drag" type='icon-setting' />
-                    设置中心
+                    Setting
                 </Menu.Item>
                 <Menu.Item key="3">
 
@@ -126,7 +121,7 @@ class Header extends React.Component {
                             <Search
                                 allowClear={true}
                                 className="webkit-no-drag flex-type flex-align-mid"
-                                placeholder="请输入..."
+                                placeholder="Please Input..."
                                 size="small"
                                 prefix={<IconFont onClick={() => this.onSearch(this.state.inputValue)} style={{ fontSize: '16px' }} type='icon-sousuo' />}
                                 onSearch={this.onSearch}
@@ -148,14 +143,14 @@ class Header extends React.Component {
                         </Space>
                     </Col>
                 </Row>
-                {/* 退出确认弹框 */}
+                {/* confirm exit modal */}
                 <Modal
                     visible={this.state.visible}
                     onOk={this.closeModal}
                     onCancel={this.hideModal}
-                    okText="确认"
+                    okText="Confirm"
                     maskClosable={false}
-                    cancelText="取消"
+                    cancelText="Cancel"
                     width="250px"
                     centered
                     focusTriggerAfterClose={false}
@@ -165,7 +160,7 @@ class Header extends React.Component {
                         borderTopRightRadius: '10px'
                     }}
                 >
-                    <p>确认退出吗？</p>
+                    <p>Confirm Exit</p>
                 </Modal>
             </>
         )
@@ -173,7 +168,7 @@ class Header extends React.Component {
 }
 
 /**
- * 设置窗口透明度
+ * set app window opacity
  * @param {*} props 
  * @returns 
  */
@@ -192,53 +187,11 @@ function SetOpacityCom(props) {
         <Dropdown overlay={menu} trigger={['click']} placement='topCenter'>
             <Space className="webkit-no-drag">
                 <SkinOutlined />
-                窗口透明度
+                Window Opacity
             </Space>
         </Dropdown>
     )
 }
-
-/**
- * 设置窗口最大最小化
- * @param {*} props 
- * @returns 
- */
-// function ShowMaxOrMinCom(props) {
-//     if (props.showWhat === "maximize") {
-//         return (
-//             <ExpandOutlined onClick={props.onClick} className="webkit-no-drag" />
-//         )
-//     } else if ((props.showWhat === "normal")) {
-//         return (
-//             <BorderOutlined onClick={props.onClick} className="webkit-no-drag" />
-//         )
-
-//     }
-
-// }
-
-/**
- * 设置是否固定在最上方
- * @param {*} props 
- * @returns 
- */
-// function TopByPropsCom(props) {
-//     if (props.renderCom === "cancelOnTop") {
-//         return (
-//             <Tooltip title="取消置顶" trigger="hover" color="transparent">
-//                 <HourglassOutlined onClick={props.onClick} className="webkit-no-drag" />
-//             </Tooltip>
-//         )
-//     } else if (props.renderCom === "fixedOnTop") {
-//         return (
-//             <Tooltip title="置顶" trigger="hover" color="transparent">
-//                 <PushpinOutlined onClick={props.onClick} className="webkit-no-drag" />
-//             </Tooltip>
-//         )
-//     }
-
-// }
-
 
 export {
     Header as CustomHeader

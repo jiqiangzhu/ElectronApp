@@ -1,5 +1,4 @@
 const commonUtils = {
-
     /**
      * Seconds to minutes: seconds
      * @param {seconds} sec 
@@ -33,6 +32,12 @@ const commonUtils = {
             return this.randomInteger(currentIndex, max);
         }
         return result;
+    },
+    
+    delay2s: function (resolve) {
+        setTimeout({
+            resolve
+        }, 2000)
     }
 
 }
