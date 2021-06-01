@@ -35,6 +35,7 @@ export default function FooterCom(props) {
     const [playMode, setPlayMode] = useState("1");
     const [currentIndex, setCurrentIndex] = useState(0);
     const audioRef = React.createRef();
+    const beginRef = React.createRef();
     const progressRef = React.createRef();
     const [playFlag, setPlayFlag] = useState("pause");
     const [duration, setDuration] = useState(0);
@@ -46,6 +47,7 @@ export default function FooterCom(props) {
         try {
             if (playFlag === "play" && audioRef.current.paused) {
                 audioRef.current.volume = localStorage.defalutVolume;
+                // console.log("readyState>>>>>>>", audioRef.current.readyState);
                 audioRef.current.play();
             } else if (playFlag === "pause") {
                 audioRef.current.pause();
@@ -69,48 +71,83 @@ export default function FooterCom(props) {
     }
 
     const setCurrentPlayTime = (event) => {
-        console.log("event---------", event.pageX);
-        console.log("progressRef.current.offsetLeft--------", progressRef.current.offsetLeft + 205);
-        console.log("progressRef.current.width--------", progressRef.current.offsetWidth + 205);
-        let currentProgress = event.pageX - (progressRef.current.offsetLeft + 205);
-        let currentRate = parseInt(currentProgress / progressRef.current.offsetWidth * 100);
-        let setCurrentTime = (duration * currentRate) / 100;
-        audioRef.current.currentTime = setCurrentTime;
-        setPlayFlag("play");
-    }
-
-    const playNext = (value) => {
         try {
-            audioRef.current.pause();
-            if (value === 1) {
-                if ((currentIndex + 1) >= filePathArray.length) {
-                    setCurrentIndex(0);
-                } else {
-                    setCurrentIndex(currentIndex + 1)
-                }
-            } else if (value === -1) {
-                if ((currentIndex - 1) < 0) {
-                    setCurrentIndex(filePathArray.length - 1);
-                } else {
-                    setCurrentIndex((currentIndex - 1) * 1)
-                }
+            if (!audioRef.current.currentSrc) {
+                message.error({
+                    content: "url is unvalid",
+                    style: {
+                        marginTop: '40vh',
+                    },
+                });
+                return;
             }
+            // console.log('beginRef', beginRef.current.offsetWidth);
+            // console.log('beginRef', beginRef.current.offsetLeft);
+            console.log("event---------", event.pageX);
+            // console.log("progressRef.current.offsetLeft--------", progressRef.current.offsetLeft);
+            // console.log("progressRef.current.width--------", progressRef.current.offsetWidth);
+            // 10 paddingRight
+            let currentProgress = event.pageX - (beginRef.current.offsetWidth + beginRef.current.offsetLeft + 10);
+            let currentRate = (currentProgress / progressRef.current.offsetWidth * 100);
+            let setCurrentTime = (duration * currentRate) / 100;
+            audioRef.current.currentTime = setCurrentTime;
+            setPlayFlag("play");
         } catch (e) {
-            console.error(`The program reported an error when switching songs\n${e}`);
+            console.error(`The program reported an error on progress bar\n${e}`);
         }
     }
 
-    const playMusic = (flag) => {
-        if (!audioRef.current.currentSrc) {
+    const playNext = (value) => {
+        if (filePathArray.length <= 0) {
             message.error({
-                content: "valid music url",
+                content: "music list is null",
                 style: {
                     marginTop: '40vh',
                 },
             });
             return;
         }
-        setPlayFlag(flag)
+        try {
+            if (playMode !== "3") {
+                if (value === 1) {
+                    if ((currentIndex + 1) >= filePathArray.length) {
+                        setCurrentIndex(0);
+                    } else {
+                        setCurrentIndex(currentIndex + 1);
+                    }
+                } else if (value === -1) {
+                    if ((currentIndex - 1) < 0) {
+                        setCurrentIndex(filePathArray.length - 1);
+                    } else {
+                        setCurrentIndex((currentIndex - 1) * 1)
+                    }
+                }
+            } else {
+                let tempIndex = commonUtils.randomInteger(currentIndex, filePathArray.length);
+                setCurrentIndex(tempIndex);
+            }
+
+        } catch (e) {
+            console.error(`The program reported an error when switching songs\n${e}`);
+        }
+
+    }
+
+    const playMusic = (flag) => {
+        try {
+            if (!audioRef.current.currentSrc) {
+                message.error({
+                    content: "unvalid music url",
+                    style: {
+                        marginTop: '40vh',
+                    },
+                });
+                return;
+            }
+            setPlayFlag(flag);
+        } catch (e) {
+            console.error(`The program reported an error when playing songs\n${e}`);
+        }
     }
 
     const importLocal = async (e, dirPath = "D:/") => {
@@ -123,6 +160,7 @@ export default function FooterCom(props) {
 
     const readDir = async (event, arg) => {
         let musicPathList = [];
+        let musicList = filePathArray;
         let path;
         if (typeof arg === "string") {
             path = arg;
@@ -136,23 +174,34 @@ export default function FooterCom(props) {
                 files.filter((item, index) => {
                     if (item.indexOf('.mp3') !== -1) {
                         list.push(item.substr(0, item.indexOf('.mp3')));
-                        musicPathList.push(path + '\\' + item)
+                        musicPathList.push(path + '\\' + item);
+                        musicList.push(item);
+                        // let fileName = item.substr(0, item.indexOf('.mp3'))
+                        // musicPathList.push({ fullPath: path + '\\' + item, fileName: fileName })
                         return true;
                     }
                     return false;
                 })
                 props.getMusicListFromFooterCom(list);
-                setFilePathArray(musicPathList);
+                setFilePathArray(musicPathList.concat());
             }
         })
     }
 
     const setVolume = (value) => {
-        localStorage.defalutVolume = value;
         try {
-            audioRef.current.volume = localStorage.defalutVolume;
+            if (!isNaN(value)) {
+                if (value === 0) {
+                    audioRef.current.volume = 0;
+                } else {
+                    localStorage.defalutVolume = value;
+                    audioRef.current.volume = localStorage.defalutVolume;
+                }
+            } else {
+                throw new Error('value is not a number')
+            }
         } catch (e) {
-            console.log("program reported an error when set ");
+            console.log(`program reported an error when set volume \n ${e}`);
         }
     }
 
@@ -183,12 +232,15 @@ export default function FooterCom(props) {
                             style={{ fontSize: "24px", cursor: "pointer" }} />
                     </Space>
                 </Col>
-                <Col span={1} style={{ paddingBottom: '10px', paddingRight: '10px' }}
+                {/* <Col span={1} style={{ paddingBottom: '10px', paddingRight: '10px' }}
                     className="flex-type flex-justify-end">
                     {commonUtils.secondsFormat(beginTime)}
-                </Col>
+                </Col> */}
+                <span ref={beginRef} style={{ paddingBottom: '10px', paddingRight: '10px' }}>
+                    {commonUtils.secondsFormat(beginTime)}
+                </span>
                 <Col span={12}>
-                    <div ref={progressRef}>
+                    <div className="progress" ref={progressRef}>
                         <Progress percent={percent}
                             onClick={setCurrentPlayTime.bind(this)}
                             className="audio-process"
@@ -198,9 +250,12 @@ export default function FooterCom(props) {
                             }} />
                     </div>
                 </Col>
-                <Col style={{ paddingBottom: '10px', paddingLeft: '10px' }} span={1}>
+                <span style={{ paddingBottom: '10px', paddingLeft: '10px' }}>
                     {commonUtils.secondsFormat(parseInt(duration) ? parseInt(duration) : 0)}
-                </Col>
+                </span>
+                {/* <Col style={{ paddingBottom: '10px', paddingLeft: '10px' }} span={1}>
+                    {commonUtils.secondsFormat(parseInt(duration) ? parseInt(duration) : 0)}
+                </Col> */}
                 <Col span={4} className="flex-type flex-justify-end">
                     <Space size="middle" style={{ paddingBottom: '10px', }}>
                         <SetPlayModeCom changePlayMode={changePlayMode.bind(this)}
@@ -219,6 +274,7 @@ export default function FooterCom(props) {
         </>
     )
 }
+
 /**
  * set play or pause
  * @param {*} props
@@ -226,20 +282,13 @@ export default function FooterCom(props) {
  */
 function PlayStatusCom(props) {
     const IconFont = createFromIconfontCN();
-    if (props.playStatus === "pause") {
-        return (
-            <IconFont type="icon-bofang"
-                style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }}
-                onClick={() => props.onClick("play")} className="webkit-no-drag" />
-        )
-    } else {
-        return (
-            <IconFont type="icon-zanting-xianxingyuankuang"
-                style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }}
-                onClick={() => props.onClick("pause")} className="webkit-no-drag" />
-        )
-    }
-
+    let action = props.playStatus === "pause" ? "play" : "pause";
+    let type = props.playStatus === "pause" ? "icon-bofang" : "icon-zanting-xianxingyuankuang";
+    return (
+        <IconFont type={type}
+            style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }}
+            onClick={() => props.onClick(action)} className="webkit-no-drag" />
+    )
 }
 
 /**
@@ -248,21 +297,41 @@ function PlayStatusCom(props) {
  * @returns 
  */
 function SetVolumeCom(props) {
+    const [currentVolume, setCurrentVolume] = useState(props.defaultValue * 10);
     const style = {
         display: 'inline-block',
         height: 80
-    };
+    }
+
+    const setVolume = (value) => {
+        if (value === 0) {
+            if (currentVolume === 0) {
+                props.setVolume(localStorage.defalutVolume);
+                setCurrentVolume(localStorage.defalutVolume * 10);
+            } else {
+                props.setVolume(0);
+                setCurrentVolume(0);
+            }
+            return;
+        }
+        props.setVolume(value / 10);
+        setCurrentVolume(value);
+    }
+
     const menu = (
         <div style={style}>
             <Slider vertical max={10} min={0} step={1} defaultValue={props.defaultValue * 10}
-                onChange={(value) => props.setVolume(value / 10)} />
+                value={currentVolume}
+                onChange={(value) => setVolume(value)} />
         </div>
-    );
+    )
+
     return (
         <Dropdown overlay={menu} trigger={['hover']} placement='topCenter'>
             <Space className="webkit-no-drag">
                 <IconFont style={{ fontSize: '16px' }}
-                    type="icon-yinliang"
+                    onClick={() => setVolume(0)}
+                    type={currentVolume === 0 ? "icon-mute" : 'icon-yinliang'}
                     className="webkit-no-drag" />
             </Space>
         </Dropdown>
@@ -290,10 +359,12 @@ function SetPlayModeCom(props) {
                 )
             })}
         </Menu >
-    );
+    )
+
     let playMode = props.playMode * 1;
+
     return (
-        <Dropdown overlay={menu} trigger={['click']} placement='topCenter'>
+        <Dropdown overlay={menu} trigger={['hover']} placement='topCenter'>
             <Space className="webkit-no-drag">
                 <IconFont style={{ fontSize: '16px' }}
                     type={playModeArr[playMode - 1].type}

@@ -1,5 +1,5 @@
 /**
- * window-util
+ * app window-util
  */
 
 // electron render process
@@ -51,7 +51,6 @@ const windowUtils = {
      * @param {*} resolve 
      */
     openFolder: async function (path, resolve) {
-        console.log("path-----------", path);
         await ipcRenderer.send("openFolder", path);
         ipcRenderer.once('asynchronous-reply', resolve)
     }

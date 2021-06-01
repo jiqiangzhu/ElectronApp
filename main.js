@@ -5,16 +5,18 @@ let mainWindow;
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
 /**
- * 初始化窗口
+ * init app
  */
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
     width: 1024,
+    minWidth: 830,
+    minHeight: 680,
     height: 680,
-    // transparent: true, //设置透明后窗口最大化会出现问题
-    backgroundColor: "#3B3B4D", //设置背景色，在未被完全加载前加载出框架颜色
+    // transparent: true, // program cannot set window max when transparent
+    backgroundColor: "#3B3B4D", //set bg color
     webPreferences: {
-      nodeIntegration: true, //允许在前端调用node
+      nodeIntegration: true, //enable to use node in web
       enableRemoteModule: true,
       contextIsolation: false,
       webSecurity: false,
@@ -40,7 +42,7 @@ app.on('ready', () => {
 //    }
 
 /**
- * 添加 改变窗口透明度 窗口大小 打开文件夹路径等监听
+ * New Action Listener of Change winodw opacity window size open dir and so on
  */
 ipcMain.on("setOpacity", async (event, args) => {
   await mainWindow.setOpacity(args);
@@ -70,7 +72,7 @@ ipcMain.on("openFolder", async (event, args) => {
 });
 
 /**
- * 仅在开发环境注册打开控制台的快捷键
+ * open devoloper tools in dev
  */
 if (isDev) {
   app.whenReady().then(() => {
@@ -82,6 +84,6 @@ if (isDev) {
       console.log('registration failed')
     }
 
-    console.log("Alt + F12打开控制台快捷键注册成功了吗", globalShortcut.isRegistered('Alt+F12'))
+    console.log("Alt + F12 register success ?", globalShortcut.isRegistered('Alt+F12'))
   })
 }
