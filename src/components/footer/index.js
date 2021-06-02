@@ -24,6 +24,7 @@ const playModeArr = [
         index: "3"
     },
 ];
+const os = window.require('os');
 /**
  * Footer Play Controller Component
  * @param {Object} props 
@@ -41,6 +42,7 @@ export default function FooterCom(props) {
     const [duration, setDuration] = useState(0);
     const [percent, setPercent] = useState(0);
     const [filePathArray, setFilePathArray] = useState([]);
+    const [fileNameArray, setFileNameArray] = useState([]);
 
     useEffect(() => {
         setDuration(duration);
@@ -134,6 +136,7 @@ export default function FooterCom(props) {
     }
 
     const playMusic = (flag) => {
+        console.log("---------->>>>>>>>>>>>>", os.userInfo().username);
         try {
             if (!audioRef.current.currentSrc) {
                 message.error({
@@ -151,7 +154,7 @@ export default function FooterCom(props) {
     }
 
     const importLocal = async (e, dirPath = "D:/") => {
-        await windowUtils.openFolder(dirPath, readDir.bind(this));
+        await windowUtils.openFolder(dirPath, readDir);
     }
 
     const getDuration = () => {
@@ -159,31 +162,37 @@ export default function FooterCom(props) {
     }
 
     const readDir = async (event, arg) => {
-        let musicPathList = [];
-        let musicList = filePathArray;
+        let musicList = fileNameArray;
         let path;
         if (typeof arg === "string") {
             path = arg;
         } else if (typeof arg === "object") {
             path = arg.filePaths[0];
         }
-        await fsUtils.readMusicDir(path, (err, files) => {
+        fsUtils.readMusicDir(path, (err, files) => {
             console.log(`list of files from ${path}------->>>>>>>`, files);
             if (files.length > 0) {
-                let list = [];
+                // let list = [];
                 files.filter((item, index) => {
                     if (item.indexOf('.mp3') !== -1) {
-                        list.push(item.substr(0, item.indexOf('.mp3')));
-                        musicPathList.push(path + '\\' + item);
+                        // list.push(item);
+
+                        // list.push(item.substr(0, item.indexOf('.mp3')));
+                        // musicPathList.push(path + '\\' + item);
                         musicList.push(item);
+                        // return Array.from(new Set(arr))
                         // let fileName = item.substr(0, item.indexOf('.mp3'))
                         // musicPathList.push({ fullPath: path + '\\' + item, fileName: fileName })
                         return true;
                     }
                     return false;
                 })
-                props.getMusicListFromFooterCom(list);
-                setFilePathArray(musicPathList.concat());
+                // musicList = list.concat(musicList);
+                musicList = Array.from(new Set(musicList)); //de-duplication
+                setFileNameArray(musicList);
+                console.log("length>>>>>>>>>>>>", musicList.length);
+                props.getMusicListFromFooterCom(musicList);
+                // setFilePathArray(musicPathList.concat());
             }
         })
     }
