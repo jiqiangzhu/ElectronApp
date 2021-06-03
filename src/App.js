@@ -37,7 +37,7 @@ export default class App extends React.Component {
   }
 
   changeOpacity = (value) => {
-    console.log("opacity value---78~100-------", value*100);
+    console.log("opacity value---78~100-------", value * 100);
     windowUtils.setWindowOpacity(value);
     localStorage.opacityVallue = value;
   }
@@ -51,7 +51,9 @@ export default class App extends React.Component {
       musicList: musicList,
       musicDom: musicList.map((item, index) => {
         return (
-          <p onClick={()=>this.playMusic(index)} key={index}>{item}</p>
+          <p onClick={() => this.playMusic(index)} key={index}>
+            {(item.indexOf('.mp3') !== -1) ? item.substr(0, item.indexOf('.mp3')) : item}
+          </p>
         )
       })
     })
@@ -61,8 +63,8 @@ export default class App extends React.Component {
       <Skeleton active loading={this.state.loadingFlag} rows={100}>
         <Layout className="main-content">
           <Header className="lay-header webkit-drag" style={{ position: 'fixed', zIndex: 10, width: '100%' }}>
-            <CustomHeader defaultValue={localStorage.opacityVallue * 1} 
-                          changeOpacity={(value) => { this.changeOpacity(value) }} 
+            <CustomHeader defaultValue={localStorage.opacityVallue * 1}
+              changeOpacity={(value) => { this.changeOpacity(value) }}
             />
           </Header>
           <Layout className="my-content">
@@ -75,13 +77,13 @@ export default class App extends React.Component {
                   </List.Item>
                 )}
               />
-            
+
             </Content>
           </Layout>
-          
+
           <Footer style={{ height: "40px", lineHeight: '40px', position: 'fixed', zIndex: 10, bottom: 0, width: '100%' }}>
-            <FooterCom playMusic={(i) => this.playMusic(i)} 
-                       getMusicListFromFooterCom={(musicList) => this.setMusicList(musicList)} 
+            <FooterCom playMusic={(i) => this.playMusic(i)}
+              getMusicListFromFooterCom={(musicList) => this.setMusicList(musicList)}
             />
           </Footer>
         </Layout>

@@ -24,7 +24,7 @@ const playModeArr = [
         index: "3"
     },
 ];
-const os = window.require('os');
+// const os = window.require('os');
 /**
  * Footer Play Controller Component
  * @param {Object} props 
@@ -92,6 +92,10 @@ export default function FooterCom(props) {
             let currentProgress = event.pageX - (beginRef.current.offsetWidth + beginRef.current.offsetLeft + 10);
             let currentRate = (currentProgress / progressRef.current.offsetWidth * 100);
             let setCurrentTime = (duration * currentRate) / 100;
+
+            console.log("currentProgress--------", currentProgress);
+            console.log("currentRate--------", currentRate);
+            console.log("setCurrentTime--------", setCurrentTime);
             audioRef.current.currentTime = setCurrentTime;
             setPlayFlag("play");
         } catch (e) {
@@ -136,7 +140,7 @@ export default function FooterCom(props) {
     }
 
     const playMusic = (flag) => {
-        console.log("---------->>>>>>>>>>>>>", os.userInfo().username);
+        // console.log("---------->>>>>>>>>>>>>", os.userInfo().username);
         try {
             if (!audioRef.current.currentSrc) {
                 message.error({
@@ -163,6 +167,7 @@ export default function FooterCom(props) {
 
     const readDir = async (event, arg) => {
         let musicList = fileNameArray;
+        let fullPathList = filePathArray;
         let path;
         if (typeof arg === "string") {
             path = arg;
@@ -170,29 +175,27 @@ export default function FooterCom(props) {
             path = arg.filePaths[0];
         }
         fsUtils.readMusicDir(path, (err, files) => {
-            console.log(`list of files from ${path}------->>>>>>>`, files);
-            if (files.length > 0) {
-                // let list = [];
-                files.filter((item, index) => {
-                    if (item.indexOf('.mp3') !== -1) {
-                        // list.push(item);
-
-                        // list.push(item.substr(0, item.indexOf('.mp3')));
-                        // musicPathList.push(path + '\\' + item);
-                        musicList.push(item);
-                        // return Array.from(new Set(arr))
-                        // let fileName = item.substr(0, item.indexOf('.mp3'))
-                        // musicPathList.push({ fullPath: path + '\\' + item, fileName: fileName })
-                        return true;
-                    }
-                    return false;
-                })
-                // musicList = list.concat(musicList);
-                musicList = Array.from(new Set(musicList)); //de-duplication
-                setFileNameArray(musicList);
-                console.log("length>>>>>>>>>>>>", musicList.length);
-                props.getMusicListFromFooterCom(musicList);
-                // setFilePathArray(musicPathList.concat());
+            try {
+                console.log(`list of files from ${path}------->>>>>>>`, files);
+                if (files.length > 0) {
+                    files.filter((item, index) => {
+                        if (item.indexOf('.mp3') !== -1) {
+                            musicList.push(item);
+                            return true;
+                        }
+                        return false;
+                    })
+                    musicList = Array.from(new Set(musicList)); //de-duplication
+                    fullPathList = musicList.map((item, index) => {
+                        return path + '\\' + item;
+                    })
+                    setFileNameArray(musicList);
+                    setFilePathArray(fullPathList);
+                    props.getMusicListFromFooterCom(musicList);
+                }
+            } catch (e) {
+                console.error("err----------", err);
+                console.error("e----------", e);
             }
         })
     }
