@@ -17,6 +17,7 @@ export default class App extends React.Component {
       musicList: [],
       musicDom: ""
     };
+    this.scrollRef = React.createRef();
   }
 
   async UNSAFE_componentWillMount() {
@@ -58,6 +59,15 @@ export default class App extends React.Component {
       })
     })
   }
+  myMouseEvent = (flag) => {
+    if (flag === 1) {
+      this.scrollRef.current.classList.remove('my-content1')
+      this.scrollRef.current.classList.add('my-content')
+    } else {
+      this.scrollRef.current.classList.remove('my-content')
+      this.scrollRef.current.classList.add('my-content1')
+    }
+  }
   render() {
     return (
       <Skeleton active loading={this.state.loadingFlag} rows={100}>
@@ -67,18 +77,23 @@ export default class App extends React.Component {
               changeOpacity={(value) => { this.changeOpacity(value) }}
             />
           </Header>
-          <Layout className="my-content">
-            <Content>
-              <List
-                dataSource={this.state.musicDom}
-                renderItem={item => (
-                  <List.Item>
-                    {item}
-                  </List.Item>
-                )}
-              />
+          <Layout>
+            <div ref={this.scrollRef}
+              onMouseMove={() => this.myMouseEvent(1)}
+              onMouseLeave={() => this.myMouseEvent(2)}
+            >
+              <Content>
+                <List
+                  dataSource={this.state.musicDom}
+                  renderItem={item => (
+                    <List.Item>
+                      {item}
+                    </List.Item>
+                  )}
+                />
 
-            </Content>
+              </Content>
+            </div>
           </Layout>
 
           <Footer style={{ height: "40px", lineHeight: '40px', position: 'fixed', zIndex: 10, bottom: 0, width: '100%' }}>
