@@ -60,13 +60,13 @@ export default class App extends React.Component {
     })
   }
   myMouseEvent = (flag) => {
-    if (flag === 1) {
-      this.scrollRef.current.classList.remove('my-content1')
-      this.scrollRef.current.classList.add('my-content')
-    } else {
-      this.scrollRef.current.classList.remove('my-content')
-      this.scrollRef.current.classList.add('my-content1')
-    }
+    // if (flag === 1) {
+    //   this.scrollRef.current.classList.remove('my-content1')
+    //   this.scrollRef.current.classList.add('my-content')
+    // } else {
+    //   this.scrollRef.current.classList.remove('my-content')
+    //   this.scrollRef.current.classList.add('my-content1')
+    // }
   }
   render() {
     return (
@@ -79,8 +79,9 @@ export default class App extends React.Component {
           </Header>
           <Layout>
             <div ref={this.scrollRef}
-              onMouseMove={() => this.myMouseEvent(1)}
-              onMouseLeave={() => this.myMouseEvent(2)}
+              className="my-content"
+              // onMouseMove={() => this.myMouseEvent(1)}
+              // onMouseLeave={() => this.myMouseEvent(2)}
             >
               <Content>
                 <List

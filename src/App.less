@@ -1,30 +1,22 @@
 @import '~antd/dist/antd.less';
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-.my-content {
-  overflow-y: scroll;
-  overflow-x: hidden;
-  max-height: 300px;
-  padding: 10px;
-}
-.my-content1 {
-  overflow-y: scroll;
-  overflow-x: hidden;
-  max-height: 300px;
-  padding: 10px;
-}
+
 .main-content {
   // height: 680px;
   min-width: 830px;
   padding: 13px 15px;
   display: flex;
   flex-direction: column;
+
   .ant-tabs-tab-active .anticon svg {
     color: #00CED1;
   }
+
   .lay-header {
     height: 30px;
     line-height: 30px;
@@ -76,7 +68,7 @@
   // background: rgba(46, 103, 156, 0.2);
 }
 
-// 预定义样式
+// Pre-defined style
 .flex-align-mid {
   align-items: center;
 }
@@ -100,9 +92,11 @@
 .flex-type {
   display: flex;
 }
+
 .align-self-start {
   align-self: flex-start;
 }
+
 .flex-justify-start {
   justify-content: flex-start;
 }
@@ -118,14 +112,13 @@
 .padding-top5 {
   padding-top: 5px;
 }
+
 /* scroll bar */
 // ::-webkit-scrollbar {  
 //   width: 10px;
 // }
-::-webkit-scrollbar-track {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
- }
+
+
 // ::-webkit-scrollbar-thumb {
 //   background-color: #11171a;
 //   border-radius: 10px;
@@ -133,13 +126,33 @@
 // ::-webkit-scrollbar-thumb:hover {
 //   background: linear-gradient(transparent, #f2f4f5);
 // }
+// ::-webkit-scrollbar-track {
+//   background-color: rgba(255, 255, 255, 0.2);
+//   border-radius: 10px;
+// }
+
+.my-content {
+  overflow-y: hidden;
+  overflow-x: hidden;
+  max-height: 300px;
+  padding: 10px;
+}
+
+.my-content:hover {
+  overflow-y: scroll;
+  padding-right: 0px;
+}
+
 .my-content::-webkit-scrollbar {
   width: 10px;
 }
+
 .my-content::-webkit-scrollbar-thumb {
   background-color: #11171a;
   border-radius: 10px;
- }
- .my-content1::-webkit-scrollbar {
-  display: none;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
 }
