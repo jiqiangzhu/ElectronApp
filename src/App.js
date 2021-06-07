@@ -59,15 +59,7 @@ export default class App extends React.Component {
       })
     })
   }
-  myMouseEvent = (flag) => {
-    // if (flag === 1) {
-    //   this.scrollRef.current.classList.remove('my-content1')
-    //   this.scrollRef.current.classList.add('my-content')
-    // } else {
-    //   this.scrollRef.current.classList.remove('my-content')
-    //   this.scrollRef.current.classList.add('my-content1')
-    // }
-  }
+
   render() {
     return (
       <Skeleton active loading={this.state.loadingFlag} rows={100}>
@@ -78,11 +70,8 @@ export default class App extends React.Component {
             />
           </Header>
           <Layout>
-            <div ref={this.scrollRef}
-              className="my-content"
-              // onMouseMove={() => this.myMouseEvent(1)}
-              // onMouseLeave={() => this.myMouseEvent(2)}
-            >
+            
+            {/* <div ref={this.scrollRef} className="my-content">
               <Content>
                 <List
                   dataSource={this.state.musicDom}
@@ -94,10 +83,15 @@ export default class App extends React.Component {
                 />
 
               </Content>
-            </div>
+            </div> */}
           </Layout>
 
-          <Footer style={{ height: "40px", lineHeight: '40px', position: 'fixed', zIndex: 10, bottom: 0, width: '100%' }}>
+          <Footer style={{
+            height: "40px", lineHeight: '40px',
+            position: 'fixed', zIndex: 10,
+            bottom: 0, width: '100%'
+          }}
+          >
             <FooterCom playMusic={(i) => this.playMusic(i)}
               getMusicListFromFooterCom={(musicList) => this.setMusicList(musicList)}
             />
