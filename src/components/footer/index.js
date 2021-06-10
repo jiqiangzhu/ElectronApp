@@ -248,7 +248,7 @@ export default function FooterCom(props) {
                     className="flex-type flex-justify-end">
                     {commonUtils.secondsFormat(beginTime)}
                 </Col> */}
-                <span ref={beginRef} style={{ paddingBottom: '10px', paddingRight: '10px' }}>
+                <span ref={beginRef} style={{ paddingBottom: '10px', paddingRight: '10px' }} className="cannotselect">
                     {commonUtils.secondsFormat(beginTime)}
                 </span>
                 <Col span={12}>
@@ -262,7 +262,7 @@ export default function FooterCom(props) {
                             }} />
                     </div>
                 </Col>
-                <span style={{ paddingBottom: '10px', paddingLeft: '10px' }}>
+                <span style={{ paddingBottom: '10px', paddingLeft: '10px' }} className="cannotselect">
                     {commonUtils.secondsFormat(parseInt(duration) ? parseInt(duration) : 0)}
                 </span>
                 {/* <Col style={{ paddingBottom: '10px', paddingLeft: '10px' }} span={1}>

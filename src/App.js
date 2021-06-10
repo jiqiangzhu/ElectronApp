@@ -52,7 +52,7 @@ export default class App extends React.Component {
       musicList: musicList,
       musicDom: musicList.map((item, index) => {
         return (
-          <p onClick={() => this.playMusic(index)} key={index}>
+          <p onDoubleClick={() => this.playMusic(index)} key={index}>
             {(item.indexOf('.mp3') !== -1) ? item.substr(0, item.indexOf('.mp3')) : item}
           </p>
         )
@@ -92,10 +92,9 @@ export default class App extends React.Component {
                 visible={this.state.visible}
                 maskStyle={{background: 'transparent'}}
                 headerStyle={{color: '#FFFFFF'}}
-                className="webkit-no-drag"
+                className="webkit-no-drag cannotselect"
               >
                 <div ref={this.scrollRef} className="my-content">
-                  {/* <h2 style={{color: '#FFF'}}>Music List</h2> */}
                   <Content>
                     <List
                       dataSource={this.state.musicDom}
