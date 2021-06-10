@@ -5,8 +5,7 @@ import '@/App.less';
 import commonUtils from '@localUtils/common-util';
 import windowUtils from '@localUtils/window-util';
 import fsUtils from '@localUtils/fs-util';
-import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
-import { createFromIconfontCN } from '@ant-design/icons';
+import { StepBackwardOutlined, StepForwardOutlined, createFromIconfontCN } from '@ant-design/icons';
 
 const IconFont = createFromIconfontCN();
 const playModeArr = [
@@ -24,7 +23,6 @@ const playModeArr = [
         index: "3"
     },
 ];
-// const os = window.require('os');
 /**
  * Footer Play Controller Component
  * @param {Object} props 
@@ -49,7 +47,6 @@ export default function FooterCom(props) {
         try {
             if (playFlag === "play" && audioRef.current.paused) {
                 audioRef.current.volume = localStorage.defalutVolume;
-                // console.log("readyState>>>>>>>", audioRef.current.readyState);
                 audioRef.current.play();
             } else if (playFlag === "pause") {
                 audioRef.current.pause();
@@ -83,11 +80,7 @@ export default function FooterCom(props) {
                 });
                 return;
             }
-            // console.log('beginRef', beginRef.current.offsetWidth);
-            // console.log('beginRef', beginRef.current.offsetLeft);
             console.log("event---------", event.pageX);
-            // console.log("progressRef.current.offsetLeft--------", progressRef.current.offsetLeft);
-            // console.log("progressRef.current.width--------", progressRef.current.offsetWidth);
             // 10 paddingRight
             let currentProgress = event.pageX - (beginRef.current.offsetWidth + beginRef.current.offsetLeft + 10);
             let currentRate = (currentProgress / progressRef.current.offsetWidth * 100);
@@ -140,7 +133,6 @@ export default function FooterCom(props) {
     }
 
     const playMusic = (flag) => {
-        // console.log("---------->>>>>>>>>>>>>", os.userInfo().username);
         try {
             if (!audioRef.current.currentSrc) {
                 message.error({
@@ -297,7 +289,6 @@ export default function FooterCom(props) {
  * @returns
  */
 function PlayStatusCom(props) {
-    const IconFont = createFromIconfontCN();
     let action = props.playStatus === "pause" ? "play" : "pause";
     let type = props.playStatus === "pause" ? "icon-bofang" : "icon-zanting-xianxingyuankuang";
     return (

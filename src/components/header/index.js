@@ -4,8 +4,7 @@ import './index.less';
 import '../../App.less';
 import windowUtils from '@localUtils/window-util';
 import { getUserInfor } from '../../api/index'
-import { createFromIconfontCN } from '@ant-design/icons';
-import { SkinOutlined } from '@ant-design/icons';
+import { createFromIconfontCN, SkinOutlined } from '@ant-design/icons';
 
 const IconFont = createFromIconfontCN();
 const { Search } = Input;
@@ -83,7 +82,6 @@ class Header extends React.Component {
     onSearch = (value) => {
         console.log("onSearch--------", value);
         if (!value) {
-            // warning("搜索内容不可为空，请检查");
             return;
         }
     };
