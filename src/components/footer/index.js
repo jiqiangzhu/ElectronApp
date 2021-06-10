@@ -280,6 +280,10 @@ export default function FooterCom(props) {
                         <SetVolumeCom defaultValue={localStorage.defalutVolume ? localStorage.defalutVolume : 1}
                             setVolume={setVolume.bind(this)}
                         />
+                        <IconFont style={{ fontSize: '16px' }}
+                            type="icon-liebiao1"
+                            onClick={() => props.openMusicList()}
+                            className="webkit-no-drag" />
                     </Space>
                 </Col>
             </Row>

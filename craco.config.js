@@ -25,7 +25,8 @@ module.exports = {
                             '@text-color': '#FFFFFF',
                             '@menu-item-active-bg': '#4B6E8F',
                             '@tooltip-bg': '#87d068',
-                            '@modal-footer-bg': 'rgb(69, 71, 71)'
+                            '@modal-footer-bg': 'rgb(69, 71, 71)',
+                            '@list-item-padding': '15'
                         },
                         javascriptEnabled: true,
                     },

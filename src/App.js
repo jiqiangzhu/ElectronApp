@@ -1,4 +1,4 @@
-import { Layout, Skeleton, List } from 'antd';
+import { Layout, Skeleton, List, Drawer } from 'antd';
 import './App.less';
 import { getMusicList } from './api';
 import FooterCom from './components/footer';
@@ -15,7 +15,8 @@ export default class App extends React.Component {
       loadingFlag: true,
       opacityVallue: 0,
       musicList: [],
-      musicDom: ""
+      musicDom: "",
+      visible: false
     };
     this.scrollRef = React.createRef();
   }
@@ -34,7 +35,6 @@ export default class App extends React.Component {
     if (localStorage.opacityVallue && localStorage.opacityVallue !== "0") {
       this.changeOpacity(localStorage.opacityVallue * 1);
     }
-
   }
 
   changeOpacity = (value) => {
@@ -60,6 +60,19 @@ export default class App extends React.Component {
     })
   }
 
+  openMusicList = () => {
+    console.log('open music list...');
+    this.setState({
+      visible: true
+    })
+  }
+
+  onClose = () => {
+    this.setState({
+      visible: false
+    })
+  }
+
   render() {
     return (
       <Skeleton active loading={this.state.loadingFlag} rows={100}>
@@ -70,20 +83,33 @@ export default class App extends React.Component {
             />
           </Header>
           <Layout>
-            
-            {/* <div ref={this.scrollRef} className="my-content">
-              <Content>
-                <List
-                  dataSource={this.state.musicDom}
-                  renderItem={item => (
-                    <List.Item>
-                      {item}
-                    </List.Item>
-                  )}
-                />
+            <>
+              <Drawer
+                title="Music List"
+                placement="right"
+                closable={false}
+                onClose={()=>this.onClose()}
+                visible={this.state.visible}
+                maskStyle={{background: 'transparent'}}
+                headerStyle={{color: '#FFFFFF'}}
+                className="webkit-no-drag"
+              >
+                <div ref={this.scrollRef} className="my-content">
+                  {/* <h2 style={{color: '#FFF'}}>Music List</h2> */}
+                  <Content>
+                    <List
+                      dataSource={this.state.musicDom}
+                      renderItem={item => (
+                        <List.Item>
+                          {item}
+                        </List.Item>
+                      )}
+                    />
 
-              </Content>
-            </div> */}
+                  </Content>
+                </div>
+              </Drawer>
+            </>
           </Layout>
 
           <Footer style={{
@@ -94,6 +120,7 @@ export default class App extends React.Component {
           >
             <FooterCom playMusic={(i) => this.playMusic(i)}
               getMusicListFromFooterCom={(musicList) => this.setMusicList(musicList)}
+              openMusicList={() => this.openMusicList()}
             />
           </Footer>
         </Layout>
