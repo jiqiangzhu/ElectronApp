@@ -132,6 +132,7 @@ class Header extends React.Component {
                         <Space className="flex-type flex-justify-start flex-align-mid">
                             <Dropdown
                                 overlay={menu}
+                                trigger={['click']}
                                 onVisibleChange={this.handleVisibleChange}
                                 placement="bottomLeft"
                             >
@@ -178,7 +179,7 @@ function SetOpacityCom(props) {
     };
     const menu = (
         <div style={style}>
-            <Slider vertical max={100} min={78} step={1} style={{height: '50%'}} defaultValue={props.defaultValue * 100} onChange={(value) => props.changeOpacity(value / 100)} />
+            <Slider vertical max={100} min={78} step={1} style={{ height: '50%' }} defaultValue={props.defaultValue * 100} onChange={(value) => props.changeOpacity(value / 100)} />
         </div>
     );
     return (

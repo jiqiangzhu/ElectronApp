@@ -6,6 +6,8 @@ import commonUtils from '@localUtils/common-util';
 import windowUtils from '@localUtils/window-util';
 import fsUtils from '@localUtils/fs-util';
 import { StepBackwardOutlined, StepForwardOutlined, createFromIconfontCN } from '@ant-design/icons';
+import store from '@redux';
+import { playMusicRedux, pauseMusicRedux } from '@redux/actions/play-actions';
 
 const IconFont = createFromIconfontCN();
 const playModeArr = [
@@ -36,32 +38,30 @@ export default function FooterCom(props) {
     const audioRef = React.createRef();
     const beginRef = React.createRef();
     const progressRef = React.createRef();
-    const [playFlag, setPlayFlag] = useState("pause");
+    // const [playFlag, setPlayFlag] = useState("pause");
     const [duration, setDuration] = useState(0);
     const [percent, setPercent] = useState(0);
     const [filePathArray, setFilePathArray] = useState([]);
     const [fileNameArray, setFileNameArray] = useState([]);
+    const [audioVolume, setAudioVolume] = useState(localStorage.defalutVolume ? localStorage.defalutVolume : 1);
 
     useEffect(() => {
         setDuration(duration);
         try {
-            if (playFlag === "play" && audioRef.current.paused) {
-                audioRef.current.volume = localStorage.defalutVolume;
-                audioRef.current.play();
-            } else if (playFlag === "pause") {
-                audioRef.current.pause();
+            if (audioRef.current) {
+                audioRef.current.volume = audioVolume;
             }
         } catch (e) {
             console.error(`The program reported an error when playing song\n${e}`);
         }
         setPlayMode(localStorage.playMode ? localStorage.playMode : "1");
 
-    }, [duration, audioRef, playFlag])
+    }, [duration, audioRef, audioVolume])
 
     const updateTime = () => {
         let temPercent = (audioRef.current.currentTime / duration) * 100;
-        setPercent(temPercent)
-        setBeginTime(parseInt(audioRef.current.currentTime))
+        setPercent(temPercent);
+        setBeginTime(parseInt(audioRef.current.currentTime));
     }
 
     const changePlayMode = (e) => {
@@ -90,7 +90,7 @@ export default function FooterCom(props) {
             console.log("currentRate--------", currentRate);
             console.log("setCurrentTime--------", setCurrentTime);
             audioRef.current.currentTime = setCurrentTime;
-            setPlayFlag("play");
+            store.dispatch(playMusicRedux("play"));
         } catch (e) {
             console.error(`The program reported an error on progress bar\n${e}`);
         }
@@ -129,7 +129,6 @@ export default function FooterCom(props) {
         } catch (e) {
             console.error(`The program reported an error when switching songs\n${e}`);
         }
-
     }
 
     const playMusic = (flag) => {
@@ -143,7 +142,18 @@ export default function FooterCom(props) {
                 });
                 return;
             }
-            setPlayFlag(flag);
+            if (flag) {
+                throw new Error('audio error when play music...');
+            }
+            if (store.getState().playReducer.playFlag === "pause") {
+                store.dispatch(playMusicRedux("play"));
+                audioRef.current.play();
+            } else if (store.getState().playReducer.playFlag === "play") {
+                store.dispatch(pauseMusicRedux("pause"));
+                audioRef.current.pause();
+            } else {
+                throw new Error('music play error.\n redux error...');
+            }
         } catch (e) {
             console.error(`The program reported an error when playing songs\n${e}`);
         }
@@ -195,12 +205,7 @@ export default function FooterCom(props) {
     const setVolume = (value) => {
         try {
             if (!isNaN(value)) {
-                if (value === 0) {
-                    audioRef.current.volume = 0;
-                } else {
-                    localStorage.defalutVolume = value;
-                    audioRef.current.volume = localStorage.defalutVolume;
-                }
+                setAudioVolume(value);
             } else {
                 throw new Error('value is not a number')
             }
@@ -229,7 +234,7 @@ export default function FooterCom(props) {
                             onClick={playNext.bind(this, -1)}
                             style={{ fontSize: "24px", cursor: "pointer" }} />
                         <PlayStatusCom
-                            playStatus={playFlag}
+                            playStatus={store.getState().playReducer.playFlag}
                             onClick={playMusic.bind(this)} />
                         <StepForwardOutlined
                             onClick={playNext.bind(this, 1)}
@@ -289,12 +294,12 @@ export default function FooterCom(props) {
  * @returns
  */
 function PlayStatusCom(props) {
-    let action = props.playStatus === "pause" ? "play" : "pause";
+    // let action = props.playStatus === "pause" ? "play" : "pause";
     let type = props.playStatus === "pause" ? "icon-bofang" : "icon-zanting-xianxingyuankuang";
     return (
         <IconFont type={type}
             style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }}
-            onClick={() => props.onClick(action)} className="webkit-no-drag" />
+            onClick={() => props.onClick()} className="webkit-no-drag" />
     )
 }
 

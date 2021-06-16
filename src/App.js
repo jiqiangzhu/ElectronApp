@@ -7,7 +7,11 @@ import windowUtils from '@localUtils/window-util';
 import { CustomHeader } from './components/header';
 
 const { Content, Header, Footer } = Layout;
+const Counter = ({ value }) => (
+  <h1>{value}</h1>
+);
 
+// store.subscribe();
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -83,32 +87,37 @@ export default class App extends React.Component {
             />
           </Header>
           <Layout>
-            <>
-              <Drawer
-                title="Music List"
-                placement="right"
-                closable={false}
-                onClose={()=>this.onClose()}
-                visible={this.state.visible}
-                maskStyle={{background: 'transparent'}}
-                headerStyle={{color: '#FFFFFF'}}
-                className="webkit-no-drag cannotselect"
-              >
-                <div ref={this.scrollRef} className="my-content">
-                  <Content>
-                    <List
-                      dataSource={this.state.musicDom}
-                      renderItem={item => (
-                        <List.Item>
-                          {item}
-                        </List.Item>
-                      )}
-                    />
+            <div>
+              <Counter value={'abc'} />
+            </div>
+          </Layout>
 
-                  </Content>
-                </div>
-              </Drawer>
-            </>
+          {/* Drawer-Music List */}
+          <Layout>
+            <Drawer
+              title="Music List"
+              placement="right"
+              closable={false}
+              onClose={() => this.onClose()}
+              visible={this.state.visible}
+              maskStyle={{ background: 'transparent' }}
+              headerStyle={{ color: '#FFFFFF' }}
+              className="webkit-no-drag cannotselect"
+            >
+              <div ref={this.scrollRef} className="my-content">
+                <Content>
+                  <List
+                    dataSource={this.state.musicDom}
+                    renderItem={item => (
+                      <List.Item>
+                        {item}
+                      </List.Item>
+                    )}
+                  />
+
+                </Content>
+              </div>
+            </Drawer>
           </Layout>
 
           <Footer style={{
