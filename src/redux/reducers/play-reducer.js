@@ -4,7 +4,8 @@ const initialState = {
     playFlag: "pause",
     musicList: [],
     currentIndex: 0,
-    audioRef: ""
+    currentAudio: "",
+    currentSrc: ""
 
 }
 
@@ -12,28 +13,36 @@ function playReducer(state = initialState, action) {
     switch (action.type) {
         case MusicPlay: {
             return {
+                ...state,
                 playFlag: action.payload.playFlag
             }
         }
         case MusicPause: {
             return {
+                ...state,
                 playFlag: action.payload.playFlag
             }
         }
         case MusicList: {
             return {
-                musicList: action.payload.musicList
+                ...state,
+                currentIndex: action.payload.currentIndex ? action.payload.currentIndex : 0,
+                musicList: action.payload.musicList,
+                currentSrc: action.payload.musicList[0]
             }
         }
         case CurrentIndex: {
+            action.payload.currentAudio.src = state.musicList[action.payload.currentIndex];
             return {
-                currentIndex: action.payload.currentIndex
+                ...state,
+                currentIndex: action.payload.currentIndex,
+                currentAudio: action.payload.currentAudio
             }
         }
         case AudioFlag: {
             return {
                 ...state,
-                audioRef: action.payload.audioRef
+                currentAudio: action.payload.currentAudio
             }
         }
         default:

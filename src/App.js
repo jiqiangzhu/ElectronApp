@@ -5,6 +5,8 @@ import FooterCom from './components/footer';
 import React from 'react';
 import windowUtils from '@localUtils/window-util';
 import { CustomHeader } from './components/header';
+import store from '@redux';
+import { currentIndexRedux } from '@redux/actions/play-actions';
 
 const { Content, Header, Footer } = Layout;
 
@@ -45,7 +47,14 @@ export default class App extends React.Component {
   }
 
   playMusic = (index) => {
-    console.log("music index------------", index)
+    const reducer = store.getState().playReducer;
+    if (reducer.playFlag === "play") {
+      reducer.currentAudio.pause();
+    }
+    store.dispatch(currentIndexRedux(index, reducer.currentAudio));
+    if (reducer.currentAudio && reducer.playFlag === "play") {
+      reducer.currentAudio.play();
+    }
   }
 
   setMusicList = (musicList) => {
@@ -84,7 +93,7 @@ export default class App extends React.Component {
             />
           </Header>
           <Layout>
-            
+
           </Layout>
 
           {/* Drawer-Music List */}

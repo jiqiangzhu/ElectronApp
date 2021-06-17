@@ -7,7 +7,7 @@ import windowUtils from '@localUtils/window-util';
 import fsUtils from '@localUtils/fs-util';
 import { StepBackwardOutlined, StepForwardOutlined, createFromIconfontCN } from '@ant-design/icons';
 import store from '@redux';
-import { playMusicRedux, pauseMusicRedux, musicListRedux, audioRefRedux } from '@redux/actions/play-actions';
+import { playMusicRedux, pauseMusicRedux, currentIndexRedux, musicListRedux, audioRefRedux } from '@redux/actions/play-actions';
 
 const IconFont = createFromIconfontCN();
 const playModeArr = [
@@ -34,14 +34,12 @@ export default function FooterCom(props) {
     const [beginTime, setBeginTime] = useState(0);
     // 1 list loop 2 single circle 3 random default 1
     const [playMode, setPlayMode] = useState("1");
-    const [currentIndex, setCurrentIndex] = useState(0);
     const audioRef = React.createRef();
     const beginRef = React.createRef();
     const progressRef = React.createRef();
-    // const [playFlag, setPlayFlag] = useState("pause");
     const [duration, setDuration] = useState(0);
     const [percent, setPercent] = useState(0);
-    const [filePathArray, setFilePathArray] = useState([]);
+    const [currentSrc, setCurrentSrc] = useState("");
     const [fileNameArray, setFileNameArray] = useState([]);
     const [audioVolume, setAudioVolume] = useState(localStorage.defalutVolume ? localStorage.defalutVolume : 1);
 
@@ -98,7 +96,10 @@ export default function FooterCom(props) {
     }
 
     const playNext = (value) => {
-        if (filePathArray.length <= 0) {
+        let reducer = store.getState().playReducer;
+        let listLen = store.getState().playReducer.musicList.length;
+        let currIndex = store.getState().playReducer.currentIndex;
+        if (listLen <= 0) {
             message.error({
                 content: "music list is null",
                 style: {
@@ -108,25 +109,31 @@ export default function FooterCom(props) {
             return;
         }
         try {
+            if (reducer.playFlag === "play") {
+                reducer.currentAudio.pause();
+            }
             if (playMode !== "3") {
                 if (value === 1) {
-                    if ((currentIndex + 1) >= filePathArray.length) {
-                        setCurrentIndex(0);
+                    if ((currIndex + 1) >= listLen) {
+                        store.dispatch(currentIndexRedux(0, audioRef.current));
                     } else {
-                        setCurrentIndex(currentIndex + 1);
+                        store.dispatch(currentIndexRedux(currIndex + 1, audioRef.current));
                     }
                 } else if (value === -1) {
-                    if ((currentIndex - 1) < 0) {
-                        setCurrentIndex(filePathArray.length - 1);
+                    if ((currIndex - 1) < 0) {
+                        store.dispatch(currentIndexRedux(listLen + 1, audioRef.current));
                     } else {
-                        setCurrentIndex((currentIndex - 1) * 1)
+                        store.dispatch(currentIndexRedux((currIndex - 1) * 1), audioRef.current);
                     }
                 }
             } else {
-                let tempIndex = commonUtils.randomInteger(currentIndex, filePathArray.length);
-                setCurrentIndex(tempIndex);
+                let tempIndex = commonUtils.randomInteger(currIndex, listLen);
+                store.dispatch(currentIndexRedux(tempIndex, audioRef.current));
             }
-
+            
+            if (reducer.currentAudio && reducer.playFlag === "play") {
+                reducer.currentAudio.play();
+            }
         } catch (e) {
             console.error(`The program reported an error when switching songs\n${e}`);
         }
@@ -134,9 +141,7 @@ export default function FooterCom(props) {
 
     const playMusic = (flag) => {
         try {
-            store.dispatch(audioRefRedux({ audioRef: audioRef.current }));
-            // console.log('audioRef.current', audioRef.current);
-            // console.log(store.getState().audioReducer.audioRef);
+            store.dispatch(audioRefRedux(audioRef.current));
             if (!audioRef.current.currentSrc) {
                 message.error({
                     content: "unvalid music url",
@@ -151,10 +156,10 @@ export default function FooterCom(props) {
             }
             if (store.getState().playReducer.playFlag === "pause") {
                 store.dispatch(playMusicRedux("play"));
-                audioRef.current.play();
+                store.getState().playReducer.currentAudio.play();
             } else if (store.getState().playReducer.playFlag === "play") {
                 store.dispatch(pauseMusicRedux("pause"));
-                audioRef.current.pause();
+                store.getState().playReducer.currentAudio.pause();
             } else {
                 throw new Error('music play error.\n redux error...');
             }
@@ -173,7 +178,7 @@ export default function FooterCom(props) {
 
     const readDir = async (event, arg) => {
         let musicList = fileNameArray;
-        let fullPathList = filePathArray;
+        let fullPathList = store.getState().playReducer.musicList.musicList;
         let path;
         if (typeof arg === "string") {
             path = arg;
@@ -196,8 +201,10 @@ export default function FooterCom(props) {
                         return path + '\\' + item;
                     })
                     setFileNameArray(musicList);
-                    setFilePathArray(fullPathList);
+                    store.dispatch(musicListRedux(fullPathList));
+                    setCurrentSrc(store.getState().playReducer.musicList[store.getState().playReducer.currentIndex])
                     props.getMusicListFromFooterCom(musicList);
+                    store.dispatch(audioRefRedux(audioRef.current));
                 }
             } catch (e) {
                 console.error("err----------", err);
@@ -222,13 +229,12 @@ export default function FooterCom(props) {
         <>
             <audio
                 onTimeUpdate={updateTime.bind(this)}
-                onError={playMusic.bind(this, "pause")}
                 ref={audioRef}
                 preload="true"
                 loop={playMode === "2" ? true : false}
                 controls={false}
                 onEnded={playNext.bind(this, 1)}
-                src={filePathArray[currentIndex]}
+                src={currentSrc}
                 onCanPlay={getDuration.bind(this)}
             ></audio>
             <Row align="middle" style={{ width: "100%" }} >
@@ -298,8 +304,7 @@ export default function FooterCom(props) {
  * @returns
  */
 function PlayStatusCom(props) {
-    // let action = props.playStatus === "pause" ? "play" : "pause";
-    let type = props.playStatus === "pause" ? "icon-bofang" : "icon-zanting-xianxingyuankuang";
+    let type = props.playStatus === "play" ? "icon-zanting-xianxingyuankuang" : "icon-bofang";
     return (
         <IconFont type={type}
             style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }}

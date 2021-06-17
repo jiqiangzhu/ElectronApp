@@ -18,24 +18,24 @@ function pauseMusic(playFlag) {
     }
 }
 // play list
-function musicList(list) {
+function musicList(musicList) {
     return {
         type: MusicList,
-        payload: { list }
+        payload: { musicList }
     }
 }
 // current music index
-function currentIndex(index) {
+function currentIndex(currentIndex, currentAudio) {
     return {
         type: CurrentIndex,
-        payload: { index }
+        payload: { currentIndex, currentAudio }
     }
 }
 // audio ref
-function audioRef(playFlag) {
+function audioRef(currentAudio) {
     return {
         type: AudioFlag,
-        payload: { playFlag }
+        payload: { currentAudio }
     }
 }
 export {
