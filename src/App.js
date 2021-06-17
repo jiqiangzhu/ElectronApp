@@ -6,7 +6,7 @@ import React from 'react';
 import windowUtils from '@localUtils/window-util';
 import { CustomHeader } from './components/header';
 import store from '@redux';
-import { currentIndexRedux } from '@redux/actions/play-actions';
+import { currentIndexRedux, playMusicRedux, pauseMusicRedux } from '@redux/actions/play-actions';
 
 const { Content, Header, Footer } = Layout;
 
@@ -48,12 +48,19 @@ export default class App extends React.Component {
 
   playMusic = (index) => {
     const reducer = store.getState().playReducer;
+    console.log('current', reducer.currentAudio);
     if (reducer.playFlag === "play") {
       reducer.currentAudio.pause();
     }
+    store.dispatch(playMusicRedux("play"));
     store.dispatch(currentIndexRedux(index, reducer.currentAudio));
-    if (reducer.currentAudio && reducer.playFlag === "play") {
-      reducer.currentAudio.play();
+    if (reducer.currentAudio && reducer.currentAudio.paused) {
+      try {
+        reducer.currentAudio.play();
+      } catch (e) {
+        store.dispatch(pauseMusicRedux("pause"));
+        console.error(e);;
+      }
     }
   }
 

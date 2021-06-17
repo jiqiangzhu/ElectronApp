@@ -4,7 +4,7 @@ const initialState = {
     playFlag: "pause",
     musicList: [],
     currentIndex: 0,
-    currentAudio: "",
+    currentAudio: {},
     currentSrc: ""
 
 }

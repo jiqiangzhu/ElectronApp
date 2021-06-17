@@ -89,7 +89,9 @@ export default function FooterCom(props) {
             console.log("setCurrentTime--------", setCurrentTime);
             audioRef.current.currentTime = setCurrentTime;
             store.dispatch(playMusicRedux("play"));
-            audioRef.current.play();
+            store.dispatch(audioRefRedux(audioRef.current));
+            store.getState().playReducer.currentAudio.play();
+            // reducer.currentAudio.play();
         } catch (e) {
             console.error(`The program reported an error on progress bar\n${e}`);
         }
@@ -130,7 +132,7 @@ export default function FooterCom(props) {
                 let tempIndex = commonUtils.randomInteger(currIndex, listLen);
                 store.dispatch(currentIndexRedux(tempIndex, audioRef.current));
             }
-            
+
             if (reducer.currentAudio && reducer.playFlag === "play") {
                 reducer.currentAudio.play();
             }
@@ -140,6 +142,7 @@ export default function FooterCom(props) {
     }
 
     const playMusic = (flag) => {
+        let reducer = store.getState().playReducer;
         try {
             store.dispatch(audioRefRedux(audioRef.current));
             if (!audioRef.current.currentSrc) {
@@ -154,12 +157,12 @@ export default function FooterCom(props) {
             if (flag) {
                 throw new Error('audio error when play music...');
             }
-            if (store.getState().playReducer.playFlag === "pause") {
+            if (reducer.playFlag === "pause") {
                 store.dispatch(playMusicRedux("play"));
-                store.getState().playReducer.currentAudio.play();
+                reducer.currentAudio.play();
             } else if (store.getState().playReducer.playFlag === "play") {
                 store.dispatch(pauseMusicRedux("pause"));
-                store.getState().playReducer.currentAudio.pause();
+                reducer.currentAudio.pause();
             } else {
                 throw new Error('music play error.\n redux error...');
             }
@@ -177,6 +180,7 @@ export default function FooterCom(props) {
     }
 
     const readDir = async (event, arg) => {
+        store.dispatch(audioRefRedux(audioRef.current))
         let musicList = fileNameArray;
         let fullPathList = store.getState().playReducer.musicList.musicList;
         let path;
@@ -202,9 +206,8 @@ export default function FooterCom(props) {
                     })
                     setFileNameArray(musicList);
                     store.dispatch(musicListRedux(fullPathList));
-                    setCurrentSrc(store.getState().playReducer.musicList[store.getState().playReducer.currentIndex])
+                    setCurrentSrc(store.getState().playReducer.musicList[store.getState().playReducer.currentIndex]);
                     props.getMusicListFromFooterCom(musicList);
-                    store.dispatch(audioRefRedux(audioRef.current));
                 }
             } catch (e) {
                 console.error("err----------", err);
