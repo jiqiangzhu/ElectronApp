@@ -7,9 +7,6 @@ import windowUtils from '@localUtils/window-util';
 import { CustomHeader } from './components/header';
 
 const { Content, Header, Footer } = Layout;
-const Counter = ({ value }) => (
-  <h1>{value}</h1>
-);
 
 // store.subscribe();
 export default class App extends React.Component {
@@ -87,9 +84,7 @@ export default class App extends React.Component {
             />
           </Header>
           <Layout>
-            <div>
-              <Counter value={'abc'} />
-            </div>
+            
           </Layout>
 
           {/* Drawer-Music List */}

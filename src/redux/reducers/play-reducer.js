@@ -1,7 +1,11 @@
-import { MusicPlay, MusicPause } from '../actions/play-actions';
+import { MusicPlay, MusicPause, MusicList, CurrentIndex, AudioFlag } from '../actions/play-actions';
 
 const initialState = {
-    playFlag: "pause"
+    playFlag: "pause",
+    musicList: [],
+    currentIndex: 0,
+    audioRef: ""
+
 }
 
 function playReducer(state = initialState, action) {
@@ -14,6 +18,22 @@ function playReducer(state = initialState, action) {
         case MusicPause: {
             return {
                 playFlag: action.payload.playFlag
+            }
+        }
+        case MusicList: {
+            return {
+                musicList: action.payload.musicList
+            }
+        }
+        case CurrentIndex: {
+            return {
+                currentIndex: action.payload.currentIndex
+            }
+        }
+        case AudioFlag: {
+            return {
+                ...state,
+                audioRef: action.payload.audioRef
             }
         }
         default:

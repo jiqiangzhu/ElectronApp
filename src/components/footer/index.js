@@ -7,7 +7,7 @@ import windowUtils from '@localUtils/window-util';
 import fsUtils from '@localUtils/fs-util';
 import { StepBackwardOutlined, StepForwardOutlined, createFromIconfontCN } from '@ant-design/icons';
 import store from '@redux';
-import { playMusicRedux, pauseMusicRedux } from '@redux/actions/play-actions';
+import { playMusicRedux, pauseMusicRedux, musicListRedux, audioRefRedux } from '@redux/actions/play-actions';
 
 const IconFont = createFromIconfontCN();
 const playModeArr = [
@@ -91,6 +91,7 @@ export default function FooterCom(props) {
             console.log("setCurrentTime--------", setCurrentTime);
             audioRef.current.currentTime = setCurrentTime;
             store.dispatch(playMusicRedux("play"));
+            audioRef.current.play();
         } catch (e) {
             console.error(`The program reported an error on progress bar\n${e}`);
         }
@@ -133,6 +134,9 @@ export default function FooterCom(props) {
 
     const playMusic = (flag) => {
         try {
+            store.dispatch(audioRefRedux({ audioRef: audioRef.current }));
+            // console.log('audioRef.current', audioRef.current);
+            // console.log(store.getState().audioReducer.audioRef);
             if (!audioRef.current.currentSrc) {
                 message.error({
                     content: "unvalid music url",
