@@ -145,6 +145,11 @@ export default function FooterCom(props) {
     const playMusic = (flag) => {
         let reducer = store.getState().playReducer;
         try {
+            if (flag) {
+                store.dispatch(playMusicRedux("pause"));
+                return;
+                // throw new Error('audio error when play music...');
+            }
             store.dispatch(audioRefRedux(audioRef.current));
             if (!audioRef.current.currentSrc) {
                 message.error({
@@ -154,9 +159,6 @@ export default function FooterCom(props) {
                     },
                 });
                 return;
-            }
-            if (flag) {
-                throw new Error('audio error when play music...');
             }
             if (reducer.playFlag === "pause") {
                 store.dispatch(playMusicRedux("play"));
@@ -233,6 +235,7 @@ export default function FooterCom(props) {
         <>
             <audio
                 onTimeUpdate={updateTime.bind(this)}
+                onError={playMusic.bind(this, "pause")}
                 ref={audioRef}
                 preload="true"
                 loop={playMode === "2" ? true : false}
