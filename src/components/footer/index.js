@@ -42,7 +42,11 @@ export default function FooterCom(props) {
     const [currentSrc, setCurrentSrc] = useState("");
     const [fileNameArray, setFileNameArray] = useState([]);
     const [audioVolume, setAudioVolume] = useState(localStorage.defalutVolume ? localStorage.defalutVolume : 1);
-
+    useEffect(() => {
+        if (localStorage.defaultMusicPath) {
+            readDir({}, localStorage.defaultMusicPath)
+        }
+    }, [])// eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
         setDuration(duration);
         try {
