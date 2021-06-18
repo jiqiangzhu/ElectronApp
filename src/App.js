@@ -48,7 +48,6 @@ export default class App extends React.Component {
 
   playMusic = (index) => {
     const reducer = store.getState().playReducer;
-    console.log('current', reducer.currentAudio);
     if (reducer.playFlag === "play") {
       reducer.currentAudio.pause();
     }
@@ -62,21 +61,27 @@ export default class App extends React.Component {
         console.error(e);;
       }
     }
+    this.setMusicDom()
   }
 
   setMusicList = (musicList) => {
     this.setState({
-      musicList: musicList,
-      musicDom: musicList.map((item, index) => {
+      musicList: musicList
+    })
+    this.setMusicDom();
+  }
+  setMusicDom = () => {
+    this.setState({
+      musicDom: this.state.musicList.map((item, index) => {
         return (
-          <p onDoubleClick={() => this.playMusic(index)} key={index}>
+          <p onDoubleClick={() => this.playMusic(index)} key={index}
+            className={index === store.getState().playReducer.currentIndex ? "music-active" : ""}>
             {(item.indexOf('.mp3') !== -1) ? item.substr(0, item.indexOf('.mp3')) : item}
           </p>
         )
       })
     })
   }
-
   openMusicList = () => {
     console.log('open music list...');
     this.setState({
@@ -119,8 +124,8 @@ export default class App extends React.Component {
                 <Content>
                   <List
                     dataSource={this.state.musicDom}
-                    renderItem={item => (
-                      <List.Item>
+                    renderItem={(item, index) => (
+                      <List.Item className={index === store.getState().playReducer.currentIndex ? "list-item" : ""}>
                         {item}
                       </List.Item>
                     )}
@@ -140,6 +145,7 @@ export default class App extends React.Component {
             <FooterCom playMusic={(i) => this.playMusic(i)}
               getMusicListFromFooterCom={(musicList) => this.setMusicList(musicList)}
               openMusicList={() => this.openMusicList()}
+              setMusicDom={()=>this.setMusicDom()}
             />
           </Footer>
         </Layout>

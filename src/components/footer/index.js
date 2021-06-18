@@ -123,9 +123,9 @@ export default function FooterCom(props) {
                     }
                 } else if (value === -1) {
                     if ((currIndex - 1) < 0) {
-                        store.dispatch(currentIndexRedux(listLen + 1, audioRef.current));
+                        store.dispatch(currentIndexRedux(listLen - 1, audioRef.current));
                     } else {
-                        store.dispatch(currentIndexRedux((currIndex - 1) * 1), audioRef.current);
+                        store.dispatch(currentIndexRedux(currIndex - 1, audioRef.current));
                     }
                 }
             } else {
@@ -136,6 +136,7 @@ export default function FooterCom(props) {
             if (reducer.currentAudio && reducer.playFlag === "play") {
                 reducer.currentAudio.play();
             }
+            props.setMusicDom();
         } catch (e) {
             console.error(`The program reported an error when switching songs\n${e}`);
         }

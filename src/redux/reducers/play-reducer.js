@@ -6,7 +6,6 @@ const initialState = {
     currentIndex: 0,
     currentAudio: {},
     currentSrc: ""
-
 }
 
 function playReducer(state = initialState, action) {

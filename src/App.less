@@ -204,3 +204,40 @@
 .ant-drawer-wrapper-body {
   background-color: rgba(59, 59, 77, 1);
 }
+
+.music-active {
+  color: #00CED1;
+  background: #00CED1 linear-gradient(-135deg,
+      #acd69a 30%,
+      #87d068 60%,
+      transparent);
+  background-size: 30px 30px;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: scratchy 3s linear infinite;
+}
+
+@keyframes scratchy {
+  0% {
+    background-position: -50% 0;
+  }
+
+  100% {
+    background-position: 130% 0;
+  }
+}
+// .list-item {
+//   animation: switch 1s ease-out infinite;
+// }
+@keyframes switch {
+  0%, 33.1% {
+      margin-left: 0px;
+  }
+  33.5%, 67% {
+      margin-left: -90px;
+  }
+  67.4%, 100% {
+      margin-left: -200px;
+  }
+}
