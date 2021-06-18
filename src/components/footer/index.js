@@ -44,7 +44,7 @@ export default function FooterCom(props) {
     const [audioVolume, setAudioVolume] = useState(localStorage.defalutVolume ? localStorage.defalutVolume : 1);
     useEffect(() => {
         if (localStorage.defaultMusicPath) {
-            readDir({}, localStorage.defaultMusicPath)
+            readDir("init", localStorage.defaultMusicPath)
         }
     }, [])// eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
@@ -187,6 +187,9 @@ export default function FooterCom(props) {
     }
 
     const readDir = async (event, arg) => {
+        if (event === "init") {
+
+        }
         store.dispatch(audioRefRedux(audioRef.current))
         let musicList = fileNameArray;
         let fullPathList = store.getState().playReducer.musicList.musicList;
@@ -213,6 +216,7 @@ export default function FooterCom(props) {
                     })
                     setFileNameArray(musicList);
                     store.dispatch(musicListRedux(fullPathList));
+                    // store.dispatch(currentIndexRedux(localStorage.currentIndex ? parseInt(localStorage.currentIndex) : 0));
                     setCurrentSrc(store.getState().playReducer.musicList[store.getState().playReducer.currentIndex]);
                     props.getMusicListFromFooterCom(musicList);
                 }

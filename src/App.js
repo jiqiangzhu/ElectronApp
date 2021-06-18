@@ -145,7 +145,7 @@ export default class App extends React.Component {
             <FooterCom playMusic={(i) => this.playMusic(i)}
               getMusicListFromFooterCom={(musicList) => this.setMusicList(musicList)}
               openMusicList={() => this.openMusicList()}
-              setMusicDom={()=>this.setMusicDom()}
+              setMusicDom={() => this.setMusicDom()}
             />
           </Footer>
         </Layout>
