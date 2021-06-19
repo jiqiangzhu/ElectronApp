@@ -31,9 +31,7 @@ function playReducer(state = initialState, action) {
             }
         }
         case CurrentIndex: {
-            // if (action.payload.currentAudio) {
-                action.payload.currentAudio.src = state.musicList[action.payload.currentIndex];
-            // }
+            action.payload.currentAudio.src = state.musicList[action.payload.currentIndex];
             localStorage.currentIndex = action.payload.currentIndex;
             return {
                 ...state,

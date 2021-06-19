@@ -5,8 +5,7 @@ import '@/App.less';
 import commonUtils from '@localUtils/common-util';
 import windowUtils from '@localUtils/window-util';
 import fsUtils from '@localUtils/fs-util';
-import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
-import { createFromIconfontCN } from '@ant-design/icons';
+import { StepBackwardOutlined, StepForwardOutlined, createFromIconfontCN } from '@ant-design/icons';
 
 const IconFont = createFromIconfontCN();
 export default class FooterCom extends React.Component {
@@ -124,7 +123,6 @@ export default class FooterCom extends React.Component {
                     return false;
                 })
                 this.props.getMusicListFromFooterCom(list);
-                // setFilePathArray(musicPathList);
                 this.setState({
                     filePathArray: musicPathList
                 })
@@ -204,7 +202,6 @@ export default class FooterCom extends React.Component {
  * @returns
  */
 function PlayStatusCom(props) {
-    const IconFont = createFromIconfontCN();
     if (props.playStatus === "pause") {
         return (
             <IconFont type="icon-bofang"

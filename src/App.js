@@ -10,7 +10,6 @@ import { currentIndexRedux, playMusicRedux, pauseMusicRedux } from '@redux/actio
 
 const { Content, Header, Footer } = Layout;
 
-// store.subscribe();
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -48,18 +47,20 @@ export default class App extends React.Component {
 
   playMusic = (index) => {
     const reducer = store.getState().playReducer;
-    if (reducer.playFlag === "play") {
-      reducer.currentAudio.pause();
-    }
-    store.dispatch(playMusicRedux("play"));
-    store.dispatch(currentIndexRedux(index, reducer.currentAudio));
-    if (reducer.currentAudio && reducer.currentAudio.paused) {
-      try {
-        reducer.currentAudio.play();
-      } catch (e) {
-        store.dispatch(pauseMusicRedux("pause"));
-        console.error(e);;
+    try {
+      if (reducer.playFlag === "play") {
+        reducer.currentAudio.pause();
       }
+      store.dispatch(playMusicRedux("play"));
+      if (reducer.currentAudio && reducer.currentAudio.paused) {
+        if (index !== reducer.currentIndex) {
+          store.dispatch(currentIndexRedux(index, reducer.currentAudio));
+        }
+        reducer.currentAudio.play();
+      }
+    } catch (e) {
+      store.dispatch(pauseMusicRedux("pause"));
+      console.error(e);;
     }
     this.setMusicDom()
   }

@@ -72,11 +72,6 @@ export default class App extends React.Component {
           rightContent: <MyTVCom />
         })
         break;
-      case 2:
-        this.setState({
-          rightContent: <LocalDownloadCom />
-        })
-        break;
       case 3:
         this.setState({
           rightContent: <MusicPanCom />
@@ -166,7 +161,6 @@ export default class App extends React.Component {
             {item}
           </span>
         } key={index} onClick={clickTab}>
-          {/* {rendertab} */}
 
         </TabPane>
       )
