@@ -10,7 +10,7 @@ const fsUtils = {
      * @param {*} resolve func
      * @returns 
      */
-    readMusicDir: async (path, resolve) => {
+    readMusicDir: (path, resolve) => {
         if (!path) {
             return;
         }

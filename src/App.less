@@ -1,24 +1,31 @@
 @import '~antd/dist/antd.less';
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-.my-content {
-  overflow-y: scroll;
-  overflow-x: hidden;
-  max-height: 300px;
-  padding: 10px;
+
+.cannotselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: not-allowed;
 }
+
 .main-content {
   // height: 680px;
   min-width: 830px;
   padding: 13px 15px;
   display: flex;
   flex-direction: column;
+
   .ant-tabs-tab-active .anticon svg {
     color: #00CED1;
   }
+
   .lay-header {
     height: 30px;
     line-height: 30px;
@@ -70,9 +77,17 @@
   // background: rgba(46, 103, 156, 0.2);
 }
 
-// 预定义样式
+// Pre-defined style
 .flex-align-mid {
   align-items: center;
+}
+
+.ant-drawer-title {
+  color: #FFF;
+}
+
+.ant-drawer-body {
+  padding: 10px;
 }
 
 .flex-align-self-start {
@@ -94,11 +109,28 @@
 .flex-type {
   display: flex;
 }
+
 .align-self-start {
   align-self: flex-start;
 }
+
 .flex-justify-start {
   justify-content: flex-start;
+}
+
+.ant-list-items .ant-list-item {
+  border-bottom: none;
+}
+
+.ant-list-items .ant-list-item p {
+  white-space: nowrap;
+  overflow: hidden;
+  width: 90%;
+  text-overflow: ellipsis;
+}
+
+.ant-list-items .ant-list-item:hover {
+  color: #00CED1;
 }
 
 .flex-justify-evenly {
@@ -113,17 +145,99 @@
   padding-top: 5px;
 }
 
-::-webkit-scrollbar {  /* 滚动条 */
-  width: 10px;
+.padding-left5 {
+  padding-left: 5px;
 }
-// ::-webkit-scrollbar-track {
-//   background-color: rgba(255, 255, 255, 0.2);
+
+.padding-left15 {
+  padding-left: 15px;
+}
+
+/* scroll bar */
+// ::-webkit-scrollbar {  
+//   width: 10px;
+// }
+
+
+// ::-webkit-scrollbar-thumb {
+//   background-color: #11171a;
 //   border-radius: 10px;
 //  }
-::-webkit-scrollbar-thumb {
-  background-color: #11171a;
-  border-radius: 10px;
- }
 // ::-webkit-scrollbar-thumb:hover {
 //   background: linear-gradient(transparent, #f2f4f5);
 // }
+// ::-webkit-scrollbar-track {
+//   background-color: rgba(255, 255, 255, 0.2);
+//   border-radius: 10px;
+// }
+.my-content {
+  overflow-y: hidden;
+  overflow-x: hidden;
+  // max-height: 300px;
+  max-height: 100%;
+  padding: 10px;
+}
+
+.my-content:hover {
+  overflow-y: scroll;
+  padding-right: 0px;
+}
+
+.my-content::-webkit-scrollbar {
+  width: 10px;
+}
+
+.my-content::-webkit-scrollbar-thumb {
+  background-color: #11171a;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.ant-empty-description {
+  color: #FFF;
+}
+
+.ant-drawer-wrapper-body {
+  background-color: rgba(59, 59, 77, 1);
+}
+
+.music-active {
+  color: #00CED1;
+  background: #00CED1 linear-gradient(-135deg,
+      #acd69a 30%,
+      #87d068 60%,
+      transparent);
+  background-size: 30px 30px;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: scratchy 3s linear infinite;
+}
+
+@keyframes scratchy {
+  0% {
+    background-position: -50% 0;
+  }
+
+  100% {
+    background-position: 130% 0;
+  }
+}
+// .list-item {
+//   animation: switch 1s ease-out infinite;
+// }
+@keyframes switch {
+  0%, 33.1% {
+      margin-left: 0px;
+  }
+  33.5%, 67% {
+      margin-left: -90px;
+  }
+  67.4%, 100% {
+      margin-left: -200px;
+  }
+}

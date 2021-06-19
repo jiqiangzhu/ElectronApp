@@ -4,8 +4,7 @@ import './index.less';
 import '../../App.less';
 import windowUtils from '@localUtils/window-util';
 import { getUserInfor } from '../../api/index'
-import { createFromIconfontCN } from '@ant-design/icons';
-import { SkinOutlined } from '@ant-design/icons';
+import { createFromIconfontCN, SkinOutlined } from '@ant-design/icons';
 
 const IconFont = createFromIconfontCN();
 const { Search } = Input;
@@ -83,7 +82,6 @@ class Header extends React.Component {
     onSearch = (value) => {
         console.log("onSearch--------", value);
         if (!value) {
-            // warning("搜索内容不可为空，请检查");
             return;
         }
     };
@@ -134,6 +132,7 @@ class Header extends React.Component {
                         <Space className="flex-type flex-justify-start flex-align-mid">
                             <Dropdown
                                 overlay={menu}
+                                trigger={['click']}
                                 onVisibleChange={this.handleVisibleChange}
                                 placement="bottomLeft"
                             >
@@ -180,7 +179,7 @@ function SetOpacityCom(props) {
     };
     const menu = (
         <div style={style}>
-            <Slider vertical max={100} min={78} step={1} style={{height: '50%'}} defaultValue={props.defaultValue * 100} onChange={(value) => props.changeOpacity(value / 100)} />
+            <Slider vertical max={100} min={78} step={1} style={{ height: '50%' }} defaultValue={props.defaultValue * 100} onChange={(value) => props.changeOpacity(value / 100)} />
         </div>
     );
     return (

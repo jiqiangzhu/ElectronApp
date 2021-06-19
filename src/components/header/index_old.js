@@ -68,7 +68,6 @@ class Header extends React.Component {
         }
     }
     render() {
-        // const imgpath = require(`../../assets/img/${this.state.imgPath}`)
         return (
             <>
                 <Row className="site-page-header" align="middle">

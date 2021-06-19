@@ -24,7 +24,7 @@ app.on('ready', () => {
     titleBarStyle: 'customButtonsOnHover',
     frame: false,
     resizable: true,
-    icon: path.join(__dirname, '/public/logo48.ico'),
+    icon: path.join(__dirname, '/public/logo128.ico'),
     title: "Cool Music"
   })
   mainWindow.setMenu(null);

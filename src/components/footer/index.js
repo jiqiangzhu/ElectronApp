@@ -5,8 +5,9 @@ import '@/App.less';
 import commonUtils from '@localUtils/common-util';
 import windowUtils from '@localUtils/window-util';
 import fsUtils from '@localUtils/fs-util';
-import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
-import { createFromIconfontCN } from '@ant-design/icons';
+import { StepBackwardOutlined, StepForwardOutlined, createFromIconfontCN } from '@ant-design/icons';
+import store from '@redux';
+import { playMusicRedux, pauseMusicRedux, currentIndexRedux, musicListRedux, audioRefRedux } from '@redux/actions/play-actions';
 
 const IconFont = createFromIconfontCN();
 const playModeArr = [
@@ -33,36 +34,36 @@ export default function FooterCom(props) {
     const [beginTime, setBeginTime] = useState(0);
     // 1 list loop 2 single circle 3 random default 1
     const [playMode, setPlayMode] = useState("1");
-    const [currentIndex, setCurrentIndex] = useState(0);
     const audioRef = React.createRef();
     const beginRef = React.createRef();
     const progressRef = React.createRef();
-    const [playFlag, setPlayFlag] = useState("pause");
     const [duration, setDuration] = useState(0);
     const [percent, setPercent] = useState(0);
-    const [filePathArray, setFilePathArray] = useState([]);
-
+    const [currentSrc, setCurrentSrc] = useState("");
+    const [fileNameArray, setFileNameArray] = useState([]);
+    const [audioVolume, setAudioVolume] = useState(localStorage.defalutVolume ? localStorage.defalutVolume : 1);
+    useEffect(() => {
+        if (localStorage.defaultMusicPath) {
+            readDir("init", localStorage.defaultMusicPath)
+        }
+    }, [])// eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
         setDuration(duration);
         try {
-            if (playFlag === "play" && audioRef.current.paused) {
-                audioRef.current.volume = localStorage.defalutVolume;
-                // console.log("readyState>>>>>>>", audioRef.current.readyState);
-                audioRef.current.play();
-            } else if (playFlag === "pause") {
-                audioRef.current.pause();
+            if (audioRef.current) {
+                audioRef.current.volume = audioVolume;
             }
         } catch (e) {
             console.error(`The program reported an error when playing song\n${e}`);
         }
         setPlayMode(localStorage.playMode ? localStorage.playMode : "1");
 
-    }, [duration, audioRef, playFlag])
+    }, [duration, audioRef, audioVolume])
 
     const updateTime = () => {
         let temPercent = (audioRef.current.currentTime / duration) * 100;
-        setPercent(temPercent)
-        setBeginTime(parseInt(audioRef.current.currentTime))
+        setPercent(temPercent);
+        setBeginTime(parseInt(audioRef.current.currentTime));
     }
 
     const changePlayMode = (e) => {
@@ -81,24 +82,29 @@ export default function FooterCom(props) {
                 });
                 return;
             }
-            // console.log('beginRef', beginRef.current.offsetWidth);
-            // console.log('beginRef', beginRef.current.offsetLeft);
             console.log("event---------", event.pageX);
-            // console.log("progressRef.current.offsetLeft--------", progressRef.current.offsetLeft);
-            // console.log("progressRef.current.width--------", progressRef.current.offsetWidth);
             // 10 paddingRight
             let currentProgress = event.pageX - (beginRef.current.offsetWidth + beginRef.current.offsetLeft + 10);
             let currentRate = (currentProgress / progressRef.current.offsetWidth * 100);
             let setCurrentTime = (duration * currentRate) / 100;
+
+            console.log("currentProgress--------", currentProgress);
+            console.log("currentRate--------", currentRate);
+            console.log("setCurrentTime--------", setCurrentTime);
             audioRef.current.currentTime = setCurrentTime;
-            setPlayFlag("play");
+            store.dispatch(playMusicRedux("play"));
+            store.dispatch(audioRefRedux(audioRef.current));
+            store.getState().playReducer.currentAudio.play();
         } catch (e) {
             console.error(`The program reported an error on progress bar\n${e}`);
         }
     }
 
     const playNext = (value) => {
-        if (filePathArray.length <= 0) {
+        let reducer = store.getState().playReducer;
+        let listLen = store.getState().playReducer.musicList.length;
+        let currIndex = store.getState().playReducer.currentIndex;
+        if (listLen <= 0) {
             message.error({
                 content: "music list is null",
                 style: {
@@ -108,33 +114,45 @@ export default function FooterCom(props) {
             return;
         }
         try {
+            if (reducer.playFlag === "play") {
+                reducer.currentAudio.pause();
+            }
             if (playMode !== "3") {
                 if (value === 1) {
-                    if ((currentIndex + 1) >= filePathArray.length) {
-                        setCurrentIndex(0);
+                    if ((currIndex + 1) >= listLen) {
+                        store.dispatch(currentIndexRedux(0, audioRef.current));
                     } else {
-                        setCurrentIndex(currentIndex + 1);
+                        store.dispatch(currentIndexRedux(currIndex + 1, audioRef.current));
                     }
                 } else if (value === -1) {
-                    if ((currentIndex - 1) < 0) {
-                        setCurrentIndex(filePathArray.length - 1);
+                    if ((currIndex - 1) < 0) {
+                        store.dispatch(currentIndexRedux(listLen - 1, audioRef.current));
                     } else {
-                        setCurrentIndex((currentIndex - 1) * 1)
+                        store.dispatch(currentIndexRedux(currIndex - 1, audioRef.current));
                     }
                 }
             } else {
-                let tempIndex = commonUtils.randomInteger(currentIndex, filePathArray.length);
-                setCurrentIndex(tempIndex);
+                let tempIndex = commonUtils.randomInteger(currIndex, listLen);
+                store.dispatch(currentIndexRedux(tempIndex, audioRef.current));
             }
 
+            if (reducer.currentAudio && reducer.playFlag === "play") {
+                reducer.currentAudio.play();
+            }
+            props.setMusicDom();
         } catch (e) {
             console.error(`The program reported an error when switching songs\n${e}`);
         }
-
     }
 
     const playMusic = (flag) => {
+        let reducer = store.getState().playReducer;
         try {
+            if (flag) {
+                store.dispatch(playMusicRedux("pause"));
+                return;
+            }
+            store.dispatch(audioRefRedux(audioRef.current));
             if (!audioRef.current.currentSrc) {
                 message.error({
                     content: "unvalid music url",
@@ -144,14 +162,22 @@ export default function FooterCom(props) {
                 });
                 return;
             }
-            setPlayFlag(flag);
+            if (reducer.playFlag === "pause") {
+                store.dispatch(playMusicRedux("play"));
+                reducer.currentAudio.play();
+            } else if (store.getState().playReducer.playFlag === "play") {
+                store.dispatch(pauseMusicRedux("pause"));
+                reducer.currentAudio.pause();
+            } else {
+                throw new Error('music play error.\n redux error...');
+            }
         } catch (e) {
             console.error(`The program reported an error when playing songs\n${e}`);
         }
     }
 
     const importLocal = async (e, dirPath = "D:/") => {
-        await windowUtils.openFolder(dirPath, readDir.bind(this));
+        await windowUtils.openFolder(dirPath, readDir);
     }
 
     const getDuration = () => {
@@ -159,31 +185,38 @@ export default function FooterCom(props) {
     }
 
     const readDir = async (event, arg) => {
-        let musicPathList = [];
-        let musicList = filePathArray;
+        store.dispatch(audioRefRedux(audioRef.current));
+        let musicList = fileNameArray;
+        let fullPathList = store.getState().playReducer.musicList.musicList;
         let path;
         if (typeof arg === "string") {
             path = arg;
         } else if (typeof arg === "object") {
             path = arg.filePaths[0];
         }
-        await fsUtils.readMusicDir(path, (err, files) => {
-            console.log(`list of files from ${path}------->>>>>>>`, files);
-            if (files.length > 0) {
-                let list = [];
-                files.filter((item, index) => {
-                    if (item.indexOf('.mp3') !== -1) {
-                        list.push(item.substr(0, item.indexOf('.mp3')));
-                        musicPathList.push(path + '\\' + item);
-                        musicList.push(item);
-                        // let fileName = item.substr(0, item.indexOf('.mp3'))
-                        // musicPathList.push({ fullPath: path + '\\' + item, fileName: fileName })
-                        return true;
-                    }
-                    return false;
-                })
-                props.getMusicListFromFooterCom(list);
-                setFilePathArray(musicPathList.concat());
+        fsUtils.readMusicDir(path, (err, files) => {
+            try {
+                console.log(`list of files from ${path}------->>>>>>>`, files);
+                if (files.length > 0) {
+                    files.filter((item, index) => {
+                        if (item.indexOf('.mp3') !== -1) {
+                            musicList.push(item);
+                            return true;
+                        }
+                        return false;
+                    })
+                    musicList = Array.from(new Set(musicList)); //de-duplication
+                    fullPathList = musicList.map((item, index) => {
+                        return path + '\\' + item;
+                    })
+                    setFileNameArray(musicList);
+                    store.dispatch(musicListRedux(fullPathList));
+                    setCurrentSrc(store.getState().playReducer.musicList[store.getState().playReducer.currentIndex]);
+                    props.getMusicListFromFooterCom(musicList);
+                }
+            } catch (e) {
+                console.error("err----------", err);
+                console.error("e----------", e);
             }
         })
     }
@@ -191,12 +224,7 @@ export default function FooterCom(props) {
     const setVolume = (value) => {
         try {
             if (!isNaN(value)) {
-                if (value === 0) {
-                    audioRef.current.volume = 0;
-                } else {
-                    localStorage.defalutVolume = value;
-                    audioRef.current.volume = localStorage.defalutVolume;
-                }
+                setAudioVolume(value);
             } else {
                 throw new Error('value is not a number')
             }
@@ -215,7 +243,7 @@ export default function FooterCom(props) {
                 loop={playMode === "2" ? true : false}
                 controls={false}
                 onEnded={playNext.bind(this, 1)}
-                src={filePathArray[currentIndex]}
+                src={currentSrc}
                 onCanPlay={getDuration.bind(this)}
             ></audio>
             <Row align="middle" style={{ width: "100%" }} >
@@ -225,7 +253,7 @@ export default function FooterCom(props) {
                             onClick={playNext.bind(this, -1)}
                             style={{ fontSize: "24px", cursor: "pointer" }} />
                         <PlayStatusCom
-                            playStatus={playFlag}
+                            playStatus={store.getState().playReducer.playFlag}
                             onClick={playMusic.bind(this)} />
                         <StepForwardOutlined
                             onClick={playNext.bind(this, 1)}
@@ -236,7 +264,7 @@ export default function FooterCom(props) {
                     className="flex-type flex-justify-end">
                     {commonUtils.secondsFormat(beginTime)}
                 </Col> */}
-                <span ref={beginRef} style={{ paddingBottom: '10px', paddingRight: '10px' }}>
+                <span ref={beginRef} style={{ paddingBottom: '10px', paddingRight: '10px' }} className="cannotselect">
                     {commonUtils.secondsFormat(beginTime)}
                 </span>
                 <Col span={12}>
@@ -250,7 +278,7 @@ export default function FooterCom(props) {
                             }} />
                     </div>
                 </Col>
-                <span style={{ paddingBottom: '10px', paddingLeft: '10px' }}>
+                <span style={{ paddingBottom: '10px', paddingLeft: '10px' }} className="cannotselect">
                     {commonUtils.secondsFormat(parseInt(duration) ? parseInt(duration) : 0)}
                 </span>
                 {/* <Col style={{ paddingBottom: '10px', paddingLeft: '10px' }} span={1}>
@@ -268,6 +296,10 @@ export default function FooterCom(props) {
                         <SetVolumeCom defaultValue={localStorage.defalutVolume ? localStorage.defalutVolume : 1}
                             setVolume={setVolume.bind(this)}
                         />
+                        <IconFont style={{ fontSize: '16px' }}
+                            type="icon-liebiao1"
+                            onClick={() => props.openMusicList()}
+                            className="webkit-no-drag" />
                     </Space>
                 </Col>
             </Row>
@@ -281,13 +313,11 @@ export default function FooterCom(props) {
  * @returns
  */
 function PlayStatusCom(props) {
-    const IconFont = createFromIconfontCN();
-    let action = props.playStatus === "pause" ? "play" : "pause";
-    let type = props.playStatus === "pause" ? "icon-bofang" : "icon-zanting-xianxingyuankuang";
+    let type = props.playStatus === "play" ? "icon-zanting-xianxingyuankuang" : "icon-bofang";
     return (
         <IconFont type={type}
             style={{ color: '#fff', fontSize: "24px", cursor: "pointer" }}
-            onClick={() => props.onClick(action)} className="webkit-no-drag" />
+            onClick={() => props.onClick()} className="webkit-no-drag" />
     )
 }
 
