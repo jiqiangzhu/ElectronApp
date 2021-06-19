@@ -9,6 +9,8 @@ import store from '@redux';
 import { currentIndexRedux, playMusicRedux, pauseMusicRedux } from '@redux/actions/play-actions';
 
 const { Content, Header, Footer } = Layout;
+var internetAvailable = window.require("internet-available");
+
 
 export default class App extends React.Component {
   constructor(props) {
@@ -22,8 +24,19 @@ export default class App extends React.Component {
     };
     this.scrollRef = React.createRef();
   }
+  
+  async checkInternetAvailable() {
+    internetAvailable({
+      domainName: "baidu.com"
+    }).then(() => {
+      console.log("Internet available");
+    }).catch(() => {
+      console.log("No internet");
+    });
+  }
 
   async UNSAFE_componentWillMount() {
+    this.checkInternetAvailable();
     // Skeleton
     setTimeout(async () => {
       this.setState({

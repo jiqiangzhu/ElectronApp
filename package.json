@@ -15,6 +15,7 @@
     "craco-less": "^1.17.1",
     "ffmetadata": "^1.7.0",
     "fs-extra": "^9.1.0",
+    "internet-available": "^1.0.0",
     "mockjs": "^1.1.0",
     "path": "^0.12.7",
     "path-key": "^3.1.1",
