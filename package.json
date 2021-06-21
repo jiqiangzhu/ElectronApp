@@ -12,6 +12,8 @@
     "axios": "^0.21.1",
     "concurrently": "^6.0.0",
     "craco-less": "^1.17.1",
+    "echarts": "^4.9.0",
+    "echarts-for-react": "^3.0.1",
     "ffmetadata": "^1.7.0",
     "fs-extra": "^9.1.0",
     "internet-available": "^1.0.0",
