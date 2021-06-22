@@ -1,4 +1,4 @@
-import { Layout, Skeleton, List, Drawer } from 'antd';
+import { Layout, Skeleton, List, Drawer, Button } from 'antd';
 import './App.less';
 import { getMusicList } from './api';
 import FooterCom from './components/footer';
@@ -21,7 +21,7 @@ export default class App extends React.Component {
       musicList: [],
       musicDom: "",
       visible: false,
-      myChat: {}
+      loading: false
     };
     this.scrollRef = React.createRef();
     this.myEchart = React.createRef();
@@ -32,8 +32,10 @@ export default class App extends React.Component {
       domainName: "baidu.com"
     }).then(() => {
       console.log("Internet available");
+      return true;
     }).catch(() => {
       console.log("No internet");
+      return false;
     });
   }
 
@@ -51,11 +53,6 @@ export default class App extends React.Component {
     // set Opacity
     if (localStorage.opacityVallue && localStorage.opacityVallue !== "0") {
       this.changeOpacity(localStorage.opacityVallue * 1);
-    }
-  }
-  componentDidUpdate() {
-    if (this.myEchart.current) {
-      ChinaMap.initalECharts(this.myEchart.current);
     }
   }
 
@@ -80,7 +77,7 @@ export default class App extends React.Component {
       }
     } catch (e) {
       store.dispatch(pauseMusicRedux("pause"));
-      console.error(e);;
+      console.error(e);
     }
     this.setMusicDom()
   }
@@ -115,10 +112,24 @@ export default class App extends React.Component {
       visible: false
     })
   }
-
+  loadMap = async () => {
+    try {
+      this.setState({
+        loading: true
+      })
+      if (this.myEchart.current) {
+        await ChinaMap.initalECharts(this.myEchart.current);
+        this.setState({
+          loading: false
+        })
+      }
+    } catch (e) {
+      console.log('e', e);
+    }
+  }
   render() {
     return (
-      <Skeleton active loading={this.state.loadingFlag} rows={100}>
+      <Skeleton active loading={this.state.loadingFlag} rows={100} >
         <Layout className="main-content">
           <Header className="lay-header webkit-drag" style={{ position: 'fixed', zIndex: 10, width: '100%' }}>
             <CustomHeader defaultValue={localStorage.opacityVallue * 1}
@@ -128,6 +139,12 @@ export default class App extends React.Component {
           <Layout>
             <div style={{ width: '800px', height: '500px' }} ref={this.myEchart}>
             </div>
+            {/* <Button style={{ width: '120px', height: '25px' }} onClick={this.loadMap}>加载疫情地图</Button> */}
+            <Button type="primary" style={{ width: '120px' }} onClick={this.loadMap}
+              loading={this.state.loading} danger
+            >
+              COVID-19 Map
+            </Button>
           </Layout>
 
           {/* Drawer-Music List */}

@@ -16,7 +16,25 @@ const fsUtils = {
         }
         localStorage.defaultMusicPath = path;
         fs.readdir(path, resolve);
+    },
+    /**
+     * read content of files
+     * @param {*} filename 
+     * @param {*} resolve 
+     */
+    readFile: (filename, resolve) => {
+        if (!filename) {
+            return;
+        }
+        fs.readFile(filename, 'utf-8', resolve);
+    },
+    fileStat: (filename, resolve) => {
+        if (!filename) {
+            return;
+        }
+        fs.stat(filename, resolve)
     }
+
 }
 
 export default fsUtils;
