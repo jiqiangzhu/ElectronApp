@@ -21,26 +21,27 @@ export default class App extends React.Component {
       musicList: [],
       musicDom: "",
       visible: false,
-      loading: false
+      loading: false,
+      forbiddenFlag: false,
+      mapButtonTip: 'COVID-19 Map'
     };
     this.scrollRef = React.createRef();
     this.myEchart = React.createRef();
   }
 
-  async checkInternetAvailable() {
-    internetAvailable({
-      domainName: "baidu.com"
-    }).then(() => {
-      console.log("Internet available");
+  checkInternetAvailable() {
+    try {
+      internetAvailable({ domainName: "baidu.com" });
       return true;
-    }).catch(() => {
-      console.log("No internet");
+    } catch (err) {
+      console.error(err);
       return false;
-    });
+    }
   }
 
   async UNSAFE_componentWillMount() {
-    this.checkInternetAvailable();
+    let res = this.checkInternetAvailable();
+    console.log('res>>net>>avaliable>>>>>>>>>', res);
     // Skeleton
     setTimeout(async () => {
       this.setState({
@@ -117,10 +118,13 @@ export default class App extends React.Component {
       this.setState({
         loading: true
       })
+      let netValid = this.checkInternetAvailable();
+      console.log('netValid----------', netValid);
       if (this.myEchart.current) {
-        await ChinaMap.initalECharts(this.myEchart.current);
+        await ChinaMap.initalECharts(this.myEchart.current, netValid);
         this.setState({
-          loading: false
+          loading: false,
+          mapButtonTip: "Get again"
         })
       }
     } catch (e) {
@@ -141,9 +145,9 @@ export default class App extends React.Component {
             </div>
             {/* <Button style={{ width: '120px', height: '25px' }} onClick={this.loadMap}>加载疫情地图</Button> */}
             <Button type="primary" style={{ width: '120px' }} onClick={this.loadMap}
-              loading={this.state.loading} danger
+              loading={this.state.loading} danger disabled={this.state.forbiddenFlag}
             >
-              COVID-19 Map
+              {this.state.mapButtonTip}
             </Button>
           </Layout>
 

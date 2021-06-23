@@ -22,17 +22,29 @@ const fsUtils = {
      * @param {*} filename 
      * @param {*} resolve 
      */
-    readFile: (filename, resolve) => {
+    readFile: async (filename, resolve) => {
         if (!filename) {
             return;
         }
-        fs.readFile(filename, 'utf-8', resolve);
+        await fs.readFile(filename, 'utf8', resolve);
     },
-    fileStat: (filename, resolve) => {
+    fileStat: async (filename, resolve) => {
         if (!filename) {
-            return;
+            return 'null';
         }
-        fs.stat(filename, resolve)
+        return fs.stat(filename);
+    },
+    /**
+     * 
+     * @param {*} data 
+     * @param {*} callback 
+     * @returns 
+     */
+    writeFile: async (path, data, callback) => {
+        if (!data) {
+            return 'null'
+        }
+        await fs.writeFile(path, data, { encoding: "utf8" }, callback)
     }
 
 }

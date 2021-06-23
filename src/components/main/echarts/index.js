@@ -1,19 +1,35 @@
 import echarts from 'echarts';
 import chinaJson from '@/static/china.json'
 import { getFYDataFromSina } from '@/api';
-import fsUtils from '@/utils/fs-util'
+import fsUtils from '@/utils/fs-util';
 
 const ChinaMap = {
-    initalECharts: async (EchartDom) => {
-        let result;
+    initalECharts: async (EchartDom, netValid) => {
+        let result = false;
         echarts.registerMap('china', chinaJson);
-
         const myChart = echarts.init(EchartDom, 'dark');
-        let fydata, option;
-        fsUtils.fileStat('fydata.json', async (e, stats) => {
-            console.log('isFile', stats.isFile());
+        try {
+            result = ChinaMap.fetchData(netValid, myChart);
+            return result;
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+    },
+    fetchData: async (netValid, myChart) => {
+        try {
+            let fydata, option;
+            let isFileExist = fsUtils.fileStat('fydata.json');
+            console.log('fydata.json exits?---', isFileExist);
+            if (localStorage.lastFetchFyDate === new Date().toDateString() && isFileExist) {
+                fydata = await getFYDataFromSina(false);
+            } else {
+                fydata = await getFYDataFromSina(netValid);
+                localStorage.lastFetchFyDate = new Date().toDateString();
+                fsUtils.writeFile('fydata.json', JSON.stringify(fydata));
+            }
+            console.log('fydata', fydata);
 
-            fydata = await getFYDataFromSina();
             let dataList = fydata.data.data.list;
             let addDaily = fydata.data.data.add_daily;
             console.log('addDaily>>>>>>>>>>>', addDaily);
@@ -26,7 +42,6 @@ const ChinaMap = {
                         color: '#efefef'
                     }
                 },
-                // 放上鼠标后显示的新
                 tooltip: {
                     trigger: 'item'
                 },
@@ -53,7 +68,7 @@ const ChinaMap = {
                         fontSize: 15
                     }
                 },
-                // 设置地图数据
+                // set map data
                 series: [
                     {
                         data: dataList,
@@ -63,12 +78,12 @@ const ChinaMap = {
                     }
                 ]
             };
-
             myChart.setOption(option);
-
-            result = true;
-        })
-        return result;
+            return true;
+        } catch (err) {
+            console.log('err in fetch data', err);
+            return false;
+        }
     }
 }
 
