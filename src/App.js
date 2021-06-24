@@ -1,4 +1,4 @@
-import { Layout, Skeleton, List, Drawer, Button } from 'antd';
+import { Layout, Skeleton, List, Drawer } from 'antd';
 import './App.less';
 import { getMusicList } from './api';
 import FooterCom from './components/footer';
@@ -7,10 +7,9 @@ import windowUtils from '@localUtils/window-util';
 import { CustomHeader } from './components/header';
 import store from '@redux';
 import { currentIndexRedux, playMusicRedux, pauseMusicRedux } from '@redux/actions/play-actions';
-import { ChinaMap } from '@/components/main/echarts'
+import { ChinaMapCom } from '@/components/main/echarts/ChinaMapCom';
 
 const { Content, Header, Footer } = Layout;
-const internetAvailable = window.require("internet-available");
 
 export default class App extends React.Component {
   constructor(props) {
@@ -22,7 +21,6 @@ export default class App extends React.Component {
       musicDom: "",
       visible: false,
       loading: false,
-      forbiddenFlag: false,
       mapButtonTip: 'COVID-19 Map',
       netValid: false
     };
@@ -30,23 +28,8 @@ export default class App extends React.Component {
     this.myEchart = React.createRef();
   }
 
-  async checkInternetAvailable() {
-    try {
-      await internetAvailable({ domainName: "baidu.com" });
-      this.setState({
-        netValid: true
-      })
-      console.log('net avaliable--------');
-    } catch (err) {
-      this.setState({
-        netValid: false
-      })
-      console.warn('net cannot connect------', err);
-    }
-  }
-
   async UNSAFE_componentWillMount() {
-    this.checkInternetAvailable();
+    windowUtils.checkInternetAvailable();
 
     // Skeleton
     setTimeout(async () => {
@@ -122,23 +105,6 @@ export default class App extends React.Component {
     })
   }
 
-  loadMap = async () => {
-    try {
-      this.setState({
-        loading: true
-      })
-      this.checkInternetAvailable();
-      if (this.myEchart.current) {
-        await ChinaMap.initalECharts(this.myEchart.current, this.state.netValid);
-        this.setState({
-          loading: false,
-          mapButtonTip: "Get again"
-        })
-      }
-    } catch (e) {
-      console.err('loading map data err', e);
-    }
-  }
   render() {
     return (
       <Skeleton active loading={this.state.loadingFlag} rows={100} >
@@ -149,14 +115,7 @@ export default class App extends React.Component {
             />
           </Header>
           <Layout>
-            <div style={{ width: '800px', height: '500px' }} ref={this.myEchart}>
-            </div>
-            {/* <Button style={{ width: '120px', height: '25px' }} onClick={this.loadMap}>加载疫情地图</Button> */}
-            <Button type="primary" style={{ width: '120px' }} onClick={this.loadMap}
-              loading={this.state.loading} danger disabled={this.state.forbiddenFlag}
-            >
-              {this.state.mapButtonTip}
-            </Button>
+            <ChinaMapCom />
           </Layout>
 
           {/* Drawer-Music List */}

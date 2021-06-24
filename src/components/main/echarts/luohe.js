@@ -1,15 +1,14 @@
 import echarts from 'echarts';
-import chinaJson from '@/static/china.json'
 import { getFYDataFromSina } from '@/api';
 import fsUtils from '@/utils/fs-util';
 
-const ChinaMap = {
-    initalECharts: async (EchartDom, netValid) => {
+const LuoheMap = {
+    initalECharts: async (EchartDom, netValid, acctCode) => {
         let result = false;
-        echarts.registerMap('china', chinaJson);
+        echarts.registerMap('henan', henanJson);
         const myChart = echarts.init(EchartDom, 'dark');
         try {
-            result = ChinaMap.fetchData(netValid, myChart);
+            result = LuoheMap.fetchData(netValid, myChart);
             return result;
         } catch (err) {
             console.error('initalECharts err', err);
@@ -36,7 +35,7 @@ const ChinaMap = {
                 }
             }
             console.log('fydata', fydata);
-            let dataList = fydata.data.data.list;
+            let dataList = fydata.data.data.list[4];
             let addDaily = fydata.data.data.add_daily;
             console.log('addDaily>>>>>>>>>>>', addDaily);
             option = {
@@ -51,9 +50,6 @@ const ChinaMap = {
                 tooltip: {
                     trigger: 'item',
                     formatter: function (datas) {
-                        if (datas.name === "北京") {
-                            console.log('datas-------------------', datas);
-                        }
                         let res = datas.name + '<br/>'
                         res += "累计确诊人数：" + datas.value;
                         return res;
@@ -87,7 +83,7 @@ const ChinaMap = {
                     {
                         data: dataList,
                         type: 'map',
-                        mapType: 'china',
+                        mapType: 'henan',
                         roam: true
                     }
                 ]
@@ -102,5 +98,5 @@ const ChinaMap = {
 }
 
 export {
-    ChinaMap
+    LuoheMap
 }
