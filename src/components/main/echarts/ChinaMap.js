@@ -6,12 +6,9 @@ import fsUtils from '@/utils/fs-util';
 const ChinaMap = {
     initalECharts: async (EchartDom, netValid) => {
         let result = false;
-        echarts.registerMap('china', chinaJson);
-        const myChart = echarts.init(EchartDom, 'dark');
-        console.log('myChart', myChart);
-        // add event listener
         try {
-            result = ChinaMap.fetchData(netValid, myChart);
+            const chinaJsonData = chinaJson;
+            result = ChinaMap.fetchData(netValid, EchartDom, chinaJsonData);
             return result;
         } catch (err) {
             console.error('initalECharts err', err);
@@ -20,13 +17,22 @@ const ChinaMap = {
     },
     addEventLS: (myChart) => {
         console.log('add event listener');
-        myChart.on('datazoom', function (obj) {
-            console.log('obj', obj);
+        myChart.on('click', function (obj) {
+            console.log('obj.data.name------', obj.data.name);
+            console.log('obj.data.city------', obj.data.city);
+            // myChart.setOption({})
         })
     },
-    fetchData: async (netValid, myChart) => {
+    getOptionConfig: (dataList) => {
+        return
+    },
+
+    fetchData: async (netValid, EchartDom, chinaJsonData) => {
         try {
-            let fydata, option, isFileExist;
+            echarts.registerMap('china', chinaJsonData);
+            const myChart = echarts.init(EchartDom, 'dark');
+            console.log('myChart', myChart);
+            let fydata, isFileExist, option;
             try {
                 await fsUtils.fileStat('src/static/fydata.json');
                 isFileExist = true;
