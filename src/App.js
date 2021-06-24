@@ -7,7 +7,7 @@ import windowUtils from '@localUtils/window-util';
 import { CustomHeader } from './components/header';
 import store from '@redux';
 import { currentIndexRedux, playMusicRedux, pauseMusicRedux } from '@redux/actions/play-actions';
-import { ChinaMapCom } from '@/components/main/echarts/ChinaMapCom';
+import { ChinaMapCom } from '@/components/main/echarts';
 
 const { Content, Header, Footer } = Layout;
 
