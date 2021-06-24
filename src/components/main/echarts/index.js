@@ -12,24 +12,28 @@ const ChinaMap = {
             result = ChinaMap.fetchData(netValid, myChart);
             return result;
         } catch (err) {
-            console.error(err);
+            console.error('initalECharts err', err);
             return false;
         }
     },
     fetchData: async (netValid, myChart) => {
         try {
-            let fydata, option;
-            let isFileExist = fsUtils.fileStat('fydata.json');
+            let fydata, option, isFileExist;
+            try {
+                await fsUtils.fileStat('src/static/fydata.json');
+                isFileExist = true;
+            } catch(err) {
+                isFileExist = false;
+            }
             console.log('fydata.json exits?---', isFileExist);
             if (localStorage.lastFetchFyDate === new Date().toDateString() && isFileExist) {
                 fydata = await getFYDataFromSina(false);
             } else {
                 fydata = await getFYDataFromSina(netValid);
                 localStorage.lastFetchFyDate = new Date().toDateString();
-                fsUtils.writeFile('fydata.json', JSON.stringify(fydata));
+                fsUtils.writeFile('src/static/fydata.json', JSON.stringify(fydata));
             }
             console.log('fydata', fydata);
-
             let dataList = fydata.data.data.list;
             let addDaily = fydata.data.data.add_daily;
             console.log('addDaily>>>>>>>>>>>', addDaily);
@@ -43,7 +47,12 @@ const ChinaMap = {
                     }
                 },
                 tooltip: {
-                    trigger: 'item'
+                    trigger: 'item',
+                    formatter: function (datas) {
+                        let res = datas.name + '<br/>'
+                        res += "累计确诊人数：" + datas.value;
+                        return res;
+                    }
                 },
                 toolbox: {
                     show: true,
@@ -74,14 +83,14 @@ const ChinaMap = {
                         data: dataList,
                         type: 'map',
                         mapType: 'china',
-                        roam: false
+                        roam: true
                     }
                 ]
             };
             myChart.setOption(option);
             return true;
         } catch (err) {
-            console.log('err in fetch data', err);
+            console.error('err in fetch data', err);
             return false;
         }
     }

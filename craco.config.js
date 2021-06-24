@@ -34,6 +34,6 @@ module.exports = {
                 },
             },
         },
-    ],
-    "homepage": "./"
+    ]
+    // "homepage": "./"
 };

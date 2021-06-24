@@ -23,25 +23,31 @@ export default class App extends React.Component {
       visible: false,
       loading: false,
       forbiddenFlag: false,
-      mapButtonTip: 'COVID-19 Map'
+      mapButtonTip: 'COVID-19 Map',
+      netValid: false
     };
     this.scrollRef = React.createRef();
     this.myEchart = React.createRef();
   }
 
-  checkInternetAvailable() {
+  async checkInternetAvailable() {
     try {
-      internetAvailable({ domainName: "baidu.com" });
-      return true;
+      await internetAvailable({ domainName: "baidu.com" });
+      this.setState({
+        netValid: true
+      })
+      console.log('net avaliable--------');
     } catch (err) {
-      console.error(err);
-      return false;
+      this.setState({
+        netValid: false
+      })
+      console.warn('net cannot connect------', err);
     }
   }
 
   async UNSAFE_componentWillMount() {
-    let res = this.checkInternetAvailable();
-    console.log('res>>net>>avaliable>>>>>>>>>', res);
+    this.checkInternetAvailable();
+
     // Skeleton
     setTimeout(async () => {
       this.setState({
@@ -56,7 +62,9 @@ export default class App extends React.Component {
       this.changeOpacity(localStorage.opacityVallue * 1);
     }
   }
-
+  componentDidMount() {
+    console.log('this', this);
+  }
   changeOpacity = (value) => {
     console.log("opacity value---78~100-------", value * 100);
     windowUtils.setWindowOpacity(value);
@@ -113,22 +121,22 @@ export default class App extends React.Component {
       visible: false
     })
   }
+
   loadMap = async () => {
     try {
       this.setState({
         loading: true
       })
-      let netValid = this.checkInternetAvailable();
-      console.log('netValid----------', netValid);
+      this.checkInternetAvailable();
       if (this.myEchart.current) {
-        await ChinaMap.initalECharts(this.myEchart.current, netValid);
+        await ChinaMap.initalECharts(this.myEchart.current, this.state.netValid);
         this.setState({
           loading: false,
           mapButtonTip: "Get again"
         })
       }
     } catch (e) {
-      console.log('e', e);
+      console.err('loading map data err', e);
     }
   }
   render() {

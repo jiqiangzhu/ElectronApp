@@ -1,4 +1,5 @@
 import Mock from 'mockjs';
+import * as jsonStr from '@/static/fydata.json';
 
 Mock.setup({
     timeout: '100-300'
@@ -123,7 +124,6 @@ Mock.mock(
     '/sina/fymap',
     'get',
     () => {
-        let jsonStr = window.require('./fydata.json');
         return {
             data: jsonStr.data.data
         }
