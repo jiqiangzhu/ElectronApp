@@ -42,7 +42,7 @@ const ChinaMap = {
             console.log('netValid', netValid);
             // (toady or net avaliable) and file exist, load local file
             if (isFileExist && (localStorage.lastFetchFyDate === new Date().toDateString() || !netValid)) {
-                fydata = await getFYDataFromSina(netValid);
+                fydata = await getFYDataFromSina(false);
                 // file not exist, request sina data and save local
             } else {
                 if (!netValid) {

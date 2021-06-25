@@ -7,7 +7,7 @@ import windowUtils from '@localUtils/window-util';
 import fsUtils from '@localUtils/fs-util';
 import { StepBackwardOutlined, StepForwardOutlined, createFromIconfontCN } from '@ant-design/icons';
 import store from '@redux';
-import { playMusicRedux, pauseMusicRedux, currentIndexRedux, musicListRedux, audioRefRedux } from '@redux/actions/play-actions';
+import { playMusicRedux, currentIndexRedux, musicListRedux, audioRefRedux } from '@redux/actions/play-actions';
 import {PlayStatusCom, SetPlayModeCom, SetVolumeCom} from './PlayController'
 const IconFont = createFromIconfontCN();
 
@@ -152,7 +152,7 @@ function FooterCom(props) {
                 store.dispatch(playMusicRedux("play"));
                 reducer.currentAudio.play();
             } else if (store.getState().playReducer.playFlag === "play") {
-                store.dispatch(pauseMusicRedux("pause"));
+                store.dispatch(playMusicRedux("pause"));
                 reducer.currentAudio.pause();
             } else {
                 throw new Error('music play error.\n redux error...');
