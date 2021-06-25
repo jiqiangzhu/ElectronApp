@@ -1,9 +1,8 @@
 import { Button } from 'antd';
 import React, { useState } from 'react';
 import { ChinaMap } from '@/components/main/echarts/ChinaMap';
-import windowUtils from '@localUtils/window-util';
 
-function ChinaMapCom() {
+function ChinaMapCom(props) {
     const myEchart = React.createRef();
     const [loading, setLoading] = useState(false);
     const [mapButtonTip, setMapButtonTip] = useState("COVID-19 Map");
@@ -11,9 +10,8 @@ function ChinaMapCom() {
         try {
             setLoading(true);
             console.log('myEchart.current', myEchart.current);
-            let netValid = windowUtils.checkInternetAvailable();
             if (myEchart.current) {
-                await ChinaMap.initalECharts(myEchart.current, netValid);
+                await ChinaMap.initalECharts(myEchart.current, props.netValid);
                 setMapButtonTip("Get again");
                 setLoading(false);
             }

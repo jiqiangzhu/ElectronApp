@@ -4,7 +4,7 @@ import { getFYDataFromSina } from '@/api';
 import fsUtils from '@/utils/fs-util';
 
 const ChinaMap = {
-    initalECharts: async (EchartDom, netValid) => {
+    initalECharts: (EchartDom, netValid) => {
         let result = false;
         try {
             const chinaJsonData = chinaJson;
@@ -39,10 +39,15 @@ const ChinaMap = {
             } catch (err) {
                 isFileExist = false;
             }
-            console.log('fydata.json exits?---', isFileExist);
-            if (localStorage.lastFetchFyDate === new Date().toDateString() && isFileExist) {
-                fydata = await getFYDataFromSina(false);
+            console.log('netValid', netValid);
+            // (toady or net avaliable) and file exist, load local file
+            if (isFileExist && (localStorage.lastFetchFyDate === new Date().toDateString() || !netValid)) {
+                fydata = await getFYDataFromSina(netValid);
+                // file not exist, request sina data and save local
             } else {
+                if (!netValid) {
+                    return 'net cannot connect'
+                }
                 fydata = await getFYDataFromSina(netValid);
                 localStorage.lastFetchFyDate = new Date().toDateString();
                 if (fydata) {
@@ -117,7 +122,6 @@ const ChinaMap = {
             };
             myChart.setOption(option);
             ChinaMap.addEventLS(myChart);
-            console.log("option............", myChart.getOption());
             return true;
         } catch (err) {
             console.error('err in fetch data', err);

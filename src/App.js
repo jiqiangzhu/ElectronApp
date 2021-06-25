@@ -29,8 +29,6 @@ export default class App extends React.Component {
   }
 
   async UNSAFE_componentWillMount() {
-    windowUtils.checkInternetAvailable();
-
     // Skeleton
     setTimeout(async () => {
       this.setState({
@@ -44,9 +42,10 @@ export default class App extends React.Component {
     if (localStorage.opacityVallue && localStorage.opacityVallue !== "0") {
       this.changeOpacity(localStorage.opacityVallue * 1);
     }
-  }
-  componentDidMount() {
     console.log('this', this);
+    this.setState({
+      netValid: await windowUtils.checkInternetAvailable()
+    })
   }
   changeOpacity = (value) => {
     console.log("opacity value---78~100-------", value * 100);
@@ -115,7 +114,7 @@ export default class App extends React.Component {
             />
           </Header>
           <Layout>
-            <ChinaMapCom />
+            <ChinaMapCom netValid={this.state.netValid} />
           </Layout>
 
           {/* Drawer-Music List */}
