@@ -1,6 +1,7 @@
-import { Button } from 'antd';
+import { Button, Row, Col, } from 'antd';
 import React, { useState } from 'react';
 import { ChinaMap } from '@/components/main/echarts/ChinaMap';
+import store from 'src/redux';
 
 function ChinaMapCom(props) {
     const myEchart = React.createRef();
@@ -22,13 +23,25 @@ function ChinaMapCom(props) {
 
     return (
         <>
-            <div style={{ width: '800px', height: '500px' }} ref={myEchart}>
-            </div>
-            <Button type="primary" style={{ width: '120px' }} onClick={loadMap.bind(this)}
-                loading={loading} danger
-            >
-                {mapButtonTip}
-            </Button>
+
+            <Row>
+                <Col span={24}>
+                    <div style={{width: "100%", height: "500px"}} ref={myEchart}>
+                    </div>
+                </Col>
+            </Row>
+            <Row>
+                <Col span={3}>
+                    <Button type="primary" style={{ width: '120px' }} onClick={loadMap.bind(this)}
+                        loading={loading} danger
+                    >
+                        {mapButtonTip}
+                    </Button>
+                </Col>
+                <Col span={8}>
+                    {store.getState().mapReducer.newTime !== "0000-00-00 00:00:00" ? "update time:" + store.getState().mapReducer.newTime : ""}
+                </Col>
+            </Row>
         </>
     )
 }

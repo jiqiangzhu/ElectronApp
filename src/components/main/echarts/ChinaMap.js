@@ -2,6 +2,9 @@ import echarts from 'echarts';
 import chinaJson from '@/static/china.json'
 import { getFYDataFromSina } from '@/api';
 import fsUtils from '@/utils/fs-util';
+import { commonUtils } from '@localUtils/';
+import store from 'src/redux';
+import { updateMapRedux } from '@redux/actions/map-actions';
 
 const ChinaMap = {
     initalECharts: (EchartDom, netValid) => {
@@ -31,7 +34,7 @@ const ChinaMap = {
         return {
             backgroundColor: 'transparent',
             title: {
-                text: 'COVID-19 map in china',
+                text: `COVID-19 map in china`,
                 x: 'center',
                 textStyle: {
                     color: '#efefef'
@@ -94,7 +97,7 @@ const ChinaMap = {
         };
     },
 
-    fetchData: async (netValid, EchartDom, jsonData, type, size = 1.2) => {
+    fetchData: async (netValid, EchartDom, jsonData, type="country", size = 1.2) => {
         try {
             echarts.registerMap('china', jsonData);
             const myChart = echarts.init(EchartDom, 'dark');
@@ -109,8 +112,11 @@ const ChinaMap = {
             console.log('netValid', netValid);
             // (toady or net avaliable) and file exist, load local file
             fydata = await ChinaMap.getFyData(isFileExist, netValid);
+            console.log("time", commonUtils.dateTimeFormat(fydata.data.data.cachetime));
+            store.dispatch(updateMapRedux(commonUtils.dateTimeFormat(fydata.data.data.cachetime)));
+            console.log("----", store.getState().mapReducer.newTime === "0000-00-00 00:00:00");
             console.log('fydata', fydata);
-            let dataList, addDaily
+            let dataList, addDaily;
             if (type === "country") {
                 dataList = fydata.data.data.list;
                 addDaily = fydata.data.data.add_daily;

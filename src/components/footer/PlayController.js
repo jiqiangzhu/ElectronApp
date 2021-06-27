@@ -55,6 +55,8 @@ function SetVolumeCom(props) {
                 setCurrentVolume(0);
             }
             return;
+        } else {
+            localStorage.defalutVolume = value / 10;
         }
         props.setVolume(value / 10);
         setCurrentVolume(value);
