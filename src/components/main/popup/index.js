@@ -2,7 +2,11 @@ import store from '@redux';
 import { List, Drawer, Layout } from 'antd';
 
 const { Content } = Layout
-
+/**
+ * music list popup
+ * @param {*} props 
+ * @returns react dom
+ */
 function MusicListPopup(props) {
     return (
         <>
