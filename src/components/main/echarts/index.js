@@ -20,26 +20,25 @@ function ChinaMapCom(props) {
             console.error('loading map data err', e);
         }
     }
-
     return (
         <>
 
             <Row>
                 <Col span={24}>
-                    <div style={{width: "100%", height: "500px"}} ref={myEchart}>
+                    <div style={{ width: "100%", height: "500px" }} ref={myEchart}>
                     </div>
                 </Col>
             </Row>
             <Row>
                 <Col span={3}>
-                    <Button type="primary" style={{ width: '120px' }} onClick={loadMap.bind(this)}
+                    <Button type="primary" onClick={loadMap.bind(this)}
                         loading={loading} danger
                     >
                         {mapButtonTip}
                     </Button>
                 </Col>
                 <Col span={8}>
-                    {store.getState().mapReducer.newTime !== "0000-00-00 00:00:00" ? "update time:" + store.getState().mapReducer.newTime : ""}
+                    {store.getState().mapReducer.newTime !== "0000-00-00 00:00:00" ? "update time: " + store.getState().mapReducer.newTime : ""}
                 </Col>
             </Row>
         </>

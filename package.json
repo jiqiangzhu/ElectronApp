@@ -63,6 +63,7 @@
     "cross-env": "^7.0.3",
     "electron": "^11.4.3",
     "electron-is-dev": "^1.2.0",
+    "province-city-china": "^8.0.0",
     "react-scripts": "4.0.3"
   }
 }
