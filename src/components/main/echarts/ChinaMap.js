@@ -63,62 +63,62 @@ const ChinaMap = {
     // get map data
     fetchData: async (netValid, jsonData) => {
         try {
-            if (EchartDom) {
-                echarts.registerMap(mapName, jsonData);
-                const myChart = echarts.init(EchartDom, 'dark');
-                console.log('myChart', myChart);
-                let fydata, isFileExist, option;
-                // try {
-                //     await fsUtils.fileStat('src/static/fydata.json');
-                //     isFileExist = true;
-                // } catch (err) {
-                //     console.error('err', err);
-                //     isFileExist = false;
-                // }
-                isFileExist = true;
-                console.log('netValid', netValid);
-                // (toady or net avaliable) and file exist, load local file
-                fydata = await ChinaMap.getFyData(isFileExist, netValid);
-                // set last update time in redux
-                store.dispatch(updateMapRedux(commonUtils.dateTimeFormat(fydata.data.data.cachetime)));
-                console.log('fydata----', fydata);
-                let dataList, addDaily;
-                // all feiyan data
-                const allFyData = fydata.data.data;
-                dataList = allFyData.list;
-                addDaily = allFyData.add_daily;
-                if (type === "province") {
-                    let name = provinceObj.name.slice(0, 2);
-                    let curIndex = dataList.findIndex((item, index) => {
-                        if (item.name.slice(0, 2) === name) {
-                            return index;
-                        } else if (index === dataList.length) {
-                            return -1;
-                        } else {
-                            return 0;
-                        }
-                    })
-                    if (curIndex !== -1 && curIndex !== 0) {
-                        console.log('curIndex', curIndex);
-                        dataList = allFyData.list[curIndex].city;
-                    } else {
-                        throw new Error('file not exist')
-                    }
-                } else if (type === "city") {
-                    dataList = allFyData.list;
-                    console.log('dataList--city------', dataList);
-                }
-                console.log('addDaily>>>>>>>>>>>', addDaily);
-                console.log('dataList>>>>>>>>>>>', dataList);
-                option = ChinaMap.getOptionConfig(dataList);
-                myChart.setOption(option);
-                if (listenerMap === null) {
-                    ChinaMap.addEventLS(myChart);
-                }
-                return true;
-            } else {
+            if (!EchartDom) {
                 throw new Error(`EchartDom is undefined`)
             }
+            echarts.registerMap(mapName, jsonData);
+            const myChart = echarts.init(EchartDom, 'dark');
+            console.log('myChart', myChart);
+            let fydata, isFileExist, option;
+            // try {
+            //     await fsUtils.fileStat('src/static/fydata.json');
+            //     isFileExist = true;
+            // } catch (err) {
+            //     console.error('err', err);
+            //     isFileExist = false;
+            // }
+            isFileExist = true;
+            console.log('netValid', netValid);
+            // (toady or net avaliable) and file exist, load local file
+            fydata = await ChinaMap.getFyData(isFileExist, netValid);
+            // set last update time in redux
+            store.dispatch(updateMapRedux(commonUtils.dateTimeFormat(fydata.data.data.cachetime)));
+            console.log('fydata----', fydata);
+            let dataList, addDaily;
+            // all feiyan data
+            const allFyData = fydata.data.data;
+            dataList = allFyData.list;
+            addDaily = allFyData.add_daily;
+            if (type === "province") {
+                let name = provinceObj.name.slice(0, 2);
+                let curIndex = dataList.findIndex((item, index) => {
+                    if (item.name.slice(0, 2) === name) {
+                        return index;
+                    } else if (index === dataList.length) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                })
+                if (curIndex !== -1 && curIndex !== 0) {
+                    console.log('curIndex', curIndex);
+                    dataList = allFyData.list[curIndex].city;
+                } else {
+                    throw new Error('file not exist')
+                }
+            } else if (type === "city") {
+                dataList = allFyData.list;
+                console.log('dataList--city------', dataList);
+            }
+            console.log('addDaily>>>>>>>>>>>', addDaily);
+            console.log('dataList>>>>>>>>>>>', dataList);
+            option = ChinaMap.getOptionConfig(dataList);
+            myChart.setOption(option);
+            if (listenerMap === null) {
+                ChinaMap.addEventLS(myChart);
+            }
+            return true;
+
 
         } catch (err) {
             console.error('err in fetch data', err);
@@ -126,7 +126,7 @@ const ChinaMap = {
         }
     },
     // get config of map
-    getOptionConfig: (dataList, type = "country") => {
+    getOptionConfig: (dataList) => {
         let mapList = dataList.map((item, index) => {
             if (isNaN(item.value)) {
                 item.value = parseInt(item.conNum);
