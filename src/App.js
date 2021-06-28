@@ -1,4 +1,4 @@
-import { Layout, Skeleton, List, Drawer } from 'antd';
+import { Layout, Skeleton } from 'antd';
 import './App.less';
 import { getMusicList } from './api';
 import FooterCom from './components/footer';
@@ -8,8 +8,9 @@ import { CustomHeader } from './components/header';
 import store from '@redux';
 import { currentIndexRedux, playMusicRedux } from '@redux/actions/play-actions';
 import { ChinaMapCom } from '@/components/main/echarts';
+import MusicListPopup from '@/components/main/popup';
 
-const { Content, Header, Footer } = Layout;
+const { Header, Footer } = Layout;
 
 export default class App extends React.Component {
   constructor(props) {
@@ -20,12 +21,8 @@ export default class App extends React.Component {
       musicList: [],
       musicDom: "",
       visible: false,
-      loading: false,
-      mapButtonTip: 'COVID-19 Map',
       netValid: false
     };
-    this.scrollRef = React.createRef();
-    this.myEchart = React.createRef();
   }
 
   async UNSAFE_componentWillMount() {
@@ -97,13 +94,11 @@ export default class App extends React.Component {
       visible: true
     })
   }
-
   onClose = () => {
     this.setState({
       visible: false
     })
   }
-
   render() {
     return (
       <Skeleton active loading={this.state.loadingFlag} rows={100} >
@@ -119,30 +114,7 @@ export default class App extends React.Component {
 
           {/* Drawer-Music List */}
           <Layout>
-            <Drawer
-              title="Music List"
-              placement="right"
-              closable={false}
-              onClose={() => this.onClose()}
-              visible={this.state.visible}
-              maskStyle={{ background: 'transparent' }}
-              headerStyle={{ color: '#FFFFFF' }}
-              className="webkit-no-drag cannotselect"
-            >
-              <div ref={this.scrollRef} className="my-content">
-                <Content>
-                  <List
-                    dataSource={this.state.musicDom}
-                    renderItem={(item, index) => (
-                      <List.Item className={index === store.getState().playReducer.currentIndex ? "list-item" : ""}>
-                        {item}
-                      </List.Item>
-                    )}
-                  />
-
-                </Content>
-              </div>
-            </Drawer>
+            <MusicListPopup musicDom={this.state.musicDom} visible={this.state.visible} onClose={() => this.onClose()} />
           </Layout>
 
           <Footer style={{
