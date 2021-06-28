@@ -1,4 +1,4 @@
-import { MusicPlay, MusicPause, MusicList, CurrentIndex, AudioFlag } from '../actions/play-actions';
+import { MusicPlay,  MusicList, CurrentIndex, AudioFlag } from '../actions/play-actions';
 
 const initialState = {
     playFlag: "pause",
@@ -11,12 +11,6 @@ const initialState = {
 function playReducer(state = initialState, action) {
     switch (action.type) {
         case MusicPlay: {
-            return {
-                ...state,
-                playFlag: action.payload.playFlag
-            }
-        }
-        case MusicPause: {
             return {
                 ...state,
                 playFlag: action.payload.playFlag

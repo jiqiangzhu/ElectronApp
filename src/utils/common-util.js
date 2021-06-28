@@ -20,6 +20,17 @@ const commonUtils = {
         return len === 3 ? hour + ":" + minute + ":" + second : minute + ":" + second;
     },
     /**
+     * format date( time )util
+     * @param {*} date year-month-day hour:minute:seconds
+     * @returns xxxx年xx月xx日 xx时:xx分:xx秒
+     */
+    dateTimeFormat: function (str) {
+        let [curDate, curTime] = str.split(' ');
+        console.log(curDate, curTime);
+        let [year, month, day] = [...(curDate.split("-"))];
+        return `${year}年${month}月${day}日 ${curTime}`;
+    },
+    /**
      * Generate any number from 1 to max 
      * [) close left open right
      * @param {max integer} max 

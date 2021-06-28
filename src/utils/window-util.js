@@ -4,6 +4,8 @@
 
 // electron render process
 const { ipcRenderer } = window.require('electron');
+// check network module
+const internetAvailable = window.require("internet-available");
 
 const windowUtils = {
     /**
@@ -11,7 +13,7 @@ const windowUtils = {
      * @returns 
      */
     setWindowMax: async function () {
-        return await ipcRenderer.send("setMax");
+        return ipcRenderer.send("setMax");
     },
 
     /**
@@ -19,7 +21,7 @@ const windowUtils = {
      * @returns 
      */
     setWindowRestore: async function () {
-        return await ipcRenderer.send("setRestore");
+        return ipcRenderer.send("setRestore");
     },
 
     /**
@@ -27,7 +29,7 @@ const windowUtils = {
      * @returns 
      */
     setWindowClosed: async function () {
-        return await ipcRenderer.send("setClose")
+        return ipcRenderer.send("setClose")
     },
     /**
      * set opacity of window
@@ -35,14 +37,14 @@ const windowUtils = {
      * @returns 
      */
     setWindowOpacity: async function (value) {
-        return await ipcRenderer.send("setOpacity", value);
+        return ipcRenderer.send("setOpacity", value);
     },
     /**
      * set window min
      * @returns 
      */
     setWindowMin: async function () {
-        return await ipcRenderer.send("setMin");
+        return ipcRenderer.send("setMin");
     },
 
     /**
@@ -53,8 +55,21 @@ const windowUtils = {
     openFolder: async function (path, resolve) {
         await ipcRenderer.send("openFolder", path);
         ipcRenderer.once('asynchronous-reply', resolve)
+    },
+    /**
+     * check network
+     * @returns net connect ? true : false
+     */
+    checkInternetAvailable: async () => {
+        try {
+            await internetAvailable({ domainName: "baidu.com" });
+            console.log('net avaliable--------');
+            return true;
+        } catch (err) {
+            console.warn('net cannot connect------', err);
+            return false;
+        }
     }
-
 }
 
 export default windowUtils;

@@ -1,14 +1,23 @@
 import axios from 'axios';
 
 async function getUserInfor() {
-    return await axios.get('/user/details');
+    return axios.get('/user/details');
 }
 
 async function getMusicList() {
-    return await axios.get('/home/musiclist');
+    return axios.get('/home/musiclist');
+}
+
+async function getFYDataFromSina(netValid, url = `https://interface.sina.cn/news/wap/fymap2020_data.d.json`) {
+    if (!netValid) {
+        url = `/sina/fymap`;
+    }
+    console.log('url', url);
+    return axios.get(url);
 }
 
 export {
     getUserInfor,
-    getMusicList
+    getMusicList,
+    getFYDataFromSina
 }

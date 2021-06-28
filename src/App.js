@@ -1,4 +1,4 @@
-import { Layout, Skeleton, List, Drawer } from 'antd';
+import { Layout, Skeleton } from 'antd';
 import './App.less';
 import { getMusicList } from './api';
 import FooterCom from './components/footer';
@@ -6,11 +6,11 @@ import React from 'react';
 import windowUtils from '@localUtils/window-util';
 import { CustomHeader } from './components/header';
 import store from '@redux';
-import { currentIndexRedux, playMusicRedux, pauseMusicRedux } from '@redux/actions/play-actions';
+import { currentIndexRedux, playMusicRedux } from '@redux/actions/play-actions';
+import { ChinaMapCom } from '@/components/main/echarts';
+import MusicListPopup from '@/components/main/popup';
 
-const { Content, Header, Footer } = Layout;
-var internetAvailable = window.require("internet-available");
-
+const { Header, Footer } = Layout;
 
 export default class App extends React.Component {
   constructor(props) {
@@ -20,23 +20,12 @@ export default class App extends React.Component {
       opacityVallue: 0,
       musicList: [],
       musicDom: "",
-      visible: false
+      visible: false,
+      netValid: false
     };
-    this.scrollRef = React.createRef();
-  }
-  
-  async checkInternetAvailable() {
-    internetAvailable({
-      domainName: "baidu.com"
-    }).then(() => {
-      console.log("Internet available");
-    }).catch(() => {
-      console.log("No internet");
-    });
   }
 
   async UNSAFE_componentWillMount() {
-    this.checkInternetAvailable();
     // Skeleton
     setTimeout(async () => {
       this.setState({
@@ -50,8 +39,11 @@ export default class App extends React.Component {
     if (localStorage.opacityVallue && localStorage.opacityVallue !== "0") {
       this.changeOpacity(localStorage.opacityVallue * 1);
     }
+    console.log('this', this);
+    this.setState({
+      netValid: await windowUtils.checkInternetAvailable()
+    })
   }
-
   changeOpacity = (value) => {
     console.log("opacity value---78~100-------", value * 100);
     windowUtils.setWindowOpacity(value);
@@ -72,8 +64,8 @@ export default class App extends React.Component {
         reducer.currentAudio.play();
       }
     } catch (e) {
-      store.dispatch(pauseMusicRedux("pause"));
-      console.error(e);;
+      store.dispatch(playMusicRedux("pause"));
+      console.error(e);
     }
     this.setMusicDom()
   }
@@ -102,16 +94,14 @@ export default class App extends React.Component {
       visible: true
     })
   }
-
   onClose = () => {
     this.setState({
       visible: false
     })
   }
-
   render() {
     return (
-      <Skeleton active loading={this.state.loadingFlag} rows={100}>
+      <Skeleton active loading={this.state.loadingFlag} rows={100} >
         <Layout className="main-content">
           <Header className="lay-header webkit-drag" style={{ position: 'fixed', zIndex: 10, width: '100%' }}>
             <CustomHeader defaultValue={localStorage.opacityVallue * 1}
@@ -119,35 +109,12 @@ export default class App extends React.Component {
             />
           </Header>
           <Layout>
-
+            <ChinaMapCom netValid={this.state.netValid} />
           </Layout>
 
           {/* Drawer-Music List */}
           <Layout>
-            <Drawer
-              title="Music List"
-              placement="right"
-              closable={false}
-              onClose={() => this.onClose()}
-              visible={this.state.visible}
-              maskStyle={{ background: 'transparent' }}
-              headerStyle={{ color: '#FFFFFF' }}
-              className="webkit-no-drag cannotselect"
-            >
-              <div ref={this.scrollRef} className="my-content">
-                <Content>
-                  <List
-                    dataSource={this.state.musicDom}
-                    renderItem={(item, index) => (
-                      <List.Item className={index === store.getState().playReducer.currentIndex ? "list-item" : ""}>
-                        {item}
-                      </List.Item>
-                    )}
-                  />
-
-                </Content>
-              </div>
-            </Drawer>
+            <MusicListPopup musicDom={this.state.musicDom} visible={this.state.visible} onClose={() => this.onClose()} />
           </Layout>
 
           <Footer style={{
@@ -163,7 +130,7 @@ export default class App extends React.Component {
             />
           </Footer>
         </Layout>
-      </Skeleton>
+      </Skeleton >
     )
   }
 }
