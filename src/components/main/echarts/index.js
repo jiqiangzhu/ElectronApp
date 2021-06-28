@@ -3,6 +3,11 @@ import React, { useState } from 'react';
 import { ChinaMap } from '@/components/main/echarts/ChinaMap';
 import store from 'src/redux';
 
+/**
+ * China COVID-19 map use echarts
+ * @param {*} props 
+ * @returns 
+ */
 function ChinaMapCom(props) {
     const myEchart = React.createRef();
     const [loading, setLoading] = useState(false);

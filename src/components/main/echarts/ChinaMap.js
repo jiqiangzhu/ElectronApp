@@ -11,6 +11,7 @@ let mapName = "China", EchartDom, provinceObj, provinceCode, provinceData, cityO
 const { province, city } = require('province-city-china/data');
 
 const ChinaMap = {
+    // entry
     initalECharts: (myEchartDom, netValid) => {
         let result = false;
         EchartDom = myEchartDom;
