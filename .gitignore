@@ -5,7 +5,6 @@
 /.pnp
 .pnp.js
 /nodemodules
-/src/static/fydata
 
 # testing
 /coverage
