@@ -27,13 +27,11 @@ const ChinaMap = {
     },
     // add event listener
     addEventLS: (myChart) => {
-        console.log('add event listener');
         listenerMap = myChart.on('click', function (obj) {
-            console.log('obj---', obj);
             if (obj.data && obj.data.citycode) {// city
                 size = 1;
                 cityObj = city.find(item => item.name === obj.data.name);
-                console.log('cityObj---------', cityObj);
+                console.log(`cityObj------------>>>>>${cityObj}`);
                 if (cityObj) {
                     cityCode = cityObj.code;
                     mapName = obj.data.name;
@@ -44,6 +42,7 @@ const ChinaMap = {
             } else if (obj.data && obj.data.city) { // province
                 size = 1;
                 provinceObj = province.find(item => item.name.slice(0, 2) === obj.data.name.slice(0, 2));
+                console.log(`provinceObj--------->>>>>${cityObj}`);
                 if (provinceObj) {
                     provinceCode = provinceObj.code;
                     mapName = obj.data.ename;
@@ -59,7 +58,6 @@ const ChinaMap = {
             }
             return 1;
         })
-        console.log('listenerMap-------------', listenerMap);
     },
     // get map data
     fetchData: async (netValid, jsonData) => {
@@ -204,7 +202,7 @@ const ChinaMap = {
     // get feiyan data from local or net
     getFyData: async (isFileExist, netValid) => {
         let fydata;
-        if (isFileExist && (localStorage.lastFetchFyDate === new Date().toDateString() || !netValid)) {
+        if (isFileExist && !netValid) {
             fydata = await getFYDataFromSina(false);
         } else {// file not exist, request sina data and save local
             if (!netValid) {
