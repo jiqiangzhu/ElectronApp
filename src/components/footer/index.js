@@ -182,7 +182,7 @@ function FooterCom(props) {
         }
         fsUtils.readMusicDir(path, (err, files) => {
             try {
-                console.log(`list of files from ${path}------->>>>>>>`, files);
+                console.log(`files from ${path}------->>>>>>>`, files);
                 if (files.length > 0) {
                     files.filter((item, index) => {
                         if (item.indexOf('.mp3') !== -1) {

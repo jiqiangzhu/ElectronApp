@@ -16,6 +16,7 @@ function ChinaMapCom(props) {
     const loadMap = async () => {
         try {
             setLoading(true);
+            setMapButtonTip(`60 S`)
             setDisBtnFlag(true);
             console.log('myEchart.current', myEchart.current);
             if (myEchart.current) {
@@ -29,7 +30,7 @@ function ChinaMapCom(props) {
                         clearInterval(interval1)
                         return;
                     }
-                    setMapButtonTip(`${i} s`)
+                    setMapButtonTip(`${i} S`)
                 }, 1000);
                 setLoading(false);
 
