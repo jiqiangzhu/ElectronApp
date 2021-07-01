@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import './index.css';
-import routes from './router';
+import App from './App';
 // import reportWebVitals from './reportWebVitals';
 import './mock/index';
 import store from './redux';
@@ -8,7 +8,7 @@ import {Provider} from 'react-redux';
 ReactDOM.render(
   // <React.StrictMode>
   <Provider store={store}>
-    {routes}
+    <App />
   </Provider>,
   // </React.StrictMode>,
   document.getElementById('root')

@@ -1,12 +1,11 @@
 import React from 'react';
 import {HashRouter, Route, Switch} from 'react-router-dom';
-import App from 'src/App';
-
+import Home from 'src/components/main/home';
 
 const routes = (
     <HashRouter>
         <Switch>
-            <Route exact path="/" component={App}/>
+            <Route exact path="/" component={Home}/>
         </Switch>
     </HashRouter>
 );

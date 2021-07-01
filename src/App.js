@@ -9,8 +9,7 @@ import store from '@redux';
 import { currentIndexRedux, playMusicRedux } from '@redux/actions/play-actions';
 import { ChinaMapCom } from '@/components/main/echarts';
 import MusicListPopup from '@/components/main/popup';
-import { HashRouter, Route, Switch } from 'react-router-dom';
-
+import routes from './router';
 const { Header, Footer } = Layout;
 
 export default class App extends React.Component {
@@ -110,11 +109,9 @@ export default class App extends React.Component {
             />
           </Header>
           <Layout>
-            <HashRouter>
-              <Switch>
-                <Route></Route>
-              </Switch>
-            </HashRouter>
+            <>
+              {routes}
+            </>
             <ChinaMapCom netValid={this.state.netValid} />
           </Layout>
 
