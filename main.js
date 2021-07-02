@@ -1,3 +1,4 @@
+const { log } = require('console');
 const { app, BrowserWindow, ipcMain, globalShortcut, dialog } = require('electron');
 const isDev = require('electron-is-dev')
 const path = require('path');
@@ -27,19 +28,12 @@ app.on('ready', () => {
     icon: path.join(__dirname, '/public/logo128.ico'),
     title: "Cool Music"
   })
+
   mainWindow.setMenu(null);
   const urlLocation = isDev ? 'http://localhost:3000' : 'dummyurl';
   mainWindow.loadURL(urlLocation);
   mainWindow.setMaximizable(true);
-
 })
-
-//  case "fixedOnTop":
-//    if (!mainWindow.isAlwaysOnTop()) {
-//      mainWindow.setAlwaysOnTop(true);
-//    } else {
-//      mainWindow.setAlwaysOnTop(false);
-//    }
 
 /**
  * New Action Listener of Change winodw opacity window size open dir and so on

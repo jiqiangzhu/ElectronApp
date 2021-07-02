@@ -1,5 +1,5 @@
 import { Button, Row, Col, } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChinaMap } from '@/components/main/echarts/ChinaMap';
 import store from 'src/redux';
 
@@ -11,16 +11,22 @@ import store from 'src/redux';
 function ChinaMapCom(props) {
     const myEchart = React.createRef();
     const [loading, setLoading] = useState(false);
-    const [mapButtonTip, setMapButtonTip] = useState("COVID-19 Map");
+    const [mapButtonTip, setMapButtonTip] = useState("Get Again");
     const [disBtnFlag, setDisBtnFlag] = useState(false);
-    const loadMap = async () => {
+    useEffect(() => {
+        loadMap("init")
+    }, [])// eslint-disable-line react-hooks/exhaustive-deps
+    const loadMap = async (flag) => {
         try {
+            if (flag === "init") {
+                await ChinaMap.initalECharts(myEchart.current, props.netValid);
+                return;
+            }
             setLoading(true);
             setMapButtonTip(`60 S`)
             setDisBtnFlag(true);
             console.log('myEchart.current', myEchart.current);
             if (myEchart.current) {
-                await ChinaMap.initalECharts(myEchart.current, props.netValid);
                 let i = 60;
                 let interval1 = setInterval(() => {
                     i--;
@@ -33,7 +39,6 @@ function ChinaMapCom(props) {
                     setMapButtonTip(`${i} S`)
                 }, 1000);
                 setLoading(false);
-
             }
         } catch (e) {
             console.error('loading map data err', e);
@@ -49,11 +54,14 @@ function ChinaMapCom(props) {
                 </Col>
             </Row>
             <Row>
-                <Col span={3}>
+                <Col span={6}>
                     <Button type="primary" onClick={loadMap.bind(this)}
                         loading={loading} danger disabled={disBtnFlag}
                     >
                         {mapButtonTip}
+                    </Button>
+                    <Button type="primary" onClick={() => props.history.push('/')}>
+                        返回
                     </Button>
                 </Col>
                 <Col span={8}>

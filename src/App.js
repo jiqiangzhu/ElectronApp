@@ -7,9 +7,9 @@ import windowUtils from '@localUtils/window-util';
 import { CustomHeader } from './components/header';
 import store from '@redux';
 import { currentIndexRedux, playMusicRedux } from '@redux/actions/play-actions';
-import { ChinaMapCom } from '@/components/main/echarts';
 import MusicListPopup from '@/components/main/popup';
 import routes from './router';
+
 const { Header, Footer } = Layout;
 
 export default class App extends React.Component {
@@ -112,7 +112,6 @@ export default class App extends React.Component {
             <>
               {routes}
             </>
-            <ChinaMapCom netValid={this.state.netValid} />
           </Layout>
 
           {/* Drawer-Music List */}
