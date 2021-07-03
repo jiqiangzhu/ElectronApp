@@ -29,6 +29,7 @@ function FooterCom(props) {
     const [fileNameArray, setFileNameArray] = useState([]);
     const [audioVolume, setAudioVolume] = useState(localStorage.defalutVolume ? localStorage.defalutVolume : 1);
     useEffect(() => {
+        console.log('props-footer-----', window);
         if (localStorage.defaultMusicPath) {
             readDir("init", localStorage.defaultMusicPath)
         }
