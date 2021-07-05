@@ -1,15 +1,14 @@
 import { useEffect } from "react";
-import {Button} from 'antd';
+import { Button } from 'antd';
 
 function Home(props) {
-    useEffect(()=>{
+    useEffect(() => {
         console.log('props---', props);
     }, [])// eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>
-            <h2>Home Component</h2>
-            <Button onClick={()=>props.history.push('./fymap')}>COVID-19 map in China</Button>
+            <Button type="primary" style={{ width: '200px' }} onClick={() => props.history.push('./fymap')} danger>COVID-19 map in China</Button>
         </>
     )
 }

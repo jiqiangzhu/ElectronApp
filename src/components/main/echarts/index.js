@@ -49,7 +49,7 @@ function ChinaMapCom(props) {
 
             <Row>
                 <Col span={24}>
-                    <div style={{ width: "100%", height: "500px" }} ref={myEchart}>
+                    <div style={{ width: "60%", height: "500px" }} ref={myEchart}>
                     </div>
                 </Col>
             </Row>
