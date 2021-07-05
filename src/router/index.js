@@ -1,14 +1,15 @@
 import React from 'react';
 import {HashRouter, Route, Switch} from 'react-router-dom';
-import Home from '../components/home';
+import { ChinaMapCom } from 'src/components/main/echarts';
+import Home from 'src/components/main/home';
 
-
-const BasicRoute = () => (
+const routes = (
     <HashRouter>
         <Switch>
             <Route exact path="/" component={Home}/>
+            <Route exact path="/fymap" component={ChinaMapCom}/>
         </Switch>
     </HashRouter>
 );
 
-export default BasicRoute;
+export default routes;

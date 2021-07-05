@@ -29,6 +29,7 @@ function FooterCom(props) {
     const [fileNameArray, setFileNameArray] = useState([]);
     const [audioVolume, setAudioVolume] = useState(localStorage.defalutVolume ? localStorage.defalutVolume : 1);
     useEffect(() => {
+        console.log('props-footer-----', window);
         if (localStorage.defaultMusicPath) {
             readDir("init", localStorage.defaultMusicPath)
         }
@@ -182,7 +183,7 @@ function FooterCom(props) {
         }
         fsUtils.readMusicDir(path, (err, files) => {
             try {
-                console.log(`list of files from ${path}------->>>>>>>`, files);
+                console.log(`files from ${path}------->>>>>>>`, files);
                 if (files.length > 0) {
                     files.filter((item, index) => {
                         if (item.indexOf('.mp3') !== -1) {

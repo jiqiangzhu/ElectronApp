@@ -85,6 +85,10 @@ class Header extends React.Component {
             return;
         }
     };
+    navigatorFn = () => {
+        console.log('window', window.history);
+        // window.history.back()
+    }
     render() {
         const menu = (
             <Menu onClick={this.handleMenuClick} theme="dark">
@@ -114,8 +118,8 @@ class Header extends React.Component {
                     </Col>
                     <Col offset={0} span={20} >
                         <Space className="flex-type flex-align-mid">
-                            <IconFont style={{ fontSize: '15px' }} className="webkit-no-drag" type='icon-ziyuan1' />
-                            <IconFont style={{ fontSize: '16px' }} className="webkit-no-drag" type='icon-you' />
+                            <IconFont style={{ fontSize: '15px' }} onClick={() => { this.navigatorFn() }} className="webkit-no-drag" type='icon-ziyuan1' />
+                            <IconFont style={{ fontSize: '16px' }} onClick={() => { window.history.forward() }} className="webkit-no-drag" type='icon-you' />
                             <Search
                                 allowClear={true}
                                 className="webkit-no-drag flex-type flex-align-mid"
