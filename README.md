@@ -76,3 +76,14 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 2 = HAVE_CURRENT_DATA - data for the current playback position is available, but not enough data to play next frame/millisecond
 3 = HAVE_FUTURE_DATA - data for the current and at least the next frame is available
 4 = HAVE_ENOUGH_DATA - enough data available to start playing
+
+
+## gfs
+【第三步】
+
+使用git lfs track "大于40M的文件名" 命令
+
+
+【第四步】
+
+git add 大于40M的文件名
