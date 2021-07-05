@@ -78,7 +78,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 4 = HAVE_ENOUGH_DATA - enough data available to start playing
 
 
-## gfs
+## lfs
 【第三步】
 
 使用git lfs track "大于40M的文件名" 命令
