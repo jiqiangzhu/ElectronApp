@@ -22,7 +22,7 @@ export default class App extends React.Component {
       musicDom: "",
       visible: false,
       netValid: false
-      
+
     };
   }
 
@@ -110,7 +110,7 @@ export default class App extends React.Component {
             />
           </Header>
           <Layout>
-          
+
             <>
               {routes}
             </>

@@ -4,7 +4,12 @@ import App from './App';
 // import reportWebVitals from './reportWebVitals';
 import './mock/index';
 import store from './redux';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
+import routes from '@/router';
+import React from 'react';
+
+React.$routes = { routes }
+
 ReactDOM.render(
   // <React.StrictMode>
   <Provider store={store}>

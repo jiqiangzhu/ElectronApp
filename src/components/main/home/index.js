@@ -3,6 +3,7 @@ import { Button } from 'antd';
 
 function Home(props) {
     useEffect(() => {
+        console.log(`routes`);
         console.log('props---', props);
     }, [])// eslint-disable-line react-hooks/exhaustive-deps
 
