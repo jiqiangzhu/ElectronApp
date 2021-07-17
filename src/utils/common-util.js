@@ -1,3 +1,7 @@
+import windowUtils from './window-util';
+import store from '@/redux';
+import { checkNetRedux } from '@/redux/actions/play-actions'
+
 const commonUtils = {
     /**
      * Seconds to minutes: seconds
@@ -57,11 +61,15 @@ const commonUtils = {
      * 1 minutes task
      * @param {*} resolve 
      */
-    setMyInterval: function (resolve) {
-        return setInterval(() => {
-            console.log('check network');
-            resolve();
-        }, 6000)
+    setMyInterval: async function () {
+        if (localStorage.timer) {
+            clearInterval(parseInt(localStorage.timer));
+            localStorage.removeItem("timer");
+        }
+        const timer = setInterval(async () => {
+            store.dispatch(checkNetRedux(await windowUtils.checkIsOnline()));
+        }, 20000);
+        localStorage.timer = timer;
     }
 }
 

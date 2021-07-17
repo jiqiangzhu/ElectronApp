@@ -9,6 +9,7 @@ import store from '@redux';
 import { currentIndexRedux, playMusicRedux, checkNetRedux } from '@redux/actions/play-actions';
 import MusicListPopup from '@/components/main/popup';
 import routes from './router';
+import { commonUtils } from './utils';
 
 const { Header, Footer } = Layout;
 
@@ -39,10 +40,11 @@ export default class App extends React.Component {
     if (localStorage.opacityVallue && localStorage.opacityVallue !== "0") {
       this.changeOpacity(localStorage.opacityVallue * 1);
     }
-    console.log('this', this);
-    let netValid = await windowUtils.checkInternetAvailable();
+
+    let netValid = await windowUtils.checkIsOnline();
     console.log('netvalid', netValid);
     store.dispatch(checkNetRedux(netValid));
+    commonUtils.setMyInterval()
   }
   changeOpacity = (value) => {
     console.log("opacity value---78~100-------", value * 100);

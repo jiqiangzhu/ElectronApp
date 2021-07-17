@@ -17,6 +17,7 @@
     "ffmetadata": "^1.7.0",
     "fs-extra": "^9.1.0",
     "internet-available": "^1.0.0",
+    "is-online": "^9.0.1",
     "jszip": "^3.6.0",
     "mockjs": "^1.1.0",
     "path": "^0.12.7",
