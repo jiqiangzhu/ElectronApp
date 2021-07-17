@@ -1,4 +1,4 @@
-import { Button, Row, Col, } from 'antd';
+import { Button, Row, Col, message} from 'antd';
 import React, { useEffect, useState } from 'react';
 import { ChinaMap } from '@/components/main/echarts/ChinaMap';
 import store from 'src/redux';
@@ -22,9 +22,18 @@ function ChinaMapCom(props) {
             //     await ChinaMap.initalECharts(myEchart.current, props.netValid);
             //     return;
             // }
-            await ChinaMap.initalECharts(myEchart.current, props.netValid);
-            if (flag === 'init') {
-                return;
+            let isSuccess = await ChinaMap.initalECharts(myEchart.current, props.netValid);
+            // if (flag === 'init') {
+            //     return;
+            // }
+            if (!isSuccess) {
+                message.error({
+                    content: "err, try again",
+                    style: {
+                        marginTop: '40vh',
+                    },
+                });
+                return 
             }
             setLoading(true);
             setMapButtonTip(`60 S`)

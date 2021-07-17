@@ -1,11 +1,12 @@
-import { MusicPlay,  MusicList, CurrentIndex, AudioFlag } from '../actions/play-actions';
+import { MusicPlay,  MusicList, CurrentIndex, AudioFlag, NetValid } from '../actions/play-actions';
 
 const initialState = {
     playFlag: "pause",
     musicList: [],
     currentIndex: 0,
     currentAudio: {},
-    currentSrc: ""
+    currentSrc: "",
+    netValid: false
 }
 
 function playReducer(state = initialState, action) {
@@ -37,6 +38,12 @@ function playReducer(state = initialState, action) {
             return {
                 ...state,
                 currentAudio: action.payload.currentAudio
+            }
+        }
+        case NetValid: {
+            return {
+                ...state,
+                netValid: action.payload.netValid
             }
         }
         default:

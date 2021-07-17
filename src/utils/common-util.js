@@ -44,13 +44,25 @@ const commonUtils = {
         }
         return result;
     },
-
+    /**
+     * delay 2 seconds
+     * @param {*} resolve 
+     */
     delay2s: function (resolve) {
         setTimeout({
             resolve
         }, 2000)
+    },
+    /**
+     * 1 minutes task
+     * @param {*} resolve 
+     */
+    setMyInterval: function (resolve) {
+        return setInterval(() => {
+            console.log('check network');
+            resolve();
+        }, 6000)
     }
-
 }
 
 export default commonUtils;

@@ -12,7 +12,9 @@ const { province, city } = require('province-city-china/data');
 
 const ChinaMap = {
     // entry
-    initalECharts: (myEchartDom, netValid) => {
+    initalECharts: (myEchartDom) => {
+        let netValid = store.getState().playReducer.netValid;
+        console.log('init', netValid);
         let result = false;
         EchartDom = myEchartDom;
         try {
@@ -202,20 +204,25 @@ const ChinaMap = {
     },
     // get feiyan data from local or net
     getFyData: async (isFileExist, netValid) => {
-        let fydata;
-        if (isFileExist && !netValid) {
-            fydata = await getFYDataFromSina(false);
-        } else {// file not exist, request sina data and save local
-            if (!netValid) {
-                return 'net cannot connect'
+        try {
+            let fydata;
+            if (isFileExist && !netValid) {
+                fydata = await getFYDataFromSina(false);
+            } else {// file not exist, request sina data and save local
+                if (!netValid) {
+                    return 'net cannot connect'
+                }
+                fydata = await getFYDataFromSina(netValid);
+                localStorage.lastFetchFyDate = new Date().toDateString();
+                if (fydata) {
+                    fsUtils.writeFile('src/static/fydata.json', JSON.stringify(fydata));
+                }
             }
-            fydata = await getFYDataFromSina(netValid);
-            localStorage.lastFetchFyDate = new Date().toDateString();
-            if (fydata) {
-                fsUtils.writeFile('src/static/fydata.json', JSON.stringify(fydata));
-            }
+            return fydata;
+        } catch (e) {
+            console.error('getFydata', e);
         }
-        return fydata;
+
     }
 }
 

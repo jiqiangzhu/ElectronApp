@@ -6,7 +6,7 @@ import React from 'react';
 import windowUtils from '@localUtils/window-util';
 import { CustomHeader } from './components/header';
 import store from '@redux';
-import { currentIndexRedux, playMusicRedux } from '@redux/actions/play-actions';
+import { currentIndexRedux, playMusicRedux, checkNetRedux } from '@redux/actions/play-actions';
 import MusicListPopup from '@/components/main/popup';
 import routes from './router';
 
@@ -20,8 +20,7 @@ export default class App extends React.Component {
       opacityVallue: 0,
       musicList: [],
       musicDom: "",
-      visible: false,
-      netValid: false
+      visible: false
 
     };
   }
@@ -41,9 +40,9 @@ export default class App extends React.Component {
       this.changeOpacity(localStorage.opacityVallue * 1);
     }
     console.log('this', this);
-    this.setState({
-      netValid: await windowUtils.checkInternetAvailable()
-    })
+    let netValid = await windowUtils.checkInternetAvailable();
+    console.log('netvalid', netValid);
+    store.dispatch(checkNetRedux(netValid));
   }
   changeOpacity = (value) => {
     console.log("opacity value---78~100-------", value * 100);
