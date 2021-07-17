@@ -18,28 +18,32 @@ function ChinaMapCom(props) {
     }, [])// eslint-disable-line react-hooks/exhaustive-deps
     const loadMap = async (flag) => {
         try {
-            if (flag === "init") {
-                await ChinaMap.initalECharts(myEchart.current, props.netValid);
+            // if (flag === "init") {
+            //     await ChinaMap.initalECharts(myEchart.current, props.netValid);
+            //     return;
+            // }
+            await ChinaMap.initalECharts(myEchart.current, props.netValid);
+            if (flag === 'init') {
                 return;
             }
             setLoading(true);
             setMapButtonTip(`60 S`)
             setDisBtnFlag(true);
             console.log('myEchart.current', myEchart.current);
-            if (myEchart.current) {
-                let i = 60;
-                let interval1 = setInterval(() => {
-                    i--;
-                    if (i === 0) {
-                        setDisBtnFlag(false);
-                        setMapButtonTip(`Get Again`);
-                        clearInterval(interval1)
-                        return;
-                    }
-                    setMapButtonTip(`${i} S`)
-                }, 1000);
-                setLoading(false);
-            }
+            // if (myEchart.current) {
+            let i = 60;
+            let interval1 = setInterval(() => {
+                i--;
+                if (i === 0) {
+                    setDisBtnFlag(false);
+                    setMapButtonTip(`Get Again`);
+                    clearInterval(interval1)
+                    return;
+                }
+                setMapButtonTip(`${i} S`)
+            }, 1000);
+            setLoading(false);
+            // }
         } catch (e) {
             console.error('loading map data err', e);
         }
