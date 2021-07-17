@@ -5,6 +5,7 @@ import fsUtils from '@/utils/fs-util';
 import { commonUtils } from '@localUtils/';
 import store from 'src/redux';
 import { updateMapRedux } from '@redux/actions/map-actions';
+import { message } from 'antd';
 
 let listenerMap = null, type = "country", size = 1;
 let mapName = "China", EchartDom, provinceObj, provinceCode, provinceData, cityObj, cityCode, cityData;
@@ -12,16 +13,14 @@ const { province, city } = require('province-city-china/data');
 
 const ChinaMap = {
     // entry
-    initalECharts: (myEchartDom) => {
+    initalECharts: async() => {
         let netValid = store.getState().playReducer.netValid;
-        console.log('init', netValid);
         let result = false;
-        EchartDom = myEchartDom;
         try {
             mapName = "China";
             type = "country";
             size = 1.2;
-            result = ChinaMap.fetchData(netValid, chinaJson);
+            result = await ChinaMap.fetchData(netValid, chinaJson);
             return result;
         } catch (err) {
             console.error('initalECharts err', err);
@@ -61,16 +60,17 @@ const ChinaMap = {
             }
             return 1;
         })
+        console.log('on listenerMap', listenerMap);
     },
     // get map data
     fetchData: async (netValid, jsonData) => {
         try {
-            if (!EchartDom) {
+            console.log('mapReducer', store.getState().mapReducer);
+            if (!store.getState().mapReducer.mapDom) {
                 throw new Error(`EchartDom is undefined`)
             }
             echarts.registerMap(mapName, jsonData);
-            const myChart = echarts.init(EchartDom, 'dark');
-            console.log('myChart', myChart);
+            EchartDom = echarts.init(store.getState().mapReducer.mapDom, 'dark');
             let fydata, isFileExist, option;
             // try {
             //     await fsUtils.fileStat('src/static/fydata.json');
@@ -80,7 +80,6 @@ const ChinaMap = {
             //     isFileExist = false;
             // }
             isFileExist = true;
-            console.log('netValid', netValid);
             // (toady or net avaliable) and file exist, load local file
             fydata = await ChinaMap.getFyData(isFileExist, netValid);
             // set last update time in redux
@@ -115,9 +114,9 @@ const ChinaMap = {
             console.log('addDaily>>>>>>>>>>>', addDaily);
             console.log('dataList>>>>>>>>>>>', dataList);
             option = ChinaMap.getOptionConfig(dataList);
-            myChart.setOption(option);
-            if (listenerMap === null) {
-                ChinaMap.addEventLS(myChart);
+            EchartDom.setOption(option);
+            if (!listenerMap) {
+                ChinaMap.addEventLS(EchartDom);
             }
             return true;
 
@@ -214,12 +213,18 @@ const ChinaMap = {
                 }
                 fydata = await getFYDataFromSina(netValid);
                 localStorage.lastFetchFyDate = new Date().toDateString();
-                if (fydata) {
+                if (fydata && JSON.stringify(fydata)) {
                     fsUtils.writeFile('src/static/fydata.json', JSON.stringify(fydata));
                 }
             }
             return fydata;
         } catch (e) {
+            message.error({
+                content: "err, try again",
+                style: {
+                    marginTop: '40vh',
+                },
+            });
             console.error('getFydata', e);
         }
 

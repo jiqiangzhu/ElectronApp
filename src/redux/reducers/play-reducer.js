@@ -1,9 +1,9 @@
-import { MusicPlay,  MusicList, CurrentIndex, AudioFlag, NetValid } from '../actions/play-actions';
+import { MusicPlay, MusicList, CurrentIndex, AudioFlag, NetValid } from '../actions/play-actions';
 
 const initialState = {
     playFlag: "pause",
     musicList: [],
-    currentIndex: 0,
+    currentIndex: localStorage.currentIndex ? parseInt(localStorage.currentIndex) : 0,
     currentAudio: {},
     currentSrc: "",
     netValid: false
@@ -18,11 +18,10 @@ function playReducer(state = initialState, action) {
             }
         }
         case MusicList: {
+            // localStorage.removeItem("currentIndex")
             return {
                 ...state,
-                currentIndex: action.payload.currentIndex ? action.payload.currentIndex : 0,
-                musicList: action.payload.musicList,
-                currentSrc: action.payload.musicList[0]
+                musicList: action.payload.musicList
             }
         }
         case CurrentIndex: {

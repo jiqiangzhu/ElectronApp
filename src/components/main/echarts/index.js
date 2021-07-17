@@ -1,7 +1,8 @@
-import { Button, Row, Col, message} from 'antd';
+import { Button, Row, Col, message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { ChinaMap } from '@/components/main/echarts/ChinaMap';
 import store from 'src/redux';
+import { setMapDomRedux } from '@redux/actions/map-actions';
 
 /**
  * China COVID-19 map use echarts
@@ -14,18 +15,13 @@ function ChinaMapCom(props) {
     const [mapButtonTip, setMapButtonTip] = useState("Get Again");
     const [disBtnFlag, setDisBtnFlag] = useState(false);
     useEffect(() => {
-        loadMap("init")
+        // loadMap("init")
     }, [])// eslint-disable-line react-hooks/exhaustive-deps
     const loadMap = async (flag) => {
         try {
-            // if (flag === "init") {
-            //     await ChinaMap.initalECharts(myEchart.current, props.netValid);
-            //     return;
-            // }
-            let isSuccess = await ChinaMap.initalECharts(myEchart.current, props.netValid);
-            // if (flag === 'init') {
-            //     return;
-            // }
+            store.dispatch(setMapDomRedux(myEchart.current))
+            console.log('mapReducer', store.getState().mapReducer);
+            let isSuccess = await ChinaMap.initalECharts();
             if (!isSuccess) {
                 message.error({
                     content: "err, try again",
@@ -33,13 +29,11 @@ function ChinaMapCom(props) {
                         marginTop: '40vh',
                     },
                 });
-                return 
+                return
             }
             setLoading(true);
             setMapButtonTip(`60 S`)
             setDisBtnFlag(true);
-            console.log('myEchart.current', myEchart.current);
-            // if (myEchart.current) {
             let i = 60;
             let interval1 = setInterval(() => {
                 i--;

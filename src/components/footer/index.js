@@ -198,6 +198,7 @@ function FooterCom(props) {
                     })
                     setFileNameArray(musicList);
                     store.dispatch(musicListRedux(fullPathList));
+                    console.log('currentIndex', store.getState().playReducer);
                     setCurrentSrc(store.getState().playReducer.musicList[store.getState().playReducer.currentIndex]);
                     props.getMusicListFromFooterCom(musicList);
                 }

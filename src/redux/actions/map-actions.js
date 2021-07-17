@@ -1,4 +1,5 @@
 const UpdateTime = 'updateTime';
+const MapDom = "mapDom";
 
 // play pause music
 function updateMap(newTime) {
@@ -7,8 +8,16 @@ function updateMap(newTime) {
         payload: { newTime }
     }
 }
-
+// covid map
+function setMapDom(mapDom) {
+    return {
+        type: MapDom,
+        payload: { mapDom }
+    }
+}
 export {
     updateMap as updateMapRedux,
-    UpdateTime
+    setMapDom as setMapDomRedux,
+    UpdateTime,
+    MapDom
 }
