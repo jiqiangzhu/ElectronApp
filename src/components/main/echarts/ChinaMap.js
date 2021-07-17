@@ -213,8 +213,9 @@ const ChinaMap = {
                 }
                 fydata = await getFYDataFromSina(netValid);
                 localStorage.lastFetchFyDate = new Date().toDateString();
+                console.log('fydata', fydata);
                 if (fydata) {
-                    fsUtils.writeFile('src/static/fydata.json', JSON.stringify(fydata));
+                    await fsUtils.writeFile('src/static/fydata.json', JSON.stringify(fydata));
                 }
             }
             return fydata;

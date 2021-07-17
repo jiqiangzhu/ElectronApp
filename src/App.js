@@ -6,10 +6,9 @@ import React from 'react';
 import windowUtils from '@localUtils/window-util';
 import { CustomHeader } from './components/header';
 import store from '@redux';
-import { currentIndexRedux, playMusicRedux, checkNetRedux } from '@redux/actions/play-actions';
+import { currentIndexRedux, playMusicRedux } from '@redux/actions/play-actions';
 import MusicListPopup from '@/components/main/popup';
 import routes from './router';
-import { commonUtils } from './utils';
 
 const { Header, Footer } = Layout;
 
@@ -41,10 +40,10 @@ export default class App extends React.Component {
       this.changeOpacity(localStorage.opacityVallue * 1);
     }
 
-    let netValid = await windowUtils.checkIsOnline();
-    console.log('netvalid', netValid);
-    store.dispatch(checkNetRedux(netValid));
-    commonUtils.setMyInterval()
+    // let netValid = await windowUtils.checkIsOnline();
+    // console.log('netvalid', netValid);
+    // store.dispatch(checkNetRedux(netValid));
+    // commonUtils.setMyInterval()
   }
   changeOpacity = (value) => {
     console.log("opacity value---78~100-------", value * 100);

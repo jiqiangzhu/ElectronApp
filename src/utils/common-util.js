@@ -1,7 +1,3 @@
-import windowUtils from './window-util';
-import store from '@/redux';
-import { checkNetRedux } from '@/redux/actions/play-actions'
-
 const commonUtils = {
     /**
      * Seconds to minutes: seconds
@@ -61,16 +57,23 @@ const commonUtils = {
      * 1 minutes task
      * @param {*} resolve 
      */
-    setMyInterval: async function () {
-        if (localStorage.timer) {
-            clearInterval(parseInt(localStorage.timer));
-            localStorage.removeItem("timer");
-        }
-        const timer = setInterval(async () => {
-            store.dispatch(checkNetRedux(await windowUtils.checkIsOnline()));
-        }, 20000);
-        localStorage.timer = timer;
-    }
+    // setMyInterval: async function () {
+    //     if (localStorage.timer) {
+    //         clearInterval(parseInt(localStorage.timer));
+    //         localStorage.removeItem("timer");
+    //     }
+    //     const timer = setInterval(async () => {
+    //         try {
+    //             store.dispatch(checkNetRedux(await windowUtils.checkIsOnline()));
+    //             console.log('netValid', store.getState().playReducer.netValid);
+    //         } catch(e) {
+    //             console.error('e', e);
+    //             store.dispatch(checkNetRedux(false))
+    //         }
+    //     }, 20000);
+
+    //     localStorage.timer = timer;
+    // }
 }
 
 export default commonUtils;

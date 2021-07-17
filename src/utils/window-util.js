@@ -6,7 +6,7 @@
 const { ipcRenderer } = window.require('electron');
 // check network module
 const internetAvailable = window.require("internet-available");
-const isOnline = window.require('is-online');
+// const isOnline = window.require('is-online');
 const windowUtils = {
     /**
      * set window max
@@ -73,9 +73,6 @@ const windowUtils = {
             console.warn('net cannot connect------', err);
             return false;
         }
-    },
-    checkIsOnline: async () => {
-        return isOnline();
     }
 }
 
