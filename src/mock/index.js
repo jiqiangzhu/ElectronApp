@@ -124,13 +124,10 @@ Mock.mock(
     '/sina/fymap',
     'get',
     () => {
-        // if (jsonStr) {
-        //     return {
-        //         data: jsonStr.data.data
-        //     }
-        // }
+        const jsonStr = require('../../src/static/fydata.json');
+        console.log('jsonStr', jsonStr);
         return {
-            data: null
+            data: jsonStr.data.data
         }
 
     }

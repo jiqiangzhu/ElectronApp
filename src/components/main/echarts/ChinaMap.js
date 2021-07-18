@@ -2,7 +2,7 @@ import echarts from 'echarts';
 import chinaJson from '@/static/china.json'
 import { getFYDataFromSina } from '@/api';
 import fsUtils from '@/utils/fs-util';
-import { commonUtils } from '@localUtils/';
+import { commonUtils, windowUtils } from '@localUtils/';
 import store from 'src/redux';
 import { updateMapRedux } from '@redux/actions/map-actions';
 import { message } from 'antd';
@@ -14,7 +14,9 @@ const { province, city } = require('province-city-china/data');
 const ChinaMap = {
     // entry
     initalECharts: async() => {
-        let netValid = store.getState().playReducer.netValid;
+        let netValid = await windowUtils.checkInternetAvailable();
+        // test 
+        netValid = false;
         let result = false;
         try {
             mapName = "China";
@@ -29,7 +31,7 @@ const ChinaMap = {
     },
     // add event listener
     addEventLS: (myChart) => {
-        listenerMap = myChart.on('click', function (obj) {
+        listenerMap = myChart.on('dblclick', function (obj) {
             if (obj.data && obj.data.citycode) {// city
                 size = 1;
                 cityObj = city.find(item => item.name === obj.data.name);
@@ -60,7 +62,6 @@ const ChinaMap = {
             }
             return 1;
         })
-        console.log('on listenerMap', listenerMap);
     },
     // get map data
     fetchData: async (netValid, jsonData) => {
@@ -215,7 +216,7 @@ const ChinaMap = {
                 localStorage.lastFetchFyDate = new Date().toDateString();
                 console.log('fydata', fydata);
                 if (fydata) {
-                    await fsUtils.writeFile('src/static/fydata.json', JSON.stringify(fydata));
+                    fsUtils.writeFile('src/static/fydata.json', JSON.stringify(fydata));
                 }
             }
             return fydata;

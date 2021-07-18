@@ -39,11 +39,6 @@ export default class App extends React.Component {
     if (localStorage.opacityVallue && localStorage.opacityVallue !== "0") {
       this.changeOpacity(localStorage.opacityVallue * 1);
     }
-
-    // let netValid = await windowUtils.checkIsOnline();
-    // console.log('netvalid', netValid);
-    // store.dispatch(checkNetRedux(netValid));
-    // commonUtils.setMyInterval()
   }
   changeOpacity = (value) => {
     console.log("opacity value---78~100-------", value * 100);
