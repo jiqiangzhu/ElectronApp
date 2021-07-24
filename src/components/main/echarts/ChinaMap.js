@@ -35,8 +35,8 @@ const ChinaMap = {
     // add event listener
     addEventLS: (myChart) => {
         myChart.on('click', function (obj) {
-            console.log('obj-----------', obj.name);
-            store.dispatch(setShowDataRedux(obj.name, obj))
+            console.log('click obj detail-----------', obj);
+            store.dispatch(setShowDataRedux(obj.data.ename, obj))
         })
         myChart.on('dblclick', function (obj) {
             if (obj.data && obj.data.citycode) {// city
@@ -73,7 +73,6 @@ const ChinaMap = {
     // get map data
     fetchData: async (netValid, jsonData) => {
         try {
-            console.log('mapReducer', store.getState().mapReducer);
             if (!store.getState().mapReducer.mapDom) {
                 throw new Error(`EchartDom is undefined`)
             }
@@ -117,10 +116,11 @@ const ChinaMap = {
                 }
             } else if (type === "city") {
                 dataList = allFyData.list;
-                console.log('dataList--city------', dataList);
             }
+            // show covid-19 data in whole China
+            store.dispatch(setShowDataRedux("China", allFyData))
             console.log('addDaily>>>>>>>>>>>', addDaily);
-            console.log('dataList>>>>>>>>>>>', dataList);
+            // console.log('dataList>>>>>>>>>>>', dataList);
             option = ChinaMap.getOptionConfig(dataList);
             EchartDom.setOption(option);
             ChinaMap.addEventLS(EchartDom);

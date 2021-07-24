@@ -10,31 +10,18 @@ import { setMapDomRedux } from '@redux/actions/map-actions';
  * @returns 
  */
 const { Content } = Layout;
-const data = [
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.'
-];
+
 function ChinaMapCom(props) {
     const myEchart = React.createRef();
     const [loading] = useState(false);
     const [mapButtonTip, setMapButtonTip] = useState("Get Again");
     const [disBtnFlag, setDisBtnFlag] = useState(false);
     useEffect(() => {
-        // loadMap("init")
+        loadMap()
     }, [])// eslint-disable-line react-hooks/exhaustive-deps
     const loadMap = async (flag) => {
         try {
+            // store.dispatch(setShowDataRedux("China", {}))
             store.dispatch(setMapDomRedux(myEchart.current))
             const loadingFn = message.loading("loading Covid-19 map", 0);
             setDisBtnFlag(true);
@@ -78,38 +65,38 @@ function ChinaMapCom(props) {
                     <div style={{ width: "60%", height: "500px" }} ref={myEchart}>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', height: "535px" }}>
-                        <Divider orientation="left" style={{color: '#ff0000', fontSize: '20px'}}>Details in {store.getState().mapReducer.name}</Divider>
+                        <Divider orientation="left" style={{ color: '#ff0000', fontSize: '20px', display: store.getState().mapReducer.name ? "block" : "none" }}>Detailed data in {store.getState().mapReducer.name}</Divider>
                         <div className="my-content" >
                             <Content>
                                 <List
                                     size="large"
                                     bordered={false}
-                                    dataSource={data}
+                                    dataSource={store.getState().mapReducer.data ? JSON.parse(store.getState().mapReducer.data) : []}
                                     renderItem={item => <List.Item>{item}</List.Item>}
                                 />
                             </Content>
                         </div>
-
+                        {/* <span>{store.getState().mapReducer.data}</span> */}
                     </div>
                 </Col>
             </Row>
-            <div style={{ position: 'fixed', bottom: '80px', left: '20px' }}>
-                <Row>
-                    <Col span={6}>
-                        <Button type="primary" onClick={loadMap.bind(this)}
-                            loading={loading} danger disabled={disBtnFlag}
-                        >
-                            {mapButtonTip}
-                        </Button>
-                        <Button type="primary" onClick={() => props.history.push('/')}>
-                            Back
-                        </Button>
-                    </Col>
-                    <Col span={8}>
-                        {store.getState().mapReducer.newTime !== "0000-00-00 00:00:00" ? "update time: " + store.getState().mapReducer.newTime : ""}
-                    </Col>
-                </Row>
-            </div>
+            {/* <div style={{ position: 'fixed', bottom: '80px', left: '20px', width: '500px', display: 'flex' }}> */}
+            <Row>
+                <Col span={6}>
+                    <Button type="primary" onClick={loadMap.bind(this)}
+                        loading={loading} danger disabled={disBtnFlag}
+                    >
+                        {mapButtonTip}
+                    </Button>
+                    <Button type="primary" onClick={() => props.history.push('/')}>
+                        Back
+                    </Button>
+                </Col>
+                <Col span={8} className="cannotselect">
+                    {store.getState().mapReducer.newTime !== "0000-00-00 00:00:00" ? "update time: " + store.getState().mapReducer.newTime : ""}
+                </Col>
+            </Row>
+            {/* </div> */}
 
         </>
     )

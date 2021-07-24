@@ -9,7 +9,7 @@ function Home(props) {
     }, [])// eslint-disable-line react-hooks/exhaustive-deps
     const goCovidPage = () => {
         props.history.push('./fymap')
-        store.dispatch(setShowDataRedux("", {}))
+        store.dispatch(setShowDataRedux("China", {}))
     }
     return (
         <>
