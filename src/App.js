@@ -33,7 +33,7 @@ export default class App extends React.Component {
       })
       let result = await getMusicList();
       console.log("get playlist---------------", result);
-    }, 1000)
+    }, 100)
 
     // set Opacity
     if (localStorage.opacityVallue && localStorage.opacityVallue !== "0") {

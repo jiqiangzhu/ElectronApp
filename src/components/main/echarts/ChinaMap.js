@@ -6,16 +6,19 @@ import { commonUtils, windowUtils } from '@localUtils/';
 import store from 'src/redux';
 import { updateMapRedux } from '@redux/actions/map-actions';
 import { message } from 'antd';
+import { setShowDataRedux } from 'src/redux/actions/map-actions';
 
-let listenerMap = null, type = "country", size = 1;
+let type = "country", size = 1;
 let mapName = "China", EchartDom, provinceObj, provinceCode, provinceData, cityObj, cityCode, cityData;
 const { province, city } = require('province-city-china/data');
 
 const ChinaMap = {
     // entry
-    initalECharts: async() => {
-        let netValid = await windowUtils.checkInternetAvailable();
-        // test 
+    initalECharts: async () => {
+        let netValid;
+        netValid = await windowUtils.checkInternetAvailable();
+        console.log('netValid>>>>>>>>>>>>>', netValid);
+        // test
         netValid = false;
         let result = false;
         try {
@@ -31,7 +34,11 @@ const ChinaMap = {
     },
     // add event listener
     addEventLS: (myChart) => {
-        listenerMap = myChart.on('dblclick', function (obj) {
+        myChart.on('click', function (obj) {
+            console.log('obj-----------', obj.name);
+            store.dispatch(setShowDataRedux(obj.name, obj))
+        })
+        myChart.on('dblclick', function (obj) {
             if (obj.data && obj.data.citycode) {// city
                 size = 1;
                 cityObj = city.find(item => item.name === obj.data.name);
@@ -116,9 +123,7 @@ const ChinaMap = {
             console.log('dataList>>>>>>>>>>>', dataList);
             option = ChinaMap.getOptionConfig(dataList);
             EchartDom.setOption(option);
-            if (!listenerMap) {
-                ChinaMap.addEventLS(EchartDom);
-            }
+            ChinaMap.addEventLS(EchartDom);
             return true;
 
 

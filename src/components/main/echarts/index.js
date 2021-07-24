@@ -1,20 +1,29 @@
-import { Button, Row, Col, message, List, Divider } from 'antd';
+import { Button, Row, Col, message, List, Divider, Layout } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { ChinaMap } from '@/components/main/echarts/ChinaMap';
 import store from 'src/redux';
 import { setMapDomRedux } from '@redux/actions/map-actions';
-import './index.less';
+
 /**
  * China COVID-19 map use echarts
  * @param {*} props 
  * @returns 
  */
+const { Content } = Layout;
 const data = [
     'Racing car sprays burning fuel into crowd.',
     'Japanese princess to wed commoner.',
     'Australian walks 100km after outback crash.',
     'Man charged over missing wedding girl.',
     'Los Angeles battles huge wildfires.',
+    'Japanese princess to wed commoner.',
+    'Australian walks 100km after outback crash.',
+    'Man charged over missing wedding girl.',
+    'Los Angeles battles huge wildfires.',
+    'Japanese princess to wed commoner.',
+    'Australian walks 100km after outback crash.',
+    'Man charged over missing wedding girl.',
+    'Los Angeles battles huge wildfires.'
 ];
 function ChinaMapCom(props) {
     const myEchart = React.createRef();
@@ -68,16 +77,19 @@ function ChinaMapCom(props) {
                 <Col span={24} style={{ display: 'flex' }}>
                     <div style={{ width: "60%", height: "500px" }} ref={myEchart}>
                     </div>
-                    <div className="my-content1" style={{ display: 'flex', flexDirection: 'column' }}>
-                        <Divider orientation="left">Large Size</Divider>
-                        <List
-                            size="large"
-                            header={<div>Header</div>}
-                            footer={<div>Footer</div>}
-                            bordered
-                            dataSource={data}
-                            renderItem={item => <List.Item>{item}</List.Item>}
-                        />
+                    <div style={{ display: 'flex', flexDirection: 'column', height: "535px" }}>
+                        <Divider orientation="left" style={{color: '#ff0000', fontSize: '20px'}}>Details in {store.getState().mapReducer.name}</Divider>
+                        <div className="my-content" >
+                            <Content>
+                                <List
+                                    size="large"
+                                    bordered={false}
+                                    dataSource={data}
+                                    renderItem={item => <List.Item>{item}</List.Item>}
+                                />
+                            </Content>
+                        </div>
+
                     </div>
                 </Col>
             </Row>
@@ -90,7 +102,7 @@ function ChinaMapCom(props) {
                             {mapButtonTip}
                         </Button>
                         <Button type="primary" onClick={() => props.history.push('/')}>
-                            返回
+                            Back
                         </Button>
                     </Col>
                     <Col span={8}>

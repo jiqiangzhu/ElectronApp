@@ -1,8 +1,10 @@
-import { UpdateTime, MapDom } from '../actions/map-actions';
+import { UpdateTime, MapDom, ShowData } from '../actions/map-actions';
 
 const initialState = {
     newTime: '0000-00-00 00:00:00',
-    mapDom: ""
+    mapDom: "",
+    name: "",
+    data: ""
 }
 
 function mapReducer(state = initialState, action) {
@@ -19,6 +21,15 @@ function mapReducer(state = initialState, action) {
             return {
                 ...state,
                 mapDom: action.payload.mapDom
+            }
+        }
+        case ShowData: {
+            console.log('showdata---name', action.payload.name);
+            console.log('showdata---data', action.payload.data);
+            return {
+                ...state,
+                name: action.payload.name,
+                data: action.payload.data
             }
         }
         default:
