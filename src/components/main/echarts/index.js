@@ -20,13 +20,11 @@ function ChinaMapCom(props) {
         loadMap()
     }, [])// eslint-disable-line react-hooks/exhaustive-deps
     const loadMap = async (flag) => {
+        const loadingFn = message.loading("loading Covid-19 map", 0);
+        setMapButtonTip(`loading...`);
         try {
-            // store.dispatch(setShowDataRedux("China", {}))
             store.dispatch(setMapDomRedux(myEchart.current))
-            const loadingFn = message.loading("loading Covid-19 map", 0);
             setDisBtnFlag(true);
-            setMapButtonTip(`loading...`);
-            console.log('mapReducer', store.getState().mapReducer);
             let isSuccess = await ChinaMap.initalECharts();
             if (!isSuccess) {
                 message.error({
@@ -55,6 +53,7 @@ function ChinaMapCom(props) {
             loadingFn(); //close message box
         } catch (e) {
             console.error('loading map data err', e);
+            loadingFn(); //close message box
         }
     }
     return (
@@ -76,11 +75,9 @@ function ChinaMapCom(props) {
                                 />
                             </Content>
                         </div>
-                        {/* <span>{store.getState().mapReducer.data}</span> */}
                     </div>
                 </Col>
             </Row>
-            {/* <div style={{ position: 'fixed', bottom: '80px', left: '20px', width: '500px', display: 'flex' }}> */}
             <Row>
                 <Col span={6}>
                     <Button type="primary" onClick={loadMap.bind(this)}
@@ -96,7 +93,6 @@ function ChinaMapCom(props) {
                     {store.getState().mapReducer.newTime !== "0000-00-00 00:00:00" ? "update time: " + store.getState().mapReducer.newTime : ""}
                 </Col>
             </Row>
-            {/* </div> */}
 
         </>
     )

@@ -17,9 +17,8 @@ const ChinaMap = {
     initalECharts: async () => {
         let netValid;
         netValid = await windowUtils.checkInternetAvailable();
-        console.log('netValid>>>>>>>>>>>>>', netValid);
         // test
-        netValid = false;
+        // netValid = false;
         let result = false;
         try {
             mapName = "China";
@@ -36,13 +35,12 @@ const ChinaMap = {
     addEventLS: (myChart) => {
         myChart.on('click', function (obj) {
             console.log('click obj detail-----------', obj);
-            store.dispatch(setShowDataRedux(obj.data.ename, obj))
+            store.dispatch(setShowDataRedux(obj.name, obj))
         })
         myChart.on('dblclick', function (obj) {
             if (obj.data && obj.data.citycode) {// city
                 size = 1;
                 cityObj = city.find(item => item.name === obj.data.name);
-                console.log(`cityObj------------>>>>>${cityObj}`);
                 if (cityObj) {
                     cityCode = cityObj.code;
                     mapName = obj.data.name;
@@ -53,7 +51,6 @@ const ChinaMap = {
             } else if (obj.data && obj.data.city) { // province
                 size = 1;
                 provinceObj = province.find(item => item.name.slice(0, 2) === obj.data.name.slice(0, 2));
-                console.log(`provinceObj--------->>>>>${cityObj}`);
                 if (provinceObj) {
                     provinceCode = provinceObj.code;
                     mapName = obj.data.ename;
@@ -91,12 +88,10 @@ const ChinaMap = {
             fydata = await ChinaMap.getFyData(isFileExist, netValid);
             // set last update time in redux
             store.dispatch(updateMapRedux(commonUtils.dateTimeFormat(fydata.data.data.cachetime)));
-            console.log('fydata----', fydata);
-            let dataList, addDaily;
+            let dataList;
             // all feiyan data
             const allFyData = fydata.data.data;
             dataList = allFyData.list;
-            addDaily = allFyData.add_daily;
             if (type === "province") {
                 let name = provinceObj.name.slice(0, 2);
                 let curIndex = dataList.findIndex((item, index) => {
@@ -109,7 +104,6 @@ const ChinaMap = {
                     }
                 })
                 if (curIndex !== -1 && curIndex !== 0) {
-                    console.log('curIndex', curIndex);
                     dataList = allFyData.list[curIndex].city;
                 } else {
                     throw new Error('file not exist')
@@ -118,9 +112,7 @@ const ChinaMap = {
                 dataList = allFyData.list;
             }
             // show covid-19 data in whole China
-            store.dispatch(setShowDataRedux("China", allFyData))
-            console.log('addDaily>>>>>>>>>>>', addDaily);
-            // console.log('dataList>>>>>>>>>>>', dataList);
+            store.dispatch(setShowDataRedux("China", allFyData));
             option = ChinaMap.getOptionConfig(dataList);
             EchartDom.setOption(option);
             ChinaMap.addEventLS(EchartDom);
@@ -158,7 +150,7 @@ const ChinaMap = {
                         return `${datas.name}<br/>累计确诊人数：${!isNaN(datas.value) ? datas.value : 0}<br/>累计死亡人数：${!isNaN(datas.data.deathNum) ? datas.data.deathNum : 0}`;
 
                     } catch (err) {
-                        console.warn(`format error \n${err}`);
+                        // console.warn(`format error \n${err}`);
                     }
                 }
             },
@@ -219,7 +211,6 @@ const ChinaMap = {
                 }
                 fydata = await getFYDataFromSina(netValid);
                 localStorage.lastFetchFyDate = new Date().toDateString();
-                console.log('fydata', fydata);
                 if (fydata) {
                     fsUtils.writeFile('src/static/fydata.json', JSON.stringify(fydata));
                 }

@@ -10,14 +10,12 @@ const initialState = {
 function mapReducer(state = initialState, action) {
     switch (action.type) {
         case UpdateTime: {
-            console.log('action', action.payload.newTime);
             return {
                 ...state,
                 newTime: action.payload.newTime
             }
         }
         case MapDom: {
-            console.log('mapDom', action.payload.mapDom);
             return {
                 ...state,
                 mapDom: action.payload.mapDom
@@ -27,8 +25,6 @@ function mapReducer(state = initialState, action) {
             try {
                 let showDetaislData = [];
                 if (action.payload.name === "China" && Object.keys(action.payload.data).length && Object.keys(action.payload.data.add_daily).length) {
-                    console.log('allFyData---------', action.payload.data);
-                    // showDetaislData
                     for (let item in action.payload.data) {
                         switch (item) {
                             case "deathtotal":
@@ -49,7 +45,6 @@ function mapReducer(state = initialState, action) {
                 }
                 if (Object.keys(action.payload.data).length && Object.keys(action.payload.data.data).length) { // action.payload.data is not {}
                     const data = action.payload.data.data;
-                    console.log('data---data', data);
                     for (let item in data) {
                         switch (item) {
                             case "value":
@@ -70,14 +65,13 @@ function mapReducer(state = initialState, action) {
                     }
 
                 }
-                console.log('showDetaislData', JSON.parse(JSON.stringify(showDetaislData)));
                 return {
                     ...state,
                     name: action.payload.name,
                     data: showDetaislData.length ? JSON.stringify(showDetaislData) : ""
                 }
             } catch (err) {
-                console.error('showdata---', err);
+                console.error('showdata-error--', err);
                 const showData = JSON.stringify(["无明细数据"])
                 return {
                     ...state,
