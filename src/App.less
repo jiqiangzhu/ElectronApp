@@ -17,27 +17,31 @@
 
 .main-content {
   // height: 680px;
-  min-width: 830px;
+  // min-width: 830px;
+  width: 100vw;
+  height: 100vh;
   padding: 13px 15px;
   display: flex;
   flex-direction: column;
-
+  justify-content: flex-start;
   .ant-tabs-tab-active .anticon svg {
     color: #00CED1;
   }
-
-  .lay-header {
-    height: 30px;
-    line-height: 30px;
+  .ant-layout {
     padding: 0 0;
-    display: flex;
-    flex-direction: row;
-    position: fixed;
-    z-index: 10;
-    width: 100%;
-    left: 15px;
-    top: 6px;
   }
+  // .lay-header {
+  //   height: 30px;
+  //   line-height: 30px;
+  //   padding: 0 0;
+  //   display: flex;
+  //   flex-direction: row;
+  //   position: fixed;
+  //   z-index: 10;
+  //   width: 100%;
+  //   left: 15px;
+  //   top: 6px;
+  // }
 
 }
 
@@ -156,7 +160,6 @@
 .my-content {
   overflow-y: hidden;
   overflow-x: hidden;
-  // max-height: 300px;
   max-height: 100%;
   padding: 10px;
 }

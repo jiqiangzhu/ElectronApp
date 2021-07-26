@@ -222,7 +222,7 @@ function FooterCom(props) {
     }
 
     return (
-        <>
+        <div className="footer">
             <audio
                 onTimeUpdate={updateTime.bind(this)} onError={playMusic.bind(this, "pause")}
                 ref={audioRef} preload="true" loop={playMode === "2" ? true : false}
@@ -265,7 +265,7 @@ function FooterCom(props) {
                     </Space>
                 </Col>
             </Row>
-        </>
+        </div>
     )
 }
 

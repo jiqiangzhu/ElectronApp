@@ -1,16 +1,13 @@
-import { Layout, Skeleton } from 'antd';
+import { Skeleton } from 'antd';
 import './App.less';
 import { getMusicList } from './api';
 import FooterCom from './components/footer';
 import React from 'react';
 import windowUtils from '@localUtils/window-util';
-import { CustomHeader } from './components/header';
 import store from '@redux';
 import { currentIndexRedux, playMusicRedux } from '@redux/actions/play-actions';
 import MusicListPopup from '@/components/main/popup';
 import routes from './router';
-
-const { Header, Footer } = Layout;
 
 export default class App extends React.Component {
   constructor(props) {
@@ -98,37 +95,20 @@ export default class App extends React.Component {
   render() {
     return (
       <Skeleton active loading={this.state.loadingFlag} rows={100} >
-        <Layout className="main-content">
-          <Header className="lay-header webkit-drag" style={{ position: 'fixed', zIndex: 10, width: '100%' }}>
-            <CustomHeader defaultValue={localStorage.opacityVallue * 1}
-              changeOpacity={(value) => { this.changeOpacity(value) }}
-            />
-          </Header>
-          <Layout>
+        <div className="main-content">
+          <>
+            {routes}
+          </>
+          <MusicListPopup musicDom={this.state.musicDom} visible={this.state.visible} onClose={() => this.onClose()} />
 
-            <>
-              {routes}
-            </>
-          </Layout>
-
-          {/* Drawer-Music List */}
-          <Layout>
-            <MusicListPopup musicDom={this.state.musicDom} visible={this.state.visible} onClose={() => this.onClose()} />
-          </Layout>
-
-          <Footer style={{
-            height: "40px", lineHeight: '40px',
-            position: 'fixed', zIndex: 10,
-            bottom: 0, width: '100%'
-          }}
-          >
+          <div className="footer">
             <FooterCom playMusic={(i) => this.playMusic(i)}
               getMusicListFromFooterCom={(musicList) => this.setMusicList(musicList)}
               openMusicList={() => this.openMusicList()}
               setMusicDom={() => this.setMusicDom()}
             />
-          </Footer>
-        </Layout>
+          </div>
+        </div>
       </Skeleton >
     )
   }
