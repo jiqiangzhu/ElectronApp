@@ -117,8 +117,6 @@ const ChinaMap = {
             EchartDom.setOption(option);
             ChinaMap.addEventLS(EchartDom);
             return true;
-
-
         } catch (err) {
             console.error('err in fetch data', err);
             return false;

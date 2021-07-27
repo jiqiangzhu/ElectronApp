@@ -57,7 +57,7 @@ function ChinaMapCom(props) {
         }
     }
     return (
-        <>
+        <div className="home">
 
             <Row style={{ overflow: 'hidden' }}>
                 <Col span={24} style={{ display: 'flex' }}>
@@ -94,7 +94,7 @@ function ChinaMapCom(props) {
                 </Col>
             </Row>
 
-        </>
+        </div>
     )
 }
 
