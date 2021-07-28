@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { ChinaMap } from '@/components/main/echarts/ChinaMap';
 import store from 'src/redux';
 import { setMapDomRedux } from '@redux/actions/map-actions';
+import './index.less';
 
 /**
  * China COVID-19 map use echarts
@@ -57,27 +58,24 @@ function ChinaMapCom(props) {
         }
     }
     return (
-        <div className="home">
-
-            <Row style={{ overflow: 'hidden' }}>
-                <Col span={24} style={{ display: 'flex' }}>
-                    <div style={{ width: "60%", height: "500px" }} ref={myEchart}>
+        <div className="home-content">
+            <div className="content">
+                <div style={{ width: "60%", height: "500px" }} ref={myEchart}>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', height: "535px" }}>
+                    <Divider orientation="left" style={{ color: '#ff0000', fontSize: '20px', display: store.getState().mapReducer.name ? "block" : "none" }}>Detailed data in {store.getState().mapReducer.name}</Divider>
+                    <div className="scroll-bar" style={{padding: "0"}} >
+                        <Content>
+                            <List
+                                size="large"
+                                bordered={false}
+                                dataSource={store.getState().mapReducer.data ? JSON.parse(store.getState().mapReducer.data) : []}
+                                renderItem={item => <List.Item>{item}</List.Item>}
+                            />
+                        </Content>
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', height: "535px" }}>
-                        <Divider orientation="left" style={{ color: '#ff0000', fontSize: '20px', display: store.getState().mapReducer.name ? "block" : "none" }}>Detailed data in {store.getState().mapReducer.name}</Divider>
-                        <div className="my-content" >
-                            <Content>
-                                <List
-                                    size="large"
-                                    bordered={false}
-                                    dataSource={store.getState().mapReducer.data ? JSON.parse(store.getState().mapReducer.data) : []}
-                                    renderItem={item => <List.Item>{item}</List.Item>}
-                                />
-                            </Content>
-                        </div>
-                    </div>
-                </Col>
-            </Row>
+                </div>
+            </div>
             <Row>
                 <Col span={6}>
                     <Button type="primary" onClick={loadMap.bind(this)}

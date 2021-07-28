@@ -2,7 +2,7 @@ import React from 'react';
 import { HashRouter, Route } from 'react-router-dom';
 import FooterCom from 'src/components/footer';
 import { CustomHeader } from 'src/components/header';
-import { ChinaMapCom } from 'src/components/main/echarts';
+// import { ChinaMapCom } from 'src/components/main/echarts';
 import Home from 'src/components/main/home';
 
 const routes = (
@@ -14,7 +14,7 @@ const routes = (
             <Route component={MenuBar} />
         </Route> */}
         {/* <Route component={MenuBar} /> */}
-        <Route exact path="/fymap" component={ChinaMapCom} />
+        {/* <Route exact path="/fymap" component={ChinaMapCom} /> */}
         <Route component={FooterCom} />
         {/* </Switch> */}
     </HashRouter>
