@@ -17,8 +17,6 @@ const ChinaMap = {
     initalECharts: async () => {
         let netValid;
         netValid = await windowUtils.checkInternetAvailable();
-        // test
-        // netValid = false;
         let result = false;
         try {
             mapName = "China";

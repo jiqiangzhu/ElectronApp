@@ -9,7 +9,11 @@ const routes = (
     <HashRouter>
         {/* <Switch> */}
         <Route component={CustomHeader} />
-        <Route exact path="/" component={Home} />
+        <Route path="/" component={Home} />
+        {/* <Route path="/" component={Home}>
+            <Route component={MenuBar} />
+        </Route> */}
+        {/* <Route component={MenuBar} /> */}
         <Route exact path="/fymap" component={ChinaMapCom} />
         <Route component={FooterCom} />
         {/* </Switch> */}
