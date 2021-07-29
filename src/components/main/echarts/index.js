@@ -18,7 +18,7 @@ function ChinaMapCom(props) {
     const [mapButtonTip, setMapButtonTip] = useState("Get Again");
     const [disBtnFlag, setDisBtnFlag] = useState(false);
     useEffect(() => {
-        loadMap()
+        loadMap();
     }, [])// eslint-disable-line react-hooks/exhaustive-deps
     const loadMap = async (flag) => {
         const loadingFn = message.loading("loading Covid-19 map", 0);

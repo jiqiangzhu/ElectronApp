@@ -23,28 +23,27 @@ class MenuBar extends React.Component {
     });
   };
   toPage = (path) => {
-    this.props.history.push(path)
-    console.log("history>>>>>>>>>>>", this.props.history);
+    this.props.history.push(path);
   }
 
   render() {
     return (
       <div className="menu-bar cannotselect">
-        <Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16 }}>
+        <Button type="dashed" onClick={this.toggleCollapsed} style={{ marginBottom: 16 }}>
           {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
         </Button>
         <div style={{ height: '90%' }}>
           <div className="scroll-bar">
             <Menu
               defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
+              defaultOpenKeys={['sub1', 'sub2']}
               mode="inline"
               theme="dark"
               inlineIndent={12}
               inlineCollapsed={this.state.collapsed}
             >
-              <Menu.Item key="1" icon={<PieChartOutlined />}>
-                Option 1
+              <Menu.Item key="1" icon={<PieChartOutlined />} onClick={() => this.toPage('/home')}>
+                Recommend
               </Menu.Item>
               <Menu.Item key="2" icon={<DesktopOutlined />}>
                 Option 2
