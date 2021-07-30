@@ -94,7 +94,7 @@ class Header extends React.Component {
         console.log("opacity value---78~100-------", value * 100);
         windowUtils.setWindowOpacity(value);
         localStorage.opacityVallue = value;
-      }
+    }
     render() {
         const menu = (
             <Menu onClick={this.handleMenuClick} theme="dark">
@@ -128,7 +128,7 @@ class Header extends React.Component {
                             <IconFont style={{ fontSize: '16px' }} onClick={() => { window.history.forward() }} className="webkit-no-drag" type='icon-you' />
                             <Search
                                 allowClear={true}
-                                className="webkit-no-drag flex-type flex-align-mid"
+                                className="webkit-no-drag flex-type flex-align-mid cannotselect"
                                 placeholder="Please Input..."
                                 size="small"
                                 prefix={<IconFont onClick={() => this.onSearch(this.state.inputValue)} style={{ fontSize: '16px' }} type='icon-sousuo' />}
