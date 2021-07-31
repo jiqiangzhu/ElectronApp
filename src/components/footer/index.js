@@ -31,7 +31,8 @@ function FooterCom(props) {
     const [currentSrc, setCurrentSrc] = useState("");
     const [fileNameArray, setFileNameArray] = useState([]);
     const [popupList, setPopupList] = useState([]);
-    const [popupVisible, setPopupVisible] = useState(false)
+    const [popupVisible, setPopupVisible] = useState(false);
+    const [showLyrics, setShowLyrics] = useState(false);
     const [audioVolume, setAudioVolume] = useState(localStorage.defalutVolume ? localStorage.defalutVolume : 1);
     useEffect(() => {
         console.log('props-footer-----', window);
@@ -296,6 +297,8 @@ function FooterCom(props) {
                 </span>
                 <Col span={4} className="flex-type flex-justify-end">
                     <Space size="middle" style={{ paddingBottom: '10px', }}>
+                        <IconFont style={{ fontSize: '18px' }} type={showLyrics ? "icon-geciweidianji" : "icon-geciweidianji-copy"}
+                            onClick={() => setShowLyrics(!showLyrics)} className="webkit-no-drag" />
                         <SetPlayModeCom changePlayMode={changePlayMode.bind(this)} playMode={playMode} />
                         <IconFont style={{ fontSize: '16px' }} type="icon-jia" onClick={importLocal.bind(this)}
                             className="webkit-no-drag" />
