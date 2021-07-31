@@ -12,7 +12,7 @@ function Recommend(props) {
     const getImgPath = () => {
         try {
             let arr = []
-            for (let i = 1; i <= 9; i++) {
+            for (let i = 1; i <= 30; i++) {
                 arr.push(require(`@/assets/img/recommend/${i}.jpg`).default)
             }
             setImgPathArr(arr);
