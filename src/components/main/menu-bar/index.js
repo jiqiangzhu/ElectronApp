@@ -36,7 +36,7 @@ class MenuBar extends React.Component {
           <div className="scroll-bar">
             <Menu
               defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1', 'sub2']}
+              defaultOpenKeys={['sub1', 'sub2', 'sub3']}
               mode="inline"
               theme="dark"
               inlineIndent={12}
@@ -46,23 +46,23 @@ class MenuBar extends React.Component {
                 Recommend
               </Menu.Item>
               <Menu.Item key="2" icon={<DesktopOutlined />}>
-                Option 2
+                Movie
               </Menu.Item>
               <Menu.Item key="3" icon={<ContainerOutlined />}>
-                Option 3
+                Stay tuned
               </Menu.Item>
               <SubMenu key="sub1" icon={<AppstoreOutlined />} title="Toolbox">
                 <Menu.Item key="5" onClick={() => this.toPage('/fymap')}> Covid-19 map</Menu.Item>
-                <Menu.Item key="6">Option 6</Menu.Item>
-                <Menu.Item key="7">Option 7</Menu.Item>
-                <Menu.Item key="8">Option 8</Menu.Item>
+                <Menu.Item key="6">Stay tuned</Menu.Item>
+                <Menu.Item key="7">Stay tuned</Menu.Item>
+                <Menu.Item key="8">Stay tuned</Menu.Item>
               </SubMenu>
-              <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Navigation Two">
-                <Menu.Item key="9">Option 9</Menu.Item>
-                <Menu.Item key="10">Option 10</Menu.Item>
-                <SubMenu key="sub3" title="Submenu">
-                  <Menu.Item key="11">Option 11</Menu.Item>
-                  <Menu.Item key="12">Option 12</Menu.Item>
+              <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Stay tuned">
+                <Menu.Item key="9">Stay tuned</Menu.Item>
+                <Menu.Item key="10">Stay tuned</Menu.Item>
+                <SubMenu key="sub3" title="Stay tuned">
+                  <Menu.Item key="11">Stay tuned</Menu.Item>
+                  <Menu.Item key="12">Stay tuned</Menu.Item>
                 </SubMenu>
               </SubMenu>
             </Menu>
