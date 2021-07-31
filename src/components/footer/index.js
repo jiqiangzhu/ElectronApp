@@ -239,6 +239,14 @@ function FooterCom(props) {
                 }
                 reducer.currentAudio.play();
             }
+            setPopupList(() => fileNameArray.map((item, index) => {
+                return (
+                    <p onDoubleClick={() => playMusicByPopupList(index)} key={index}
+                        className={index === store.getState().playReducer.currentIndex ? "music-active" : ""}>
+                        {(item.indexOf('.mp3') !== -1) ? item.substr(0, item.indexOf('.mp3')) : item}
+                    </p>
+                )
+            }));
         } catch (e) {
             store.dispatch(playMusicRedux("pause"));
             console.error(e);
