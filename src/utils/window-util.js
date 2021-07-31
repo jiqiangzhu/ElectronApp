@@ -6,7 +6,7 @@
 const { ipcRenderer } = window.require('electron');
 // check network module
 const internetAvailable = window.require("internet-available");
-
+// const isOnline = window.require('is-online');
 const windowUtils = {
     /**
      * set window max
@@ -62,7 +62,12 @@ const windowUtils = {
      */
     checkInternetAvailable: async () => {
         try {
-            await internetAvailable({ domainName: "baidu.com" });
+            await internetAvailable({
+                domainName: "baidu.com",
+                port: 53,
+                host: '114.114.114.114',
+                rate: 1000
+            });
             console.log('net avaliable--------');
             return true;
         } catch (err) {

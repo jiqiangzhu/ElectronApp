@@ -3,6 +3,7 @@ const MusicPause = "Pause";
 const MusicList = 'MusicList';
 const CurrentIndex = 'CurrentIndex';
 const AudioFlag = "audio";
+const NetValid = "netValid";
 // play pause music
 function playMusic(playFlag) {
     return {
@@ -31,14 +32,23 @@ function audioRef(currentAudio) {
         payload: { currentAudio }
     }
 }
+// check network
+function checkNet(netValid) {
+    return {
+        type: NetValid,
+        payload: { netValid }
+    }
+}
 export {
     playMusic as playMusicRedux,
     musicList as musicListRedux,
     currentIndex as currentIndexRedux,
     audioRef as audioRefRedux,
+    checkNet as checkNetRedux,
     AudioFlag,
     MusicPlay,
     MusicPause,
     MusicList,
-    CurrentIndex
+    CurrentIndex,
+    NetValid
 }

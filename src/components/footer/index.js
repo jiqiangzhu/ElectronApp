@@ -8,7 +8,10 @@ import fsUtils from '@localUtils/fs-util';
 import { StepBackwardOutlined, StepForwardOutlined, createFromIconfontCN } from '@ant-design/icons';
 import store from '@redux';
 import { playMusicRedux, currentIndexRedux, musicListRedux, audioRefRedux } from '@redux/actions/play-actions';
-import {PlayStatusCom, SetPlayModeCom, SetVolumeCom} from './PlayController'
+import { PlayStatusCom, SetPlayModeCom, SetVolumeCom } from './PlayController';
+import MusicListPopup from '@/components/main/popup';
+
+
 const IconFont = createFromIconfontCN();
 
 /**
@@ -27,6 +30,8 @@ function FooterCom(props) {
     const [percent, setPercent] = useState(0);
     const [currentSrc, setCurrentSrc] = useState("");
     const [fileNameArray, setFileNameArray] = useState([]);
+    const [popupList, setPopupList] = useState([]);
+    const [popupVisible, setPopupVisible] = useState(false)
     const [audioVolume, setAudioVolume] = useState(localStorage.defalutVolume ? localStorage.defalutVolume : 1);
     useEffect(() => {
         console.log('props-footer-----', window);
@@ -69,15 +74,16 @@ function FooterCom(props) {
                 });
                 return;
             }
-            console.log("event---------", event.pageX);
-            // 10 paddingRight
-            let currentProgress = event.pageX - (beginRef.current.offsetWidth + beginRef.current.offsetLeft + 10);
+            /*
+                pageX 点击点相对于边框的横向距离 
+                offsetWidth 当前时间对应的dom元素的宽度
+                offsetLeft 当前时间对应dom元素相对于边框的横向距离
+                pageX - (offsetWidth + offsetLeft)即为点击点相对于起点的长度
+            */
+            let currentProgress = event.pageX - (beginRef.current.offsetWidth + beginRef.current.offsetLeft);
             let currentRate = (currentProgress / progressRef.current.offsetWidth * 100);
             let setCurrentTime = (duration * currentRate) / 100;
 
-            console.log("currentProgress--------", currentProgress);
-            console.log("currentRate--------", currentRate);
-            console.log("setCurrentTime--------", setCurrentTime);
             audioRef.current.currentTime = setCurrentTime;
             store.dispatch(playMusicRedux("play"));
             store.dispatch(audioRefRedux(audioRef.current));
@@ -126,12 +132,16 @@ function FooterCom(props) {
             if (reducer.currentAudio && reducer.playFlag === "play") {
                 reducer.currentAudio.play();
             }
-            props.setMusicDom();
+            // setMusicDom();
         } catch (e) {
             console.error(`The program reported an error when switching songs\n${e}`);
         }
     }
-
+    /**
+     * change play status
+     * @param {*} flag play status
+     * @returns 
+     */
     const playMusic = (flag) => {
         let reducer = store.getState().playReducer;
         try {
@@ -198,8 +208,17 @@ function FooterCom(props) {
                     })
                     setFileNameArray(musicList);
                     store.dispatch(musicListRedux(fullPathList));
+                    console.log('currentIndex', store.getState().playReducer);
                     setCurrentSrc(store.getState().playReducer.musicList[store.getState().playReducer.currentIndex]);
-                    props.getMusicListFromFooterCom(musicList);
+                    // setMusicList(musicList)
+                    setPopupList(() => musicList.map((item, index) => {
+                        return (
+                            <p onDoubleClick={() => playMusicByPopupList(index)} key={index}
+                                className={index === store.getState().playReducer.currentIndex ? "music-active" : ""}>
+                                {(item.indexOf('.mp3') !== -1) ? item.substr(0, item.indexOf('.mp3')) : item}
+                            </p>
+                        )
+                    }));
                 }
             } catch (e) {
                 console.error("err----------", err);
@@ -207,7 +226,32 @@ function FooterCom(props) {
             }
         })
     }
-
+    const playMusicByPopupList = (index) => {
+        const reducer = store.getState().playReducer;
+        try {
+            if (reducer.playFlag === "play") {
+                reducer.currentAudio.pause();
+            }
+            store.dispatch(playMusicRedux("play"));
+            if (reducer.currentAudio && reducer.currentAudio.paused) {
+                if (index !== reducer.currentIndex) {
+                    store.dispatch(currentIndexRedux(index, reducer.currentAudio));
+                }
+                reducer.currentAudio.play();
+            }
+            setPopupList(() => fileNameArray.map((item, index) => {
+                return (
+                    <p onDoubleClick={() => playMusicByPopupList(index)} key={index}
+                        className={index === store.getState().playReducer.currentIndex ? "music-active" : ""}>
+                        {(item.indexOf('.mp3') !== -1) ? item.substr(0, item.indexOf('.mp3')) : item}
+                    </p>
+                )
+            }));
+        } catch (e) {
+            store.dispatch(playMusicRedux("pause"));
+            console.error(e);
+        }
+    }
     const setVolume = (value) => {
         try {
             if (!isNaN(value)) {
@@ -219,9 +263,8 @@ function FooterCom(props) {
             console.log(`program reported an error when set volume \n ${e}`);
         }
     }
-
     return (
-        <>
+        <div className="footer">
             <audio
                 onTimeUpdate={updateTime.bind(this)} onError={playMusic.bind(this, "pause")}
                 ref={audioRef} preload="true" loop={playMode === "2" ? true : false}
@@ -259,12 +302,14 @@ function FooterCom(props) {
                         <SetVolumeCom defaultValue={localStorage.defalutVolume ? localStorage.defalutVolume : 1}
                             setVolume={setVolume.bind(this)}
                         />
-                        <IconFont style={{ fontSize: '16px' }} type="icon-liebiao1" onClick={() => props.openMusicList()}
+                        <IconFont style={{ fontSize: '16px' }} type="icon-liebiao1" onClick={() => setPopupVisible(true)}
                             className="webkit-no-drag" />
                     </Space>
                 </Col>
             </Row>
-        </>
+
+            <MusicListPopup musicDom={popupList} visible={popupVisible} onClose={() => setPopupVisible(false)} />
+        </div>
     )
 }
 

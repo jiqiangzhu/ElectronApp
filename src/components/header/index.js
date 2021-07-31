@@ -16,7 +16,8 @@ class Header extends React.Component {
             visible: false,
             nickname: "",
             isMax: true,
-            inputValue: ""
+            inputValue: "",
+            defaultValue: localStorage.opacityVallue * 1
         };
     };
     onInputChange = e => {
@@ -89,11 +90,16 @@ class Header extends React.Component {
         console.log('window', window.history);
         // window.history.back()
     }
+    changeOpacity = (value) => {
+        console.log("opacity value---78~100-------", value * 100);
+        windowUtils.setWindowOpacity(value);
+        localStorage.opacityVallue = value;
+    }
     render() {
         const menu = (
             <Menu onClick={this.handleMenuClick} theme="dark">
                 <Menu.Item key="1">
-                    <SetOpacityCom className="webkit-no-drag" defaultValue={this.props.defaultValue} changeOpacity={(value) => this.props.changeOpacity(value)} />
+                    <SetOpacityCom className="webkit-no-drag" defaultValue={this.state.defaultValue} changeOpacity={(value) => this.changeOpacity(value)} />
                 </Menu.Item>
                 <Menu.Item key="2" style={{ fontSize: '15px' }} onClick={(e) => { this.changeWindowSize(e, 'close') }} >
                     <IconFont className="webkit-no-drag" type='icon-setting' />
@@ -105,7 +111,7 @@ class Header extends React.Component {
             </Menu>
         );
         return (
-            <>
+            <div className="header webkit-drag">
                 <Row align="middle" style={{ width: "100%" }} >
                     <Col span={2}>
                         <Space>
@@ -122,7 +128,7 @@ class Header extends React.Component {
                             <IconFont style={{ fontSize: '16px' }} onClick={() => { window.history.forward() }} className="webkit-no-drag" type='icon-you' />
                             <Search
                                 allowClear={true}
-                                className="webkit-no-drag flex-type flex-align-mid"
+                                className="webkit-no-drag flex-type flex-align-mid cannotselect"
                                 placeholder="Please Input..."
                                 size="small"
                                 prefix={<IconFont onClick={() => this.onSearch(this.state.inputValue)} style={{ fontSize: '16px' }} type='icon-sousuo' />}
@@ -165,7 +171,7 @@ class Header extends React.Component {
                 >
                     <p>Confirm Exit</p>
                 </Modal>
-            </>
+            </div>
         )
     }
 }

@@ -1,58 +1,81 @@
-import { Button, Row, Col, } from 'antd';
+import { Button, Row, Col, message, List, Divider, Layout } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { ChinaMap } from '@/components/main/echarts/ChinaMap';
 import store from 'src/redux';
+import { setMapDomRedux } from '@redux/actions/map-actions';
+import './index.less';
 
 /**
  * China COVID-19 map use echarts
  * @param {*} props 
  * @returns 
  */
+const { Content } = Layout;
+
 function ChinaMapCom(props) {
     const myEchart = React.createRef();
-    const [loading, setLoading] = useState(false);
+    const [loading] = useState(false);
     const [mapButtonTip, setMapButtonTip] = useState("Get Again");
     const [disBtnFlag, setDisBtnFlag] = useState(false);
     useEffect(() => {
-        loadMap("init")
+        loadMap();
     }, [])// eslint-disable-line react-hooks/exhaustive-deps
     const loadMap = async (flag) => {
+        const loadingFn = message.loading("loading Covid-19 map", 0);
+        setMapButtonTip(`loading...`);
         try {
-            if (flag === "init") {
-                await ChinaMap.initalECharts(myEchart.current, props.netValid);
-                return;
-            }
-            setLoading(true);
-            setMapButtonTip(`60 S`)
+            store.dispatch(setMapDomRedux(myEchart.current))
             setDisBtnFlag(true);
-            console.log('myEchart.current', myEchart.current);
-            if (myEchart.current) {
-                let i = 60;
-                let interval1 = setInterval(() => {
-                    i--;
-                    if (i === 0) {
-                        setDisBtnFlag(false);
-                        setMapButtonTip(`Get Again`);
-                        clearInterval(interval1)
-                        return;
-                    }
-                    setMapButtonTip(`${i} S`)
-                }, 1000);
-                setLoading(false);
+            let isSuccess = await ChinaMap.initalECharts();
+            if (!isSuccess) {
+                message.error({
+                    content: "err, try again",
+                    style: {
+                        marginTop: '40vh',
+                    },
+                });
+                loadingFn();//close message box
+                setDisBtnFlag(false);
+                setMapButtonTip(`Get Again`)
+                return
             }
+            let i = 60;
+            let interval1 = setInterval(() => {
+                i--;
+                if (i === 0) {
+                    setDisBtnFlag(false);
+                    setMapButtonTip(`Get Again`);
+                    clearInterval(interval1)
+                    return;
+                }
+                setMapButtonTip(`${i} S`)
+            }, 1000);
+            message.success('complete')
+            loadingFn(); //close message box
         } catch (e) {
             console.error('loading map data err', e);
+            loadingFn(); //close message box
         }
     }
     return (
-        <>
-
-            <Row>
-                <Col span={24}>
-                    <div style={{ width: "60%", height: "500px" }} ref={myEchart}>
+        <div className="home-content">
+            <div className="content">
+                <div style={{ width: "60%", height: "500px" }} ref={myEchart}>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', height: "535px" }}>
+                    <Divider orientation="left" style={{ color: '#ff0000', fontSize: '20px', display: store.getState().mapReducer.name ? "block" : "none" }}>Detailed data in {store.getState().mapReducer.name}</Divider>
+                    <div className="scroll-bar" style={{padding: "0"}} >
+                        <Content>
+                            <List
+                                size="large"
+                                bordered={false}
+                                dataSource={store.getState().mapReducer.data ? JSON.parse(store.getState().mapReducer.data) : []}
+                                renderItem={item => <List.Item>{item}</List.Item>}
+                            />
+                        </Content>
                     </div>
-                </Col>
-            </Row>
+                </div>
+            </div>
             <Row>
                 <Col span={6}>
                     <Button type="primary" onClick={loadMap.bind(this)}
@@ -61,14 +84,15 @@ function ChinaMapCom(props) {
                         {mapButtonTip}
                     </Button>
                     <Button type="primary" onClick={() => props.history.push('/')}>
-                        返回
+                        Back
                     </Button>
                 </Col>
-                <Col span={8}>
+                <Col span={8} className="cannotselect">
                     {store.getState().mapReducer.newTime !== "0000-00-00 00:00:00" ? "update time: " + store.getState().mapReducer.newTime : ""}
                 </Col>
             </Row>
-        </>
+
+        </div>
     )
 }
 

@@ -2,24 +2,27 @@ import echarts from 'echarts';
 import chinaJson from '@/static/china.json'
 import { getFYDataFromSina } from '@/api';
 import fsUtils from '@/utils/fs-util';
-import { commonUtils } from '@localUtils/';
+import { commonUtils, windowUtils } from '@localUtils/';
 import store from 'src/redux';
 import { updateMapRedux } from '@redux/actions/map-actions';
+import { message } from 'antd';
+import { setShowDataRedux } from 'src/redux/actions/map-actions';
 
-let listenerMap = null, type = "country", size = 1;
+let type = "country", size = 1;
 let mapName = "China", EchartDom, provinceObj, provinceCode, provinceData, cityObj, cityCode, cityData;
 const { province, city } = require('province-city-china/data');
 
 const ChinaMap = {
     // entry
-    initalECharts: (myEchartDom, netValid) => {
+    initalECharts: async () => {
+        let netValid;
+        netValid = await windowUtils.checkInternetAvailable();
         let result = false;
-        EchartDom = myEchartDom;
         try {
             mapName = "China";
             type = "country";
             size = 1.2;
-            result = ChinaMap.fetchData(netValid, chinaJson);
+            result = await ChinaMap.fetchData(netValid, chinaJson);
             return result;
         } catch (err) {
             console.error('initalECharts err', err);
@@ -28,11 +31,14 @@ const ChinaMap = {
     },
     // add event listener
     addEventLS: (myChart) => {
-        listenerMap = myChart.on('click', function (obj) {
+        myChart.on('click', function (obj) {
+            console.log('click obj detail-----------', obj);
+            store.dispatch(setShowDataRedux(obj.name, obj))
+        })
+        myChart.on('dblclick', function (obj) {
             if (obj.data && obj.data.citycode) {// city
                 size = 1;
                 cityObj = city.find(item => item.name === obj.data.name);
-                console.log(`cityObj------------>>>>>${cityObj}`);
                 if (cityObj) {
                     cityCode = cityObj.code;
                     mapName = obj.data.name;
@@ -43,7 +49,6 @@ const ChinaMap = {
             } else if (obj.data && obj.data.city) { // province
                 size = 1;
                 provinceObj = province.find(item => item.name.slice(0, 2) === obj.data.name.slice(0, 2));
-                console.log(`provinceObj--------->>>>>${cityObj}`);
                 if (provinceObj) {
                     provinceCode = provinceObj.code;
                     mapName = obj.data.ename;
@@ -63,12 +68,11 @@ const ChinaMap = {
     // get map data
     fetchData: async (netValid, jsonData) => {
         try {
-            if (!EchartDom) {
+            if (!store.getState().mapReducer.mapDom) {
                 throw new Error(`EchartDom is undefined`)
             }
             echarts.registerMap(mapName, jsonData);
-            const myChart = echarts.init(EchartDom, 'dark');
-            console.log('myChart', myChart);
+            EchartDom = echarts.init(store.getState().mapReducer.mapDom, 'dark');
             let fydata, isFileExist, option;
             // try {
             //     await fsUtils.fileStat('src/static/fydata.json');
@@ -78,17 +82,14 @@ const ChinaMap = {
             //     isFileExist = false;
             // }
             isFileExist = true;
-            console.log('netValid', netValid);
             // (toady or net avaliable) and file exist, load local file
             fydata = await ChinaMap.getFyData(isFileExist, netValid);
             // set last update time in redux
             store.dispatch(updateMapRedux(commonUtils.dateTimeFormat(fydata.data.data.cachetime)));
-            console.log('fydata----', fydata);
-            let dataList, addDaily;
+            let dataList;
             // all feiyan data
             const allFyData = fydata.data.data;
             dataList = allFyData.list;
-            addDaily = allFyData.add_daily;
             if (type === "province") {
                 let name = provinceObj.name.slice(0, 2);
                 let curIndex = dataList.findIndex((item, index) => {
@@ -101,25 +102,19 @@ const ChinaMap = {
                     }
                 })
                 if (curIndex !== -1 && curIndex !== 0) {
-                    console.log('curIndex', curIndex);
                     dataList = allFyData.list[curIndex].city;
                 } else {
                     throw new Error('file not exist')
                 }
             } else if (type === "city") {
                 dataList = allFyData.list;
-                console.log('dataList--city------', dataList);
             }
-            console.log('addDaily>>>>>>>>>>>', addDaily);
-            console.log('dataList>>>>>>>>>>>', dataList);
+            // show covid-19 data in whole China
+            store.dispatch(setShowDataRedux("China", allFyData));
             option = ChinaMap.getOptionConfig(dataList);
-            myChart.setOption(option);
-            if (listenerMap === null) {
-                ChinaMap.addEventLS(myChart);
-            }
+            EchartDom.setOption(option);
+            ChinaMap.addEventLS(EchartDom);
             return true;
-
-
         } catch (err) {
             console.error('err in fetch data', err);
             return false;
@@ -151,7 +146,7 @@ const ChinaMap = {
                         return `${datas.name}<br/>累计确诊人数：${!isNaN(datas.value) ? datas.value : 0}<br/>累计死亡人数：${!isNaN(datas.data.deathNum) ? datas.data.deathNum : 0}`;
 
                     } catch (err) {
-                        console.warn(`format error \n${err}`);
+                        // console.warn(`format error \n${err}`);
                     }
                 }
             },
@@ -202,20 +197,31 @@ const ChinaMap = {
     },
     // get feiyan data from local or net
     getFyData: async (isFileExist, netValid) => {
-        let fydata;
-        if (isFileExist && !netValid) {
-            fydata = await getFYDataFromSina(false);
-        } else {// file not exist, request sina data and save local
-            if (!netValid) {
-                return 'net cannot connect'
+        try {
+            let fydata;
+            if (isFileExist && !netValid) {
+                fydata = await getFYDataFromSina(false);
+            } else {// file not exist, request sina data and save local
+                if (!netValid) {
+                    return 'net cannot connect'
+                }
+                fydata = await getFYDataFromSina(netValid);
+                localStorage.lastFetchFyDate = new Date().toDateString();
+                if (fydata) {
+                    fsUtils.writeFile('src/static/fydata.json', JSON.stringify(fydata));
+                }
             }
-            fydata = await getFYDataFromSina(netValid);
-            localStorage.lastFetchFyDate = new Date().toDateString();
-            if (fydata) {
-                fsUtils.writeFile('src/static/fydata.json', JSON.stringify(fydata));
-            }
+            return fydata;
+        } catch (e) {
+            message.error({
+                content: "err, try again",
+                style: {
+                    marginTop: '40vh',
+                },
+            });
+            console.error('getFydata', e);
         }
-        return fydata;
+
     }
 }
 

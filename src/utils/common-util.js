@@ -44,13 +44,36 @@ const commonUtils = {
         }
         return result;
     },
-
+    /**
+     * delay 2 seconds
+     * @param {*} resolve 
+     */
     delay2s: function (resolve) {
         setTimeout({
             resolve
         }, 2000)
-    }
+    },
+    /**
+     * 1 minutes task
+     * @param {*} resolve 
+     */
+    // setMyInterval: async function () {
+    //     if (localStorage.timer) {
+    //         clearInterval(parseInt(localStorage.timer));
+    //         localStorage.removeItem("timer");
+    //     }
+    //     const timer = setInterval(async () => {
+    //         try {
+    //             store.dispatch(checkNetRedux(await windowUtils.checkIsOnline()));
+    //             console.log('netValid', store.getState().playReducer.netValid);
+    //         } catch(e) {
+    //             console.error('e', e);
+    //             store.dispatch(checkNetRedux(false))
+    //         }
+    //     }, 20000);
 
+    //     localStorage.timer = timer;
+    // }
 }
 
 export default commonUtils;

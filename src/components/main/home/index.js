@@ -1,15 +1,15 @@
 import { useEffect } from "react";
-import { Button } from 'antd';
+import './index.less';
+import routes2 from "src/router/second-router";
 
 function Home(props) {
     useEffect(() => {
-        console.log('props---', props);
+        console.log('router', props.history);
     }, [])// eslint-disable-line react-hooks/exhaustive-deps
-
     return (
-        <>
-            <Button type="primary" style={{ width: '200px' }} onClick={() => props.history.push('./fymap')} danger>COVID-19 map in China</Button>
-        </>
+        <div className="home">
+            {routes2}
+        </div>
     )
 }
 
