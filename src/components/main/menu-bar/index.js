@@ -28,7 +28,7 @@ class MenuBar extends React.Component {
 
   render() {
     return (
-      <div className="menu-bar cannotselect">
+      <div className="menu-bar">
         <Button type="dashed" onClick={this.toggleCollapsed} style={{ marginBottom: 16 }}>
           {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
         </Button>

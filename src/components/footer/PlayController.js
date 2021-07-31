@@ -1,6 +1,7 @@
 import { Slider, Dropdown, Menu, Space } from 'antd';
 import { createFromIconfontCN } from '@ant-design/icons';
 import { useState } from 'react';
+import './index.less';
 
 const IconFont = createFromIconfontCN();
 const playModeArr = [
@@ -108,7 +109,7 @@ function SetPlayModeCom(props) {
     let playMode = props.playMode * 1;
 
     return (
-        <Dropdown overlay={menu} trigger={['hover']} placement='topCenter'>
+        <Dropdown overlay={menu} trigger={['hover']} overlayStyle={{ backgroundColor: '#3B3B4D' }} placement='topCenter'>
             <Space className="webkit-no-drag">
                 <IconFont style={{ fontSize: '16px' }}
                     type={playModeArr[playMode - 1].type}

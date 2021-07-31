@@ -2,8 +2,33 @@
     overflow: hidden;
 
     .scroller-bar {
-        height: 100%;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        max-height: 100%;
         padding-right: 10px;
+
+        .ant-row {
+
+            .ant-col-lg-6 {
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+
+            .ant-image-img {
+                border-radius: 30px;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                cursor: not-allowed;
+            }
+
+            .ant-image-mask {
+                border-radius: 30px;
+            }
+        }
     }
 
     .scroller-bar:hover {
@@ -19,10 +44,5 @@
         background-color: rgba(42, 39, 39, 0.841);
         border-radius: 10px;
     }
-    .ant-image-img {
-        border-radius: 30px;
-    }
-    .ant-image-mask {
-        border-radius: 30px;
-    }
+
 }
