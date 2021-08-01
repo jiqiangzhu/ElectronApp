@@ -5,6 +5,8 @@ import '../../App.less';
 import windowUtils from '@localUtils/window-util';
 import { getUserInfor } from '../../api/index'
 import { createFromIconfontCN, SkinOutlined } from '@ant-design/icons';
+import store from 'src/redux';
+import { SelectKeyRedux } from 'src/redux/actions/play-actions';
 
 const IconFont = createFromIconfontCN();
 const { Search } = Input;
@@ -86,9 +88,10 @@ class Header extends React.Component {
             return;
         }
     };
-    navigatorFn = () => {
-        console.log('window', window.history);
-        // window.history.back()
+    navigatorFn = (value) => {
+        this.props.history.go(value);
+        store.dispatch(SelectKeyRedux(store.getState().playReducer.selectedKeys.oldKey))
+        console.log('length', this.props.history.length);
     }
     changeOpacity = (value) => {
         console.log("opacity value---78~100-------", value * 100);
@@ -124,8 +127,15 @@ class Header extends React.Component {
                     </Col>
                     <Col offset={0} span={20} >
                         <Space className="flex-type flex-align-mid">
-                            <IconFont style={{ fontSize: '15px' }} onClick={() => { this.navigatorFn() }} className="webkit-no-drag" type='icon-ziyuan1' />
-                            <IconFont style={{ fontSize: '16px' }} onClick={() => { window.history.forward() }} className="webkit-no-drag" type='icon-you' />
+                            <IconFont style={{ fontSize: '15px' }} onClick={() => { this.navigatorFn(-1) }}
+                                className={["webkit-no-drag", this.props.history.length > 1 ? "allowed" : "not-allowed"]}
+                                type={this.props.history.length > 1 ? "icon-ziyuan1" : "icon-ziyuan1-copy-copy"} />
+                            <IconFont style={{ fontSize: '16px' }} onClick={() => { this.navigatorFn(1) }}
+                                className={["webkit-no-drag", this.props.history.length > 1 ? "allowed" : "not-allowed"]}
+                                type={this.props.history.length > 1 ? 'icon-you' : 'icon-you-copy'} />
+                            {/* <IconFont style={{ fontSize: '16px' }} onClick={() => { this.props.history.go(0) }}
+                                className={["webkit-no-drag"]}
+                                type= 'icon-shuaxin-copy' /> */}
                             <Search
                                 allowClear={true}
                                 className="webkit-no-drag flex-type flex-align-mid cannotselect"
