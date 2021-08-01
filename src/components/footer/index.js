@@ -12,7 +12,6 @@ import { PlayStatusCom, SetPlayModeCom, SetVolumeCom } from './PlayController';
 import MusicListPopup from '@/components/main/popup';
 import { connect } from 'react-redux';
 
-
 const IconFont = createFromIconfontCN();
 
 /**

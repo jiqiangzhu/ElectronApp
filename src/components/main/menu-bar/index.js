@@ -2,17 +2,15 @@ import { Menu, Button } from 'antd';
 import React, { useState } from 'react';
 import './index.less';
 import {
-  AppstoreOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
-  PieChartOutlined,
-  DesktopOutlined,
-  ContainerOutlined
+  createFromIconfontCN
 } from '@ant-design/icons';
 import { SelectKeyRedux } from 'src/redux/actions/play-actions';
 import { connect } from 'react-redux';
 
 const { SubMenu } = Menu;
+const IconFont = createFromIconfontCN();
 
 function MenuBarCom(props) {
   const { selectedKeys, setSelectedKeys } = props;
@@ -38,27 +36,27 @@ function MenuBarCom(props) {
             inlineCollapsed={collapsed}
             selectedKeys={selectedKeys.currentKey}
           >
-            <Menu.Item key="1" icon={<PieChartOutlined />} onClick={toPage.bind(this, 'home', '1')}>
+            <Menu.Item key="1" icon={<IconFont type="icon-tuijian" />} onClick={toPage.bind(this, 'home', '1')}>
               Recommend
             </Menu.Item>
-            <Menu.Item key="2" icon={<DesktopOutlined />} onClick={toPage.bind(this, 'video', '2')}>
+            <Menu.Item key="2" icon={<IconFont type="icon-shipin" />} onClick={toPage.bind(this, 'movie', '2')}>
               Movie
             </Menu.Item>
-            <Menu.Item key="3" icon={<ContainerOutlined />}>
-              Stay tuned
+            <Menu.Item key="3" icon={<IconFont type="icon-paihangbang" />} onClick={toPage.bind(this, 'rank', '3')}>
+              Leaderboard
             </Menu.Item>
-            <SubMenu key="sub1" icon={<AppstoreOutlined />} title="Toolbox">
+            <SubMenu key="sub1" icon={<IconFont type="icon-bag-case-work-need-job-ecacdf" />} title="Toolbox">
               <Menu.Item key="5" onClick={toPage.bind(this, 'fymap', '5')}> Covid-19 map</Menu.Item>
-              <Menu.Item key="6">Stay tuned</Menu.Item>
-              <Menu.Item key="7">Stay tuned</Menu.Item>
-              <Menu.Item key="8">Stay tuned</Menu.Item>
+              <Menu.Item key="6" onClick={toPage.bind(this, 'recordLog', '6')}>Record Log</Menu.Item>
+              <Menu.Item key="7" onClick={toPage.bind(this, 'print', '7')}>Print</Menu.Item>
+              <Menu.Item key="8" onClick={toPage.bind(this, 'other', '8')}>Stay tuned</Menu.Item>
             </SubMenu>
-            <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Stay tuned">
-              <Menu.Item key="9">Stay tuned</Menu.Item>
-              <Menu.Item key="10">Stay tuned</Menu.Item>
-              <SubMenu key="sub3" title="Stay tuned">
-                <Menu.Item key="11">Stay tuned</Menu.Item>
-                <Menu.Item key="12">Stay tuned</Menu.Item>
+            <SubMenu key="sub2" icon={<IconFont type="icon-icon-test" />} title="Community">
+              <Menu.Item key="9" onClick={toPage.bind(this, 'other', '9')}>Stay tuned</Menu.Item>
+              <Menu.Item key="10" onClick={toPage.bind(this, 'other', '10')}>Stay tuned</Menu.Item>
+              <SubMenu key="sub3" icon={<IconFont type="icon-shequ" />} title="Other">
+                <Menu.Item key="11" onClick={toPage.bind(this, 'person', '11')}>Person</Menu.Item>
+                <Menu.Item key="12" onClick={toPage.bind(this, 'other', '12')}>Stay tuned</Menu.Item>
               </SubMenu>
             </SubMenu>
           </Menu>
