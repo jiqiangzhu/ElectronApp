@@ -197,6 +197,7 @@ function Footer(props) {
         }
         fsUtils.readMusicDir(path, (err, files) => {
             try {
+                localStorage.defaultMusicPath = path;
                 console.log(`files from ${path}------->>>>>>>`, files);
                 if (files.length > 0) {
                     files.filter((item, index) => {

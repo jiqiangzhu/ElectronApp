@@ -75,7 +75,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     setSelectedKeys: (key) => {
-      console.log('key', key);
       dispatch(SelectKeyRedux(key))
     }
   }

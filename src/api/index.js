@@ -16,8 +16,13 @@ async function getFYDataFromSina(netValid, url = `https://interface.sina.cn/news
     return axios.get(url);
 }
 
+async function getRecommendPic() {
+    return axios.get('/home/recommend');
+}
+
 export {
     getUserInfor,
     getMusicList,
-    getFYDataFromSina
+    getFYDataFromSina,
+    getRecommendPic
 }
