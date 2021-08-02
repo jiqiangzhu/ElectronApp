@@ -38,6 +38,7 @@ function FooterCom(props) {
         if (localStorage.defaultMusicPath) {
             readDir("init", localStorage.defaultMusicPath)
         }
+        audioRef.current.currentTime = localStorage.currentTime ? localStorage.currentTime : 0;
     }, [])// eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
         setDuration(duration);
@@ -49,15 +50,14 @@ function FooterCom(props) {
             console.error(`The program reported an error when playing song\n${e}`);
         }
         setPlayMode(localStorage.playMode ? localStorage.playMode : "1");
-
-        audioRef.current.currentTime = localStorage.currentTime ? localStorage.currentTime : 0;
     }, [duration, audioRef, audioVolume])// eslint-disable-line react-hooks/exhaustive-deps
 
     const updateTime = () => {
-        let temPercent = (audioRef.current.currentTime / duration) * 100;
+        const currentTime = audioRef.current.currentTime
+        let temPercent = (currentTime / duration) * 100;
         setPercent(temPercent);
-        setBeginTime(parseInt(audioRef.current.currentTime));
-        // setCurrentTime(audioRef.current.currentTime);
+        setBeginTime(parseInt(currentTime));
+        localStorage.currentTime = currentTime;
     }
 
     const changePlayMode = (e) => {
@@ -181,6 +181,7 @@ function FooterCom(props) {
 
     const getDuration = () => {
         setDuration(audioRef.current.duration);
+        setPercent((audioRef.current.currentTime / audioRef.current.duration) * 100)
     }
 
     const readDir = async (event, arg) => {
