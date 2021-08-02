@@ -7,10 +7,9 @@ import windowUtils from '@localUtils/window-util';
 import fsUtils from '@localUtils/fs-util';
 import { StepBackwardOutlined, StepForwardOutlined, createFromIconfontCN } from '@ant-design/icons';
 import store from '@redux';
-import { playMusicRedux, currentIndexRedux, musicListRedux, audioRefRedux, setCurrentTimeRedux } from '@redux/actions/play-actions';
+import { playMusicRedux, currentIndexRedux, musicListRedux, audioRefRedux } from '@redux/actions/play-actions';
 import { PlayStatusCom, SetPlayModeCom, SetVolumeCom } from './PlayController';
 import MusicListPopup from '@/components/main/popup';
-import { connect } from 'react-redux';
 
 const IconFont = createFromIconfontCN();
 
@@ -19,8 +18,7 @@ const IconFont = createFromIconfontCN();
  * @param {Object} props 
  * @returns 
  */
-function Footer(props) {
-    const { currentTime, setCurrentTime } = props;
+function FooterCom(props) {
     const [beginTime, setBeginTime] = useState(0);
     // 1 list loop 2 single circle 3 random default 1
     const [playMode, setPlayMode] = useState("1");
@@ -51,15 +49,15 @@ function Footer(props) {
             console.error(`The program reported an error when playing song\n${e}`);
         }
         setPlayMode(localStorage.playMode ? localStorage.playMode : "1");
-        
-        audioRef.current.currentTime = currentTime;
+
+        audioRef.current.currentTime = localStorage.currentTime ? localStorage.currentTime : 0;
     }, [duration, audioRef, audioVolume])// eslint-disable-line react-hooks/exhaustive-deps
 
     const updateTime = () => {
         let temPercent = (audioRef.current.currentTime / duration) * 100;
         setPercent(temPercent);
         setBeginTime(parseInt(audioRef.current.currentTime));
-        setCurrentTime(audioRef.current.currentTime);
+        // setCurrentTime(audioRef.current.currentTime);
     }
 
     const changePlayMode = (e) => {
@@ -323,19 +321,19 @@ function Footer(props) {
     )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        currentTime: state.playReducer.currentTime
-    }
-}
+// const mapStateToProps = (state) => {
+//     return {
+//         currentTime: state.playReducer.currentTime
+//     }
+// }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        setCurrentTime: (currentTime) => {
-            dispatch(setCurrentTimeRedux(currentTime))
-        }
-    }
-}
-const FooterCom = connect(mapStateToProps, mapDispatchToProps)(Footer);
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//         setCurrentTime: (currentTime) => {
+//             dispatch(setCurrentTimeRedux(currentTime))
+//         }
+//     }
+// }
+// const FooterCom = connect(mapStateToProps, mapDispatchToProps)(Footer);
 
 export default FooterCom;
