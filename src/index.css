@@ -1,5 +1,5 @@
 html {
-  font-size: 696%;
+  font-size: 460%;
 }
 
 body {
@@ -49,4 +49,5 @@ code {
 #root {
   position: relative;
   display: flex;
+  overflow: hidden;
 }
