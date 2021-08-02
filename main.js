@@ -33,6 +33,14 @@ app.on('ready', () => {
   const urlLocation = isDev ? 'http://localhost:3000' : 'dummyurl';
   mainWindow.loadURL(urlLocation);
   mainWindow.setMaximizable(true);
+  mainWindow.on('maximize', () => {
+    console.log('windows maximize');
+    app.webContents.send('max', mainWindow.width)
+  })
+  mainWindow.on('unmaximize', () => {
+    console.log('windows unmaximize');
+    app.webContents.send('max', mainWindow.width)
+  })
 })
 
 /**

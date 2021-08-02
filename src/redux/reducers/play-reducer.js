@@ -1,4 +1,4 @@
-import { MusicPlay, MusicList, CurrentIndex, AudioFlag, NetValid, SelectKey, CurrentTime } from '../actions/play-actions';
+import { MusicPlay, MusicList, CurrentIndex, AudioFlag, NetValid, SelectKey, CurrentTime, ShowLoading } from '../actions/play-actions';
 import initialState from '../state';
 
 function playReducer(state = initialState, action) {
@@ -51,6 +51,13 @@ function playReducer(state = initialState, action) {
             return {
                 ...state,
                 currentTime: action.payload.currentTime
+            }
+        }
+        case ShowLoading: {
+            console.log('showLoading', action.payload.showLoading);
+            return {
+                ...state,
+                showLoading: action.payload.showLoading
             }
         }
         default:

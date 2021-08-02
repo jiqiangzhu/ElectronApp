@@ -12,7 +12,6 @@ async function getFYDataFromSina(netValid, url = `https://interface.sina.cn/news
     if (!netValid) {
         url = `/sina/fymap`;
     }
-    console.log('url', url);
     return axios.get(url);
 }
 

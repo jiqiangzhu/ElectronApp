@@ -3,6 +3,7 @@ import './App.less';
 import { getMusicList } from './api';
 import React from 'react';
 import routes from './router';
+import LoadingCom from './components/main/loading';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -30,6 +31,7 @@ export default class App extends React.Component {
         <div className="main-content">
           {routes}
         </div>
+        <LoadingCom />
       </Skeleton >
     )
   }

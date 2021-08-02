@@ -9,7 +9,8 @@ const initialState = {
         currentKey: "1",
         oldKey: ""
     },
-    currentTime: localStorage.currentTime ? localStorage.currentTime * 1 : 0
+    currentTime: localStorage.currentTime ? localStorage.currentTime * 1 : 0,
+    showLoading: false
 }
 
 export default initialState;

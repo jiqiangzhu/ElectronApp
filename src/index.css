@@ -42,3 +42,7 @@ code {
   fill: currentColor;
   overflow: hidden;
 }
+#root {
+  position: relative;
+  display: flex;
+}
