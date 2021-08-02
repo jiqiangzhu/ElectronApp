@@ -34,12 +34,10 @@ app.on('ready', () => {
   mainWindow.loadURL(urlLocation);
   mainWindow.setMaximizable(true);
   mainWindow.on('maximize', () => {
-    console.log('windows maximize');
-    app.webContents.send('max', mainWindow.width)
+    mainWindow.webContents.send('max', mainWindow.width)
   })
   mainWindow.on('unmaximize', () => {
-    console.log('windows unmaximize');
-    app.webContents.send('max', mainWindow.width)
+    mainWindow.webContents.send('min', mainWindow.width)
   })
 })
 
