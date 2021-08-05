@@ -8,7 +8,9 @@ import Home from 'src/components/main/home';
 const routes = (
     <HashRouter>
         <Route component={CustomHeader} />
-        <Route path="/" component={Home} />
+        <Route path="/" component={Home} onEnter={()=>{
+            console.log('home');
+        }} />
         <Route path="/">
             <Redirect from="/" to="/home" />
         </Route>

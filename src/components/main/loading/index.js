@@ -5,12 +5,12 @@ import './index.less';
 
 function Loading(props) {
     const { showLoading, setShowLoading } = props;
-    const [showTips, setShowTips] = useState("Loading...")
+    const [showTips, setShowTips] = useState(props.show)
     useEffect(() => {
         setTimeout(() => {
-            setShowTips("Cancel"); 
-        })
-    }, [showTips])
+            setShowTips(false)
+        }, 5000)//user could cancel after five seconds
+    },[])
     return (
         <div className="loading cannotselect" style={{ display: showLoading ? "flex" : "none" }}>
             <div className="box">
@@ -26,14 +26,15 @@ function Loading(props) {
                     <i className="neptune"></i>
                 </div>
                 <div className="tips">
-                    <div className={`words ${showTips === "Cancel" ? "cancel" : "continue"}`} onClick={() => setShowLoading(false)}>
-                        {showTips}
+                    <div className={`words ${showTips ? "continue" : "cancel"}`} onClick={() => setShowLoading(false)}>
+                        {showTips ? "loading" : "cancel"}
                     </div>
                 </div>
             </div>
         </div>
     )
 }
+
 const mapStateToProps = (state) => {
     return {
         showLoading: state.playReducer.showLoading

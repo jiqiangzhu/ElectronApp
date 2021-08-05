@@ -1,6 +1,6 @@
 import { Row, Col, Image } from 'antd';
 import { useEffect, useState } from 'react';
-import { getRecommendPic } from 'src/api';
+import Api from 'src/api';
 import './index.less';
 
 function Recommend(props) {
@@ -8,7 +8,7 @@ function Recommend(props) {
     useEffect(() => {
         async function fetchData() {
             try {
-                const result = await getRecommendPic();
+                const result = await Api.get('/home/recommend');
                 console.log('result', result);
                 if (result && result.data && result.data.data) {
                     const data = result.data.data

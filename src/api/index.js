@@ -1,27 +1,22 @@
 import axios from 'axios';
+import store from 'src/redux';
+import { setShowLoaingRedux } from 'src/redux/actions/play-actions';
 
-async function getUserInfor() {
-    return axios.get('/user/details');
-}
 
-async function getMusicList() {
-    return axios.get('/home/musiclist');
-}
+//  url = `https://interface.sina.cn/news/wap/fymap2020_data.d.json`
 
-async function getFYDataFromSina(netValid, url = `https://interface.sina.cn/news/wap/fymap2020_data.d.json`) {
-    if (!netValid) {
-        url = `/sina/fymap`;
+const Api = {
+    get: async (url, netValid = true) => {
+        // open loading popup
+        store.dispatch(setShowLoaingRedux(true))
+        // ajax
+        let result = await axios.get(url);
+
+        // close loading popup
+        store.dispatch(setShowLoaingRedux(false))
+        return result;
     }
-    return axios.get(url);
 }
 
-async function getRecommendPic() {
-    return axios.get('/home/recommend');
-}
 
-export {
-    getUserInfor,
-    getMusicList,
-    getFYDataFromSina,
-    getRecommendPic
-}
+export default Api;

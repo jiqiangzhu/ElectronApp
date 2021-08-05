@@ -3,7 +3,7 @@ import React from 'react';
 import './index.less';
 import '../../App.less';
 import windowUtils from '@localUtils/window-util';
-import { getUserInfor } from '../../api/index'
+import Api from '../../api/index'
 import { createFromIconfontCN, SkinOutlined } from '@ant-design/icons';
 import store from 'src/redux';
 import { SelectKeyRedux } from 'src/redux/actions/play-actions';
@@ -53,7 +53,7 @@ class Header extends React.Component {
         windowUtils.setWindowClosed();
     }
     async componentDidMount() {
-        let result = await getUserInfor();
+        let result = await Api.get('/user/details');
         console.log("get user info-------------", result);
         this.setState({
             nickname: result.data.profile.nickname
@@ -92,7 +92,6 @@ class Header extends React.Component {
     navigatorFn = (value) => {
         this.props.history.go(value);
         store.dispatch(SelectKeyRedux(store.getState().playReducer.selectedKeys.oldKey))
-        console.log('length', this.props.history.length);
     }
     changeOpacity = (value) => {
         console.log("opacity value---78~100-------", value * 100);

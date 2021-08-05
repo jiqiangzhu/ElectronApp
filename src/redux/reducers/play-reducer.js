@@ -54,7 +54,6 @@ function playReducer(state = initialState, action) {
             }
         }
         case ShowLoading: {
-            console.log('showLoading', action.payload.showLoading);
             return {
                 ...state,
                 showLoading: action.payload.showLoading
