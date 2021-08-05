@@ -39,6 +39,13 @@ app.on('ready', () => {
   mainWindow.on('unmaximize', () => {
     mainWindow.webContents.send('min', mainWindow.width)
   })
+  // before show menu, action
+  mainWindow.hookWindowMessage(278, (e)=>{
+    mainWindow.setEnabled(false)
+    setTimeout(()=>{
+      mainWindow.setEnabled(true)
+    },100)
+  })
 })
 
 /**

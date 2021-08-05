@@ -11,6 +11,7 @@ import { SelectKeyRedux } from 'src/redux/actions/play-actions';
 const IconFont = createFromIconfontCN();
 const { Search } = Input;
 
+
 class Header extends React.Component {
     constructor(props) {
         super(props);
@@ -114,7 +115,7 @@ class Header extends React.Component {
             </Menu>
         );
         return (
-            <div className="header webkit-drag">
+            <div className="header webkit-drag" ref={this.divRef}>
                 <Row align="middle" style={{ width: "100%" }} >
                     <Col span={2}>
                         <Space>

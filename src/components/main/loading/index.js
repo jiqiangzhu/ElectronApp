@@ -8,7 +8,7 @@ function Loading(props) {
     const [showTips, setShowTips] = useState("Loading...")
     useEffect(() => {
         setTimeout(() => {
-            setShowTips("Cancel");
+            setShowTips("Cancel"); 
         })
     }, [showTips])
     return (
