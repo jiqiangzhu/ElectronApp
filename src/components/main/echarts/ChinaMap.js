@@ -33,7 +33,6 @@ const ChinaMap = {
     // add event listener
     addEventLS: (myChart) => {
         myChart.on('click', function (obj) {
-            console.log('click obj detail-----------', obj);
             store.dispatch(setShowDataRedux(obj.name, obj))
         })
         myChart.on('dblclick', function (obj) {
@@ -86,10 +85,8 @@ const ChinaMap = {
             // (toady or net avaliable) and file exist, load local file
             fydata = await ChinaMap.getFyData(isFileExist, netValid);
             // set last update time in redux
-            console.log('fydata', fydata);
             store.dispatch(updateMapRedux(commonUtils.dateTimeFormat(fydata.data.data.cachetime)));
             let dataList;
-            // all feiyan data
             const allFyData = fydata.data.data;
             dataList = allFyData.list;
             if (type === "province") {

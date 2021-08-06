@@ -10,7 +10,7 @@ const routes2 = (
     <HashRouter>
         <Route component={MenuBar} />
         <Switch>
-            <Route path="/home" component={Recommend} />
+            <Route path="/home" component={Recommend}></Route>
             <Route exact path="/fymap" component={ChinaMapCom} />
             <Route exact path="/movie" component={Movie} />
             <Route component={NotFound} />

@@ -4,6 +4,7 @@ import { ChinaMap } from '@/components/main/echarts/ChinaMap';
 import store from 'src/redux';
 import { setMapDomRedux } from '@redux/actions/map-actions';
 import './index.less';
+import { connect } from 'react-redux';
 
 /**
  * China COVID-19 map use echarts
@@ -12,8 +13,9 @@ import './index.less';
  */
 const { Content } = Layout;
 
-function ChinaMapCom(props) {
+function CovidMap(props) {
     const myEchart = React.createRef();
+    const { data } = props;
     const [loading] = useState(false);
     const [mapButtonTip, setMapButtonTip] = useState("Get Again");
     const [disBtnFlag, setDisBtnFlag] = useState(false);
@@ -61,7 +63,7 @@ function ChinaMapCom(props) {
                             <List
                                 size="large"
                                 bordered={false}
-                                dataSource={store.getState().mapReducer.data ? JSON.parse(store.getState().mapReducer.data) : []}
+                                dataSource={data ? JSON.parse(data) : []}
                                 renderItem={item => <List.Item>{item}</List.Item>}
                             />
                         </Content>
@@ -87,6 +89,12 @@ function ChinaMapCom(props) {
         </div>
     )
 }
+const mapStateToprops = (state) => {
+    return {
+        data: state.mapReducer.data
+    }
+}
+const ChinaMapCom = connect(mapStateToprops)(CovidMap);
 
 export {
     ChinaMapCom
