@@ -10,10 +10,10 @@ function Loading(props) {
         setTimeout(() => {
             setShowTips(false)
         }, 5000)//user could cancel after five seconds
-    },[])
+    }, [])
     return (
         <div className="loading cannotselect" style={{ display: showLoading ? "flex" : "none" }}>
-            <div className="box">
+            <div className="box1" style={{ display: localStorage.loadingMode === '1' ? "block" : "none" }}>
                 <div className="solar">
                     <i className="mercury"></i>
                     <i className="venus"></i>
@@ -24,6 +24,16 @@ function Loading(props) {
                     <i className="saturn"></i>
                     <i className="uranus"></i>
                     <i className="neptune"></i>
+                </div>
+                <div className="tips">
+                    <div className={`words ${showTips ? "continue" : "cancel"}`} onClick={() => setShowLoading(false)}>
+                        {showTips ? "loading" : "cancel"}
+                    </div>
+                </div>
+            </div>
+            <div className="box2" style={{ display: localStorage.loadingMode === '2' ? "block" : "none" }}>
+                <div class="loader2">
+                    <i></i>
                 </div>
                 <div className="tips">
                     <div className={`words ${showTips ? "continue" : "cancel"}`} onClick={() => setShowLoading(false)}>

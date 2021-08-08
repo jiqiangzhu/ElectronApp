@@ -7,7 +7,7 @@
     background-color: rgba(59, 59, 77, 0.9);
     width: 100vw;
 
-    .box {
+    .box1 {
         width: 6rem;
         height: 6rem;
         background: rgba(90, 94, 94, 0.5);
@@ -237,6 +237,73 @@
                 100% {
                     box-shadow: none;
                 }
+            }
+        }
+
+        .tips {
+            position: absolute;
+            bottom: 0.3rem;
+            width: 100%;
+            text-align: center;
+            height: 0.5rem;
+            font-size: 0.22rem;
+
+            .words {
+                width: 2rem;
+                height: 0.5rem;
+                line-height: 0.5rem;
+                margin: 0 auto;
+                border-radius: 0.2rem;
+            }
+
+            .cancel {
+                background: #e78;
+                cursor: pointer;
+            }
+
+            .continue {
+                background: #333;
+                pointer-events: none;
+            }
+        }
+    }
+
+    .box2 {
+        width: 6rem;
+        height: 6rem;
+        background: rgba(90, 94, 94, 0.5);
+        border-radius: 0.8rem;
+        position: relative;
+
+        .loader2 {
+            margin: 0 auto;
+            margin-top: 1rem;
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .loader2 i {
+            border-style: solid;
+            display: inline-block;
+            box-sizing: border-box;
+            border-width: 50px;
+            border-color: rgba(255, 255, 255, 1);
+            border-radius: 50px;
+            animation: blink 1.5s infinite ease-in-out;
+            height: 100px;
+            width: 100px;
+        }
+
+        @keyframes blink {
+            50% {
+                border-width: 0;
+                border-color: rgba(255, 255, 255, 0.5);
+            }
+
+            100% {
+                border-width: 0;
+                border-color: rgba(255, 255, 255, 0.5);
             }
         }
 

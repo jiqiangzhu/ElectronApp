@@ -49,7 +49,7 @@ function FooterCom(props) {
         } catch (e) {
             console.error(`The program reported an error when playing song\n${e}`);
         }
-        setPlayMode(localStorage.playMode ? localStorage.playMode : "1");
+        setPlayMode(localStorage.playMode ?? "1");
     }, [duration, audioRef, audioVolume])// eslint-disable-line react-hooks/exhaustive-deps
 
     const updateTime = () => {

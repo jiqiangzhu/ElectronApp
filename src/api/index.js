@@ -7,14 +7,23 @@ import { setShowLoaingRedux } from 'src/redux/actions/play-actions';
 
 const Api = {
     get: async (url, netValid = true) => {
-        // open loading popup
-        store.dispatch(setShowLoaingRedux(true))
-        // ajax
-        let result = await axios.get(url);
+        try {
+            // open loading popup
+            store.dispatch(setShowLoaingRedux(true))
+            // ajax
+            let result = await axios.get(url);
+            console.log('result', result);
+            if (!result || !result.data) {
+                throw new Error("fetch data error")
+            }
+            // close loading popup
+            store.dispatch(setShowLoaingRedux(false))
+            return result;
+        } catch (e) {
+            store.dispatch(setShowLoaingRedux(true))
+            console.log('e----------', e);
+        }
 
-        // close loading popup
-        store.dispatch(setShowLoaingRedux(false))
-        return result;
     }
 }
 
