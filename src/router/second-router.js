@@ -1,6 +1,7 @@
 import React from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import { ChinaMapCom } from 'src/components/main/echarts';
+import LeaderBoard from 'src/components/main/leader-board';
 import MenuBar from 'src/components/main/menu-bar';
 import Movie from 'src/components/main/movie';
 import Recommend from 'src/components/main/recommend';
@@ -13,6 +14,7 @@ const routes2 = (
             <Route path="/home" component={Recommend}></Route>
             <Route exact path="/fymap" component={ChinaMapCom} />
             <Route exact path="/movie" component={Movie} />
+            <Route exact path="/rank" component={LeaderBoard} />
             <Route component={NotFound} />
         </Switch>
     </HashRouter>
