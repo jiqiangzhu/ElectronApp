@@ -7,10 +7,16 @@ function Loading(props) {
     const { showLoading, setShowLoading } = props;
     const [showTips, setShowTips] = useState(props.show)
     useEffect(() => {
-        setTimeout(() => {
-            setShowTips(false)
+        const timer = setTimeout(() => {
+            function init() {
+                setShowTips(false)
+            }
+            init();
         }, 5000)//user could cancel after five seconds
-    }, [])
+        return ()=>{
+            clearTimeout(timer)
+        }
+    }, [showTips])
     return (
         <div className="loading cannotselect" style={{ display: showLoading ? "flex" : "none" }}>
             <div className="box1" style={{ display: localStorage.loadingMode === '1' ? "block" : "none" }}>
@@ -32,7 +38,7 @@ function Loading(props) {
                 </div>
             </div>
             <div className="box2" style={{ display: localStorage.loadingMode === '2' ? "block" : "none" }}>
-                <div class="loader2">
+                <div className="loader2">
                     <i></i>
                 </div>
                 <div className="tips">

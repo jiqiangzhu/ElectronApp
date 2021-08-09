@@ -100,7 +100,7 @@ class Header extends React.Component {
     }
     render() {
         const menu = (
-            <Menu onClick={this.handleMenuClick} theme="dark">
+            <Menu onClick={this.handleMenuClick} theme="dark" className="custom-menu">
                 <Menu.Item key="1">
                     <SetOpacityCom className="webkit-no-drag" defaultValue={this.state.defaultValue} changeOpacity={(value) => this.changeOpacity(value)} />
                 </Menu.Item>
