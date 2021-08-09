@@ -7,14 +7,12 @@ import Home from 'src/components/main/home';
 
 const routes = (
     <HashRouter>
-        {/* <Switch> */}
         <Route component={CustomHeader} />
         <Route path="/" component={Home} />
         <Route path="/">
             <Redirect from="/" to="/home" />
         </Route>
         <Route component={FooterCom} />
-        {/* </Switch> */}
     </HashRouter>
 );
 

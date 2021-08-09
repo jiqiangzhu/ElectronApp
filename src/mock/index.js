@@ -1,8 +1,7 @@
 import Mock from 'mockjs';
-// import * as jsonStr from '@/static/fydata.json';
 
 Mock.setup({
-    timeout: '100-300'
+    timeout: '1000-1500'
 })
 
 Mock.mock(
@@ -119,7 +118,7 @@ Mock.mock(
     }
 )
 
-// get recommand music list
+// get covid-19 map
 Mock.mock(
     '/sina/fymap',
     'get',
@@ -130,5 +129,20 @@ Mock.mock(
             data: jsonStr.data.data
         }
 
+    }
+)
+
+// get recommend picture url
+Mock.mock(
+    '/home/recommend',
+    'get',
+    () => {
+        let arr = [];
+        for (let i = 1; i <= 30; i++) {
+            arr.push(require(`@/assets/img/recommend/${i}.jpg`).default)
+        }
+        return {
+            data: arr
+        }
     }
 )

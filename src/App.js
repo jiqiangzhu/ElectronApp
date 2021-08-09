@@ -1,36 +1,47 @@
 import { Skeleton } from 'antd';
 import './App.less';
-import { getMusicList } from './api';
-import React from 'react';
+import Api from './api';
+import React, { useEffect, useState } from 'react';
 import routes from './router';
+import LoadingCom from './components/main/loading';
+import { connect } from 'react-redux';
 
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loadingFlag: true,
-      opacityVallue: 0
-    };
-  }
+function AppCom(props) {
+  let [loadingFlag, setLoadingFlag] = useState(true);
+  const [RenderCom, setRenderCom] = useState("");
+  const { showLoading } = props;
 
-  async UNSAFE_componentWillMount() {
-    // Skeleton
+  useEffect(() => {
     setTimeout(async () => {
-      this.setState({
-        loadingFlag: false
-      })
-      let result = await getMusicList();
-      console.log("get playlist---------------", result);
-    }, 100)
-  }
+      setLoadingFlag(false)
+    }, 500)
 
-  render() {
-    return (
-      <Skeleton active loading={this.state.loadingFlag} rows={100} >
-        <div className="main-content">
-          {routes}
-        </div>
-      </Skeleton >
-    )
+    async function initRequset() {
+      let result = await Api.get('/home/musiclist');
+      console.log("get playlist---------------", result);
+    }
+    initRequset()
+  }, [])
+
+  useEffect(() => {
+    setRenderCom(showLoading ? <LoadingCom show={true} /> : "")
+  }, [showLoading])
+  
+  return (
+    <Skeleton active loading={loadingFlag} rows={100} >
+      <div className="main-content">
+        {routes}
+      </div>
+      {RenderCom}
+    </Skeleton >
+  )
+}
+const mapStateToProps = (state) => {
+  return {
+    showLoading: state.playReducer.showLoading
   }
 }
+
+const App = connect(mapStateToProps)(AppCom)
+
+export default App;

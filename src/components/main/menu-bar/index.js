@@ -1,76 +1,83 @@
 import { Menu, Button } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import './index.less';
 import {
-  AppstoreOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
-  PieChartOutlined,
-  DesktopOutlined,
-  ContainerOutlined
+  createFromIconfontCN
 } from '@ant-design/icons';
+import { SelectKeyRedux } from 'src/redux/actions/play-actions';
+import { connect } from 'react-redux';
 
 const { SubMenu } = Menu;
+const IconFont = createFromIconfontCN();
 
-class MenuBar extends React.Component {
-  state = {
-    collapsed: false,
-  };
+function MenuBarCom(props) {
+  const { selectedKeys, setSelectedKeys } = props;
+  const [collapsed, setCollapsed] = useState(false);
 
-  toggleCollapsed = () => {
-    this.setState({
-      collapsed: !this.state.collapsed,
-    });
-  };
-  toPage = (path) => {
-    this.props.history.push(path);
+  const toPage = (path, key) => {
+    props.history.push("/" + path);
+    setSelectedKeys(key);
   }
-
-  render() {
-    return (
-      <div className="menu-bar">
-        <Button type="dashed" onClick={this.toggleCollapsed} style={{ marginBottom: 16 }}>
-          {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
-        </Button>
-        <div style={{ height: '90%' }}>
-          <div className="scroll-bar">
-            <Menu
-              defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1', 'sub2']}
-              mode="inline"
-              theme="dark"
-              inlineIndent={12}
-              inlineCollapsed={this.state.collapsed}
-            >
-              <Menu.Item key="1" icon={<PieChartOutlined />} onClick={() => this.toPage('/home')}>
-                Recommend
-              </Menu.Item>
-              <Menu.Item key="2" icon={<DesktopOutlined />}>
-                Option 2
-              </Menu.Item>
-              <Menu.Item key="3" icon={<ContainerOutlined />}>
-                Option 3
-              </Menu.Item>
-              <SubMenu key="sub1" icon={<AppstoreOutlined />} title="Toolbox">
-                <Menu.Item key="5" onClick={() => this.toPage('/fymap')}> Covid-19 map</Menu.Item>
-                <Menu.Item key="6">Option 6</Menu.Item>
-                <Menu.Item key="7">Option 7</Menu.Item>
-                <Menu.Item key="8">Option 8</Menu.Item>
+  return (
+    <div className="menu-bar">
+      <Button type="dashed" onClick={() => { setCollapsed(!collapsed) }} style={{ marginBottom: 16 }}>
+        {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
+      </Button>
+      <div style={{ height: '90%' }}>
+        <div className="scroll-bar cannotselect">
+          <Menu
+            defaultSelectedKeys={['1']}
+            defaultOpenKeys={['sub1', 'sub2', 'sub3']}
+            mode="inline"
+            theme="dark"
+            inlineIndent={12}
+            inlineCollapsed={collapsed}
+            selectedKeys={selectedKeys.currentKey}
+          >
+            <Menu.Item key="1" icon={<IconFont type="icon-tuijian" />} onClick={toPage.bind(this, 'home', '1')}>
+              Recommend
+            </Menu.Item>
+            <Menu.Item key="2" icon={<IconFont type="icon-shipin" />} onClick={toPage.bind(this, 'movie', '2')}>
+              Movie
+            </Menu.Item>
+            <Menu.Item key="3" icon={<IconFont type="icon-paihangbang" />} onClick={toPage.bind(this, 'rank', '3')}>
+              Leaderboard
+            </Menu.Item>
+            <SubMenu key="sub1" icon={<IconFont type="icon-bag-case-work-need-job-ecacdf" />} title="Toolbox">
+              <Menu.Item key="5" onClick={toPage.bind(this, 'fymap', '5')}> Covid-19 map</Menu.Item>
+              <Menu.Item key="6" onClick={toPage.bind(this, 'recordLog', '6')}>Record Log</Menu.Item>
+              <Menu.Item key="7" onClick={toPage.bind(this, 'print', '7')}>Print</Menu.Item>
+              <Menu.Item key="8" onClick={toPage.bind(this, 'other', '8')}>Stay tuned</Menu.Item>
+            </SubMenu>
+            <SubMenu key="sub2" icon={<IconFont type="icon-icon-test" />} title="Community">
+              <Menu.Item key="9" onClick={toPage.bind(this, 'other', '9')}>Stay tuned</Menu.Item>
+              <Menu.Item key="10" onClick={toPage.bind(this, 'other', '10')}>Stay tuned</Menu.Item>
+              <SubMenu key="sub3" icon={<IconFont type="icon-shequ" />} title="Other">
+                <Menu.Item key="11" onClick={toPage.bind(this, 'person', '11')}>Person</Menu.Item>
+                <Menu.Item key="12" onClick={toPage.bind(this, 'other', '12')}>Stay tuned</Menu.Item>
               </SubMenu>
-              <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Navigation Two">
-                <Menu.Item key="9">Option 9</Menu.Item>
-                <Menu.Item key="10">Option 10</Menu.Item>
-                <SubMenu key="sub3" title="Submenu">
-                  <Menu.Item key="11">Option 11</Menu.Item>
-                  <Menu.Item key="12">Option 12</Menu.Item>
-                </SubMenu>
-              </SubMenu>
-            </Menu>
-          </div>
+            </SubMenu>
+          </Menu>
         </div>
       </div>
-    );
+    </div>
+  );
+}
+
+function mapStateToProps(state) {
+  return {
+    selectedKeys: state.playReducer.selectedKeys
   }
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    setSelectedKeys: (key) => {
+      dispatch(SelectKeyRedux(key))
+    }
+  }
+}
+const MenuBar = connect(mapStateToProps, mapDispatchToProps)(MenuBarCom)
 export default MenuBar;

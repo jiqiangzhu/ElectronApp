@@ -1,23 +1,31 @@
 import axios from 'axios';
+import store from 'src/redux';
+import { setShowLoaingRedux } from 'src/redux/actions/play-actions';
 
-async function getUserInfor() {
-    return axios.get('/user/details');
-}
 
-async function getMusicList() {
-    return axios.get('/home/musiclist');
-}
+//  url = `https://interface.sina.cn/news/wap/fymap2020_data.d.json`
 
-async function getFYDataFromSina(netValid, url = `https://interface.sina.cn/news/wap/fymap2020_data.d.json`) {
-    if (!netValid) {
-        url = `/sina/fymap`;
+const Api = {
+    get: async (url, netValid = true) => {
+        try {
+            // open loading popup
+            store.dispatch(setShowLoaingRedux(true))
+            // ajax
+            let result = await axios.get(url);
+            console.log('result', result);
+            if (!result || !result.data) {
+                throw new Error("fetch data error")
+            }
+            // close loading popup
+            store.dispatch(setShowLoaingRedux(false))
+            return result;
+        } catch (e) {
+            store.dispatch(setShowLoaingRedux(true))
+            console.log('e----------', e);
+        }
+
     }
-    console.log('url', url);
-    return axios.get(url);
 }
 
-export {
-    getUserInfor,
-    getMusicList,
-    getFYDataFromSina
-}
+
+export default Api;

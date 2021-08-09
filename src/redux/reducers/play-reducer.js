@@ -1,13 +1,5 @@
-import { MusicPlay, MusicList, CurrentIndex, AudioFlag, NetValid } from '../actions/play-actions';
-
-const initialState = {
-    playFlag: "pause",
-    musicList: [],
-    currentIndex: localStorage.currentIndex ? parseInt(localStorage.currentIndex) : 0,
-    currentAudio: {},
-    currentSrc: "",
-    netValid: false
-}
+import { MusicPlay, MusicList, CurrentIndex, AudioFlag, NetValid, SelectKey, CurrentTime, ShowLoading } from '../actions/play-actions';
+import initialState from '../state';
 
 function playReducer(state = initialState, action) {
     switch (action.type) {
@@ -43,6 +35,28 @@ function playReducer(state = initialState, action) {
             return {
                 ...state,
                 netValid: action.payload.netValid
+            }
+        }
+        case SelectKey: {
+            return {
+                ...state,
+                selectedKeys: {
+                    oldKey: state.selectedKeys.currentKey,
+                    currentKey: action.payload.key
+                }
+            }
+        }
+        case CurrentTime: {
+            localStorage.currentTime = action.payload.currentTime;
+            return {
+                ...state,
+                currentTime: action.payload.currentTime
+            }
+        }
+        case ShowLoading: {
+            return {
+                ...state,
+                showLoading: action.payload.showLoading
             }
         }
         default:

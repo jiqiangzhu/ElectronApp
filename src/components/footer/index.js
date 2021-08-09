@@ -11,7 +11,6 @@ import { playMusicRedux, currentIndexRedux, musicListRedux, audioRefRedux } from
 import { PlayStatusCom, SetPlayModeCom, SetVolumeCom } from './PlayController';
 import MusicListPopup from '@/components/main/popup';
 
-
 const IconFont = createFromIconfontCN();
 
 /**
@@ -31,13 +30,15 @@ function FooterCom(props) {
     const [currentSrc, setCurrentSrc] = useState("");
     const [fileNameArray, setFileNameArray] = useState([]);
     const [popupList, setPopupList] = useState([]);
-    const [popupVisible, setPopupVisible] = useState(false)
+    const [popupVisible, setPopupVisible] = useState(false);
+    const [showLyrics, setShowLyrics] = useState(false);
     const [audioVolume, setAudioVolume] = useState(localStorage.defalutVolume ? localStorage.defalutVolume : 1);
     useEffect(() => {
         console.log('props-footer-----', window);
         if (localStorage.defaultMusicPath) {
             readDir("init", localStorage.defaultMusicPath)
         }
+        audioRef.current.currentTime = localStorage.currentTime ? localStorage.currentTime : 0;
     }, [])// eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
         setDuration(duration);
@@ -48,14 +49,15 @@ function FooterCom(props) {
         } catch (e) {
             console.error(`The program reported an error when playing song\n${e}`);
         }
-        setPlayMode(localStorage.playMode ? localStorage.playMode : "1");
-
-    }, [duration, audioRef, audioVolume])
+        setPlayMode(localStorage.playMode ?? "1");
+    }, [duration, audioRef, audioVolume])// eslint-disable-line react-hooks/exhaustive-deps
 
     const updateTime = () => {
-        let temPercent = (audioRef.current.currentTime / duration) * 100;
+        const currentTime = audioRef.current.currentTime
+        let temPercent = (currentTime / duration) * 100;
         setPercent(temPercent);
-        setBeginTime(parseInt(audioRef.current.currentTime));
+        setBeginTime(parseInt(currentTime));
+        localStorage.currentTime = currentTime;
     }
 
     const changePlayMode = (e) => {
@@ -179,6 +181,7 @@ function FooterCom(props) {
 
     const getDuration = () => {
         setDuration(audioRef.current.duration);
+        setPercent((audioRef.current.currentTime / audioRef.current.duration) * 100)
     }
 
     const readDir = async (event, arg) => {
@@ -193,6 +196,7 @@ function FooterCom(props) {
         }
         fsUtils.readMusicDir(path, (err, files) => {
             try {
+                localStorage.defaultMusicPath = path;
                 console.log(`files from ${path}------->>>>>>>`, files);
                 if (files.length > 0) {
                     files.filter((item, index) => {
@@ -266,9 +270,12 @@ function FooterCom(props) {
     return (
         <div className="footer">
             <audio
-                onTimeUpdate={updateTime.bind(this)} onError={playMusic.bind(this, "pause")}
+                onTimeUpdate={updateTime.bind(this)}
+                onError={playMusic.bind(this, "pause")}
                 ref={audioRef} preload="true" loop={playMode === "2" ? true : false}
-                controls={false} onEnded={playNext.bind(this, 1)} src={currentSrc}
+                controls={false}
+                onEnded={playNext.bind(this, 1)}
+                src={currentSrc}
                 onCanPlay={getDuration.bind(this)}
             ></audio>
             <Row align="middle" style={{ width: "100%" }} >
@@ -296,6 +303,8 @@ function FooterCom(props) {
                 </span>
                 <Col span={4} className="flex-type flex-justify-end">
                     <Space size="middle" style={{ paddingBottom: '10px', }}>
+                        <IconFont style={{ fontSize: '18px' }} type={showLyrics ? "icon-geciweidianji" : "icon-geciweidianji-copy"}
+                            onClick={() => setShowLyrics(!showLyrics)} className="webkit-no-drag" />
                         <SetPlayModeCom changePlayMode={changePlayMode.bind(this)} playMode={playMode} />
                         <IconFont style={{ fontSize: '16px' }} type="icon-jia" onClick={importLocal.bind(this)}
                             className="webkit-no-drag" />
@@ -312,5 +321,20 @@ function FooterCom(props) {
         </div>
     )
 }
+
+// const mapStateToProps = (state) => {
+//     return {
+//         currentTime: state.playReducer.currentTime
+//     }
+// }
+
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//         setCurrentTime: (currentTime) => {
+//             dispatch(setCurrentTimeRedux(currentTime))
+//         }
+//     }
+// }
+// const FooterCom = connect(mapStateToProps, mapDispatchToProps)(Footer);
 
 export default FooterCom;

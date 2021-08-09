@@ -3,11 +3,14 @@ import React from 'react';
 import './index.less';
 import '../../App.less';
 import windowUtils from '@localUtils/window-util';
-import { getUserInfor } from '../../api/index'
+import Api from '../../api/index'
 import { createFromIconfontCN, SkinOutlined } from '@ant-design/icons';
+import store from 'src/redux';
+import { SelectKeyRedux } from 'src/redux/actions/play-actions';
 
 const IconFont = createFromIconfontCN();
 const { Search } = Input;
+
 
 class Header extends React.Component {
     constructor(props) {
@@ -50,7 +53,7 @@ class Header extends React.Component {
         windowUtils.setWindowClosed();
     }
     async componentDidMount() {
-        let result = await getUserInfor();
+        let result = await Api.get('/user/details');
         console.log("get user info-------------", result);
         this.setState({
             nickname: result.data.profile.nickname
@@ -86,9 +89,9 @@ class Header extends React.Component {
             return;
         }
     };
-    navigatorFn = () => {
-        console.log('window', window.history);
-        // window.history.back()
+    navigatorFn = (value) => {
+        this.props.history.go(value);
+        store.dispatch(SelectKeyRedux(store.getState().playReducer.selectedKeys.oldKey))
     }
     changeOpacity = (value) => {
         console.log("opacity value---78~100-------", value * 100);
@@ -97,7 +100,7 @@ class Header extends React.Component {
     }
     render() {
         const menu = (
-            <Menu onClick={this.handleMenuClick} theme="dark">
+            <Menu onClick={this.handleMenuClick} theme="dark" className="custom-menu">
                 <Menu.Item key="1">
                     <SetOpacityCom className="webkit-no-drag" defaultValue={this.state.defaultValue} changeOpacity={(value) => this.changeOpacity(value)} />
                 </Menu.Item>
@@ -111,7 +114,7 @@ class Header extends React.Component {
             </Menu>
         );
         return (
-            <div className="header webkit-drag">
+            <div className="header webkit-drag" ref={this.divRef}>
                 <Row align="middle" style={{ width: "100%" }} >
                     <Col span={2}>
                         <Space>
@@ -124,8 +127,15 @@ class Header extends React.Component {
                     </Col>
                     <Col offset={0} span={20} >
                         <Space className="flex-type flex-align-mid">
-                            <IconFont style={{ fontSize: '15px' }} onClick={() => { this.navigatorFn() }} className="webkit-no-drag" type='icon-ziyuan1' />
-                            <IconFont style={{ fontSize: '16px' }} onClick={() => { window.history.forward() }} className="webkit-no-drag" type='icon-you' />
+                            <IconFont style={{ fontSize: '15px' }} onClick={() => { this.navigatorFn(-1) }}
+                                className={["webkit-no-drag", this.props.history.length > 1 ? "allowed" : "not-allowed"]}
+                                type={this.props.history.length > 1 ? "icon-ziyuan1" : "icon-ziyuan1-copy-copy"} />
+                            <IconFont style={{ fontSize: '16px' }} onClick={() => { this.navigatorFn(1) }}
+                                className={["webkit-no-drag", this.props.history.length > 1 ? "allowed" : "not-allowed"]}
+                                type={this.props.history.length > 1 ? 'icon-you' : 'icon-you-copy'} />
+                            {/* <IconFont style={{ fontSize: '16px' }} onClick={() => { this.props.history.go(0) }}
+                                className={["webkit-no-drag"]}
+                                type= 'icon-shuaxin-copy' /> */}
                             <Search
                                 allowClear={true}
                                 className="webkit-no-drag flex-type flex-align-mid cannotselect"

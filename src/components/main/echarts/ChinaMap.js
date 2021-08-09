@@ -1,12 +1,12 @@
 import echarts from 'echarts';
 import chinaJson from '@/static/china.json'
-import { getFYDataFromSina } from '@/api';
+// import { getFYDataFromSina } from '@/api';
 import fsUtils from '@/utils/fs-util';
 import { commonUtils, windowUtils } from '@localUtils/';
 import store from 'src/redux';
 import { updateMapRedux } from '@redux/actions/map-actions';
-import { message } from 'antd';
 import { setShowDataRedux } from 'src/redux/actions/map-actions';
+import Api from 'src/api';
 
 let type = "country", size = 1;
 let mapName = "China", EchartDom, provinceObj, provinceCode, provinceData, cityObj, cityCode, cityData;
@@ -17,6 +17,7 @@ const ChinaMap = {
     initalECharts: async () => {
         let netValid;
         netValid = await windowUtils.checkInternetAvailable();
+        netValid = false;
         let result = false;
         try {
             mapName = "China";
@@ -32,7 +33,6 @@ const ChinaMap = {
     // add event listener
     addEventLS: (myChart) => {
         myChart.on('click', function (obj) {
-            console.log('click obj detail-----------', obj);
             store.dispatch(setShowDataRedux(obj.name, obj))
         })
         myChart.on('dblclick', function (obj) {
@@ -87,7 +87,6 @@ const ChinaMap = {
             // set last update time in redux
             store.dispatch(updateMapRedux(commonUtils.dateTimeFormat(fydata.data.data.cachetime)));
             let dataList;
-            // all feiyan data
             const allFyData = fydata.data.data;
             dataList = allFyData.list;
             if (type === "province") {
@@ -200,12 +199,15 @@ const ChinaMap = {
         try {
             let fydata;
             if (isFileExist && !netValid) {
-                fydata = await getFYDataFromSina(false);
+                // fydata = await getFYDataFromSina(false);
+                fydata = await Api.get('/sina/fymap');
             } else {// file not exist, request sina data and save local
                 if (!netValid) {
                     return 'net cannot connect'
                 }
-                fydata = await getFYDataFromSina(netValid);
+                
+                fydata = await Api.get('/sina/fymap');
+                // fydata = await getFYDataFromSina(netValid);
                 localStorage.lastFetchFyDate = new Date().toDateString();
                 if (fydata) {
                     fsUtils.writeFile('src/static/fydata.json', JSON.stringify(fydata));
@@ -213,12 +215,6 @@ const ChinaMap = {
             }
             return fydata;
         } catch (e) {
-            message.error({
-                content: "err, try again",
-                style: {
-                    marginTop: '40vh',
-                },
-            });
             console.error('getFydata', e);
         }
 

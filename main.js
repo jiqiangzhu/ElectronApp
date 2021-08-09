@@ -33,6 +33,19 @@ app.on('ready', () => {
   const urlLocation = isDev ? 'http://localhost:3000' : 'dummyurl';
   mainWindow.loadURL(urlLocation);
   mainWindow.setMaximizable(true);
+  mainWindow.on('maximize', () => {
+    mainWindow.webContents.send('max', mainWindow.width)
+  })
+  mainWindow.on('unmaximize', () => {
+    mainWindow.webContents.send('min', mainWindow.width)
+  })
+  // before show menu, action
+  mainWindow.hookWindowMessage(278, (e)=>{
+    mainWindow.setEnabled(false)
+    setTimeout(()=>{
+      mainWindow.setEnabled(true)
+    },100)
+  })
 })
 
 /**

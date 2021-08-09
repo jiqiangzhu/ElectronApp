@@ -36,6 +36,7 @@
 .ant-input-group .ant-input-affix-wrapper:not(:last-child) {
     border-radius: 12px;
 }
+
 .ant-input-search .ant-input-group .ant-input-affix-wrapper:not(:last-child) {
     border-radius: 12px;
 }
@@ -43,4 +44,21 @@
 .header {
     height: 30px;
     padding: 0;
+
+    .allowed {
+        cursor: pointer;
+        color: #fff;
+    }
+
+    .not-allowed {
+        cursor: not-allowed;
+        pointer-events: none;
+        color: #000;
+
+    }
+}
+
+.ant-dropdown-menu-dark {
+    background: #3B3B4D !important;
+    border-radius: 10px !important;
 }
