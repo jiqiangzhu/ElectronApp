@@ -1,8 +1,14 @@
+import { useEffect } from 'react';
+import store from 'src/redux';
+import { setShowLoaingRedux } from 'src/redux/actions/play-actions';
 import './index.less';
 import './index.scss';
 
 function Movie(props) {
-
+    useEffect(() => {
+        store.dispatch(setShowLoaingRedux(false))
+        console.log('did mount');
+    }, [])
     return (
         <div className="home-content movie-content">
             <div className="page">

@@ -1,9 +1,15 @@
+import { useEffect } from 'react';
+import store from 'src/redux';
+import { setShowLoaingRedux } from 'src/redux/actions/play-actions';
 import './index.scss';
 
 function LeaderBoard(props) {
+    useEffect(() => {
+        // store.dispatch(setShowLoaingRedux(false))
+    }, [])
     return (
-        <div className="home-content movie-content">
-            <div className="cta-container-images">
+        <div className="home-content rank-content">
+            {/* <div className="cta-container-images">
                 <div className="cta-singular-cell">
                     <div className="cta-internal-image-cont flip-1">
                         <div className="cta-even-image image-1"></div>
@@ -88,7 +94,7 @@ function LeaderBoard(props) {
                     </div>
                 </div>
 
-            </div>
+            </div> */}
         </div>
     )
 }

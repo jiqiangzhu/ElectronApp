@@ -6,8 +6,9 @@ import {
   MenuFoldOutlined,
   createFromIconfontCN
 } from '@ant-design/icons';
-import { SelectKeyRedux } from 'src/redux/actions/play-actions';
+import { SelectKeyRedux, setShowLoaingRedux } from 'src/redux/actions/play-actions';
 import { connect } from 'react-redux';
+import store from 'src/redux';
 
 const { SubMenu } = Menu;
 const IconFont = createFromIconfontCN();
@@ -17,6 +18,7 @@ function MenuBarCom(props) {
   const [collapsed, setCollapsed] = useState(false);
 
   const toPage = (path, key) => {
+    // store.dispatch(setShowLoaingRedux(true));
     props.history.push("/" + path);
     setSelectedKeys(key);
   }
