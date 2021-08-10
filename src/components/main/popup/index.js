@@ -1,5 +1,6 @@
 import store from '@redux';
 import { List, Drawer, Layout } from 'antd';
+import './index.scss';
 
 const { Content } = Layout;
 /**
@@ -16,7 +17,6 @@ function MusicListPopup(props) {
                 closable={false}
                 onClose={() => props.onClose()}
                 visible={props.visible}
-                maskStyle={{ background: 'transparent' }}
                 headerStyle={{ color: '#FFFFFF' }}
                 className="webkit-no-drag cannotselect"
             >

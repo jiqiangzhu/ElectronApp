@@ -34,22 +34,31 @@ function FooterCom(props) {
     const [showLyrics, setShowLyrics] = useState(false);
     const [audioVolume, setAudioVolume] = useState(localStorage.defalutVolume ? localStorage.defalutVolume : 1);
     useEffect(() => {
-        console.log('props-footer-----', window);
-        if (localStorage.defaultMusicPath) {
-            readDir("init", localStorage.defaultMusicPath)
+        function init() {
+            if (localStorage.defaultMusicPath) {
+                readDir("init", localStorage.defaultMusicPath)
+            }
+            audioRef.current.currentTime = localStorage.currentTime ? localStorage.currentTime : 0;
         }
-        audioRef.current.currentTime = localStorage.currentTime ? localStorage.currentTime : 0;
+        init()
+
     }, [])// eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
-        setDuration(duration);
-        try {
-            if (audioRef.current) {
-                audioRef.current.volume = audioVolume;
+        function update() {
+            setDuration(duration);
+            try {
+                if (audioRef.current) {
+                    audioRef.current.volume = audioVolume;
+                }
+            } catch (e) {
+                console.error(`The program reported an error when playing song\n${e}`);
             }
-        } catch (e) {
-            console.error(`The program reported an error when playing song\n${e}`);
+            setPlayMode(localStorage.playMode ?? "1");
         }
-        setPlayMode(localStorage.playMode ?? "1");
+        update()
+        return()=>{
+            
+        }
     }, [duration, audioRef, audioVolume])// eslint-disable-line react-hooks/exhaustive-deps
 
     const updateTime = () => {
