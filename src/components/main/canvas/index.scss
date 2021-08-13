@@ -1,0 +1,27 @@
+.canvas-box {
+    width: 500px;
+    height: 500px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 250px;
+    box-shadow: 2px 2px 5px 10px #444;
+    margin: 20px 0 0 20px;
+    #clock {
+        border-radius: 240px;
+    }
+}
+.canvas-box {
+    animation: clock 12s linear infinite;
+}
+.canvas-box:hover {
+    animation-play-state: paused;
+}
+@keyframes clock {
+    0% {
+        transform: rotateZ(0deg);
+    }
+    100% {
+        transform: rotateZ(360deg);
+    }
+}
