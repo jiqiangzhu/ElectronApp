@@ -51,7 +51,7 @@ function MenuBarCom(props) {
               <Menu.Item key="5" onClick={toPage.bind(this, 'fymap', '5')}> Covid-19 map</Menu.Item>
               <Menu.Item key="6" onClick={toPage.bind(this, 'recordLog', '6')}>Record Log</Menu.Item>
               <Menu.Item key="7" onClick={toPage.bind(this, 'print', '7')}>Print</Menu.Item>
-              <Menu.Item key="8" onClick={toPage.bind(this, 'other', '8')}>Stay tuned</Menu.Item>
+              <Menu.Item key="8" onClick={toPage.bind(this, 'clock', '8')}>Clock</Menu.Item>
             </SubMenu>
             <SubMenu key="sub2" icon={<IconFont type="icon-icon-test" />} title="Community">
               <Menu.Item key="9" onClick={toPage.bind(this, 'other', '9')}>Stay tuned</Menu.Item>
