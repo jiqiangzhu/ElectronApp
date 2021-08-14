@@ -17,11 +17,15 @@
 .canvas-box:hover {
     animation-play-state: paused;
 }
+// #clock {
+//     transform: rotateZ(-90deg);
+//     transform-origin: center;
+// }
 @keyframes clock {
     0% {
-        transform: rotateZ(0deg);
+        transform: rotateY(0deg);
     }
     100% {
-        transform: rotateZ(360deg);
+        transform: rotateY(360deg);
     }
 }

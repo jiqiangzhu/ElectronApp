@@ -5,7 +5,7 @@ import './index.scss';
 
 function LeaderBoard(props) {
     useEffect(() => {
-        // store.dispatch(setShowLoaingRedux(false))
+        store.dispatch(setShowLoaingRedux(false))
     }, [])
     return (
         <div className="home-content rank-content">

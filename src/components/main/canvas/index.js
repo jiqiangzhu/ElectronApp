@@ -108,8 +108,11 @@ function Clock() {
         window.requestAnimFrame(draw);
     }
     useEffect(() => {
-        drawCanvas();
-    }, [])
+        function init() {
+            drawCanvas();
+        }
+        init()
+    }, [])// eslint-disable-line react-hooks/exhaustive-deps
     return (
         <div className="home-content movie-content">
             <div className="canvas-box">

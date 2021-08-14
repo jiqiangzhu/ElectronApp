@@ -18,7 +18,7 @@ function MenuBarCom(props) {
   const [collapsed, setCollapsed] = useState(false);
 
   const toPage = (path, key) => {
-    // store.dispatch(setShowLoaingRedux(true));
+    store.dispatch(setShowLoaingRedux(true));
     props.history.push("/" + path);
     setSelectedKeys(key);
   }
