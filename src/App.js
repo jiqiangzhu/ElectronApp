@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import routes from './router';
 import LoadingCom from './components/main/loading';
 import { connect } from 'react-redux';
+import ipcRendererUtil from './utils/ipc-render-util';
 
 function AppCom(props) {
   let [loadingFlag, setLoadingFlag] = useState(true);
@@ -21,6 +22,7 @@ function AppCom(props) {
       console.log("get playlist---------------", result);
     }
     initRequset()
+    ipcRendererUtil();
   }, [])
 
   useEffect(() => {

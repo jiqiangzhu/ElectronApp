@@ -1,4 +1,3 @@
-const { log } = require('console');
 const { app, BrowserWindow, ipcMain, globalShortcut, dialog } = require('electron');
 const isDev = require('electron-is-dev')
 const path = require('path');
@@ -11,7 +10,7 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
     width: 1024,
-    minWidth: 830,
+    minWidth: 944,
     minHeight: 680,
     height: 680,
     // transparent: true, // program cannot set window max when transparent
@@ -34,17 +33,24 @@ app.on('ready', () => {
   mainWindow.loadURL(urlLocation);
   mainWindow.setMaximizable(true);
   mainWindow.on('maximize', () => {
-    mainWindow.webContents.send('max', mainWindow.width)
+    let windowSize = mainWindow.getContentSize();
+    mainWindow.webContents.send('max', JSON.stringify(windowSize))
+  })
+  // 事件: 'will-resize' 
+  mainWindow.on('will-resize', () => {
+    let windowSize = mainWindow.getContentSize();
+    mainWindow.webContents.send('will-resize', JSON.stringify(windowSize))
   })
   mainWindow.on('unmaximize', () => {
-    mainWindow.webContents.send('min', mainWindow.width)
+    let windowSize = mainWindow.getContentSize();
+    mainWindow.webContents.send('min', JSON.stringify(windowSize));
   })
   // before show menu, action
-  mainWindow.hookWindowMessage(278, (e)=>{
+  mainWindow.hookWindowMessage(278, (e) => {
     mainWindow.setEnabled(false)
-    setTimeout(()=>{
+    setTimeout(() => {
       mainWindow.setEnabled(true)
-    },100)
+    }, 100)
   })
 })
 

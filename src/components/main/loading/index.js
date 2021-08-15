@@ -43,7 +43,7 @@ function Loading(props) {
                 </div>
                 <div className="tips">
                     <div className={`words ${showTips ? "continue" : "cancel"}`} onClick={() => setShowLoading(false)}>
-                        {showTips ? "loading" : "cancel"}
+                        {showTips ? "loading" : "cancel"}m
                     </div>
                 </div>
             </div>

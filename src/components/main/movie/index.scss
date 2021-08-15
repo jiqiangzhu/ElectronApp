@@ -43,19 +43,26 @@
     display: flex;
     width: calc(3.8rem * 12);
 }
+.animation-1:hover {
+    animation-play-state: paused;
+}
 .animation-2 {
     margin-left: 1.5rem;
     animation: scroller 30s linear infinite;
     display: flex;
     width: calc(3.8rem * 12);
 }
-
+.animation-2:hover {
+    animation-play-state: paused;
+}
 .animation-3 {
     animation: scroller 50s linear infinite;
     display: flex;
     width: calc(3.8rem * 12);
 }
-
+.animation-3:hover {
+    animation-play-state: paused;
+}
 // Animations
 @keyframes scroller {
     0% {
