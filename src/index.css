@@ -22,17 +22,17 @@ code {
   z-index: 0;
   background-image: url(./assets/img/logo.gif);
   background-position: right bottom;
-  background-attachment:fixed;
+  background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: 300px auto;
   -webkit-app-region: drag;
 }
-.bg-gif::after{
+.bg-gif::after {
   position: absolute;
   top: 0;
   left: 0;
   content: "";
-  background-color: #3B3B4D;
+  background-color: #3b3b4d;
   opacity: 0.7;
   z-index: 0;
   width: 100%;

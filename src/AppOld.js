@@ -1,128 +1,126 @@
-import { Layout, Tabs, Skeleton } from 'antd';
-import './App.less';
-import { getMusicList } from './api';
-import React from 'react';
-import { CustomHeader } from './components/header';
-import FooterCom from './components/footer';
+import { Layout, Tabs, Skeleton } from 'antd'
+import './App.less'
+import { getMusicList } from './api'
+import React from 'react'
+import { CustomHeader } from './components/header'
+import FooterCom from './components/footer'
 import {
-  LocalDownloadCom, DefaultListCom, MusicPanCom, Home,
-  MyCollectionCom, MyTVCom, RecentlyPlayCom, ExploreCom
-} from './components/main';
+  LocalDownloadCom,
+  DefaultListCom,
+  MusicPanCom,
+  Home,
+  MyCollectionCom,
+  MyTVCom,
+  RecentlyPlayCom,
+  ExploreCom,
+} from './components/main'
 // LiveCom, DiscoveryCom, , MobilePlayCom, ExploreCom,
-import {
-  UserOutlined,
-  SearchOutlined,
-  StarOutlined
-}
-  from '@ant-design/icons';
-import Sider from 'antd/lib/layout/Sider';
-const { Content, Header, Footer } = Layout;
-const { TabPane } = Tabs;
+import { UserOutlined, SearchOutlined, StarOutlined } from '@ant-design/icons'
+import Sider from 'antd/lib/layout/Sider'
+const { Content, Header, Footer } = Layout
+const { TabPane } = Tabs
 
 export default class App extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      tabs: [
-        '我的音乐',
-        '发现',
-        '直播',
-        '探索',
-        '手机Play'
-      ],
+      tabs: ['我的音乐', '发现', '直播', '探索', '手机Play'],
       loadingFlag: true,
       opacityVallue: 0,
-      rightContent: "",
-      renderContent: ""
-    };
+      rightContent: '',
+      renderContent: '',
+    }
   }
 
   async componentDidMount() {
     setTimeout(async () => {
       this.setState({
-        loadingFlag: false
+        loadingFlag: false,
       })
-      let result = await getMusicList();
-      console.log("获取播放列表---------------", result);
+      let result = await getMusicList()
+      console.log('获取播放列表---------------', result)
     }, 200)
 
     // 设置透明度
-    if (localStorage.opacityVallue && localStorage.opacityVallue !== "0") {
-      this.changeOpacity(localStorage.opacityVallue * 1);
+    if (localStorage.opacityVallue && localStorage.opacityVallue !== '0') {
+      this.changeOpacity(localStorage.opacityVallue * 1)
     }
-    this.callback(0);
-    this.chooseItem(2);
+    this.callback(0)
+    this.chooseItem(2)
   }
 
   changeOpacity = (value) => {
-    console.log("opacity value---0~1-------", value)
-    document.body.style.background = `rgba(46,103,156, ${value})`;
-    localStorage.opacityVallue = value;
+    console.log('opacity value---0~1-------', value)
+    document.body.style.background = `rgba(46,103,156, ${value})`
+    localStorage.opacityVallue = value
   }
   chooseItem = (index) => {
     console.log(index)
     switch (index) {
       case 0:
         this.setState({
-          rightContent: <MyCollectionCom />
+          rightContent: <MyCollectionCom />,
         })
-        break;
+        break
       case 1:
         this.setState({
-          rightContent: <MyTVCom />
+          rightContent: <MyTVCom />,
         })
-        break;
+        break
       case 3:
         this.setState({
-          rightContent: <MusicPanCom />
+          rightContent: <MusicPanCom />,
         })
-        break;
+        break
       case 4:
         this.setState({
-          rightContent: <RecentlyPlayCom />
+          rightContent: <RecentlyPlayCom />,
         })
-        break;
+        break
       case 5:
         this.setState({
-          rightContent: <DefaultListCom />
+          rightContent: <DefaultListCom />,
         })
-        break;
+        break
       default:
         this.setState({
-          rightContent: <LocalDownloadCom />
+          rightContent: <LocalDownloadCom />,
         })
-        break;
+        break
     }
   }
   playMusic = (index) => {
-    console.log("music index------------", index)
+    console.log('music index------------', index)
   }
   callback = (params) => {
     switch (params) {
       case 0:
         this.setState({
-          renderContent: <div className="flex-type full">
-            <Home onClick={(e, index) => this.chooseItem(index)} />
-            {this.state.rightContent}
-          </div>
+          renderContent: (
+            <div className="flex-type full">
+              <Home onClick={(e, index) => this.chooseItem(index)} />
+              {this.state.rightContent}
+            </div>
+          ),
         })
-        break;
+        break
       case 1:
         this.setState({
-          renderContent: <div className="flex-type full">
-            <ExploreCom onClick={(e, index) => this.chooseItem(index)} />
-            {this.state.rightContent}
-          </div>
+          renderContent: (
+            <div className="flex-type full">
+              <ExploreCom onClick={(e, index) => this.chooseItem(index)} />
+              {this.state.rightContent}
+            </div>
+          ),
         })
         break
       default:
-
-        break;
+        break
     }
   }
   render() {
     let renderDom = this.state.tabs.map((item, index) => {
-      let nodeItem;
+      let nodeItem
       // rendertab;
       switch (index) {
         case 0:
@@ -132,37 +130,39 @@ export default class App extends React.Component {
           //   {this.state.rightContent}
           // </div>
 
-          break;
+          break
         case 1:
           nodeItem = <SearchOutlined />
           // rendertab = <DiscoveryCom />
-          break;
+          break
         case 2:
           nodeItem = <StarOutlined />
           // rendertab = <LiveCom />
-          break;
+          break
         case 3:
           nodeItem = ''
           // rendertab = <ExploreCom />
-          break;
+          break
         case 4:
           nodeItem = ''
           // rendertab = <MobilePlayCom />
-          break;
+          break
         default:
           nodeItem = <UserOutlined />
           // rendertab = <Home />
-          break;
+          break
       }
       return (
-        <TabPane tab={
-          <span>
-            {nodeItem}
-            {item}
-          </span>
-        } key={index} onClick={clickTab}>
-
-        </TabPane>
+        <TabPane
+          tab={
+            <span>
+              {nodeItem}
+              {item}
+            </span>
+          }
+          key={index}
+          onClick={clickTab}
+        ></TabPane>
       )
     })
 
@@ -170,29 +170,40 @@ export default class App extends React.Component {
       <Skeleton active loading={this.state.loadingFlag} rows={20}>
         <Layout className="main-content">
           <Header className="header webkit-no-drag" style={{ position: 'fixed', zIndex: 10, width: '100%' }}>
-            <CustomHeader defaultValue={localStorage.opacityVallue * 1} changeOpacity={(value) => { this.changeOpacity(value) }} />
-            <Tabs defaultActiveKey="0" animated={{ tabPane: true }} centered onChange={(params) => this.callback(params)}>
+            <CustomHeader
+              defaultValue={localStorage.opacityVallue * 1}
+              changeOpacity={(value) => {
+                this.changeOpacity(value)
+              }}
+            />
+            <Tabs
+              defaultActiveKey="0"
+              animated={{ tabPane: true }}
+              centered
+              onChange={(params) => this.callback(params)}
+            >
               {renderDom}
             </Tabs>
           </Header>
-          <Layout style={{ paddingBottom: '72px' }} >
+          <Layout style={{ paddingBottom: '72px' }}>
             <Content>
               <Layout>
-                <Sider className="site-layout-background" width={200} style={{
-                  overflow: 'auto',
-                  height: '100vh',
-                  position: 'fixed',
-                  left: 0,
-                }}>
+                <Sider
+                  className="site-layout-background"
+                  width={200}
+                  style={{
+                    overflow: 'auto',
+                    height: '100vh',
+                    position: 'fixed',
+                    left: 0,
+                  }}
+                >
                   {this.state.renderContent}
                 </Sider>
                 <Content style={{ padding: '0 24px 0 200px', minHeight: 280 }}>
-                  <Layout>
-                    {this.state.rightContent}
-                  </Layout>
+                  <Layout>{this.state.rightContent}</Layout>
                 </Content>
               </Layout>
-
             </Content>
           </Layout>
           <Footer style={{ textAlign: 'center', lineHeight: '72px', position: 'fixed', bottom: 0, width: '100%' }}>
@@ -204,7 +215,6 @@ export default class App extends React.Component {
   }
 }
 
-
 function clickTab(e) {
-  console.log("e", e);
+  console.log('e', e)
 }
