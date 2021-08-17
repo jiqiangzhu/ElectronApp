@@ -55,15 +55,11 @@ function FooterCom(props) {
       setPlayMode(localStorage.playMode ?? '1')
     }
     update()
-    return () => {}
   }, [duration, audioRef, audioVolume]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    const currentAudioRef = audioRef.current
-    return () => {
-      localStorage.currentTime = currentAudioRef.currentTime
-    }
-  })
+    localStorage.currentTime = audioRef.current.currentTime
+  }, [audioRef]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateTime = () => {
     const currentTime = audioRef.current.currentTime
@@ -146,7 +142,6 @@ function FooterCom(props) {
       if (reducer.currentAudio && reducer.playFlag === 'play') {
         reducer.currentAudio.play()
       }
-      // setMusicDom();
     } catch (e) {
       console.error(`The program reported an error when switching songs\n${e}`)
     }
@@ -261,12 +256,12 @@ function FooterCom(props) {
         reducer.currentAudio.play()
       }
       setPopupList(() =>
-        fileNameArray.map((item, index) => {
+        fileNameArray.map((item, ind) => {
           return (
             <p
-              onDoubleClick={() => playMusicByPopupList(index)}
-              key={index}
-              className={index === store.getState().playReducer.currentIndex ? 'music-active' : ''}
+              onDoubleClick={() => playMusicByPopupList(ind)}
+              key={ind}
+              className={ind === store.getState().playReducer.currentIndex ? 'music-active' : ''}
             >
               {item.indexOf('.mp3') !== -1 ? item.substr(0, item.indexOf('.mp3')) : item}
             </p>
@@ -363,20 +358,5 @@ function FooterCom(props) {
     </div>
   )
 }
-
-// const mapStateToProps = (state) => {
-//     return {
-//         currentTime: state.playReducer.currentTime
-//     }
-// }
-
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         setCurrentTime: (currentTime) => {
-//             dispatch(setCurrentTimeRedux(currentTime))
-//         }
-//     }
-// }
-// const FooterCom = connect(mapStateToProps, mapDispatchToProps)(Footer);
 
 export default FooterCom

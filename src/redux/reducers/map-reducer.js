@@ -7,35 +7,35 @@ const initialState = {
   data: '',
 }
 
-function mapReducer(state = initialState, action) {
-  switch (action.type) {
+function mapReducer(state = initialState, { type, payload } = {}) {
+  switch (type) {
     case UpdateTime: {
       return {
         ...state,
-        newTime: action.payload.newTime,
+        newTime: payload.newTime,
       }
     }
     case MapDom: {
       return {
         ...state,
-        mapDom: action.payload.mapDom,
+        mapDom: payload.mapDom,
       }
     }
     case ShowData: {
       try {
         let showDetaislData = []
         if (
-          action.payload.name === 'China' &&
-          Object.keys(action.payload.data).length &&
-          Object.keys(action.payload.data.add_daily).length
+          payload.name === 'China' &&
+          Object.keys(payload.data).length &&
+          Object.keys(payload.data.add_daily).length
         ) {
-          for (let item in action.payload.data) {
+          for (let item in payload.data) {
             switch (item) {
               case 'deathtotal':
-                showDetaislData.push(`累计死亡人数：${action.payload.data[item]}`)
+                showDetaislData.push(`累计死亡人数：${payload.data[item]}`)
                 break
               case 'curetotal':
-                showDetaislData.push(`累计治愈人数：${action.payload.data[item]}`)
+                showDetaislData.push(`累计治愈人数：${payload.data[item]}`)
                 break
               default:
                 break
@@ -43,13 +43,13 @@ function mapReducer(state = initialState, action) {
           }
           return {
             ...state,
-            name: action.payload.name,
+            name: payload.name,
             data: JSON.stringify(showDetaislData),
           }
         }
-        if (Object.keys(action.payload.data).length && Object.keys(action.payload.data.data).length) {
-          // action.payload.data is not {}
-          const data = action.payload.data.data
+        if (Object.keys(payload.data).length && Object.keys(payload.data.data).length) {
+          // payload.data is not {}
+          const data = payload.data.data
           for (let item in data) {
             switch (item) {
               case 'value':
@@ -71,7 +71,7 @@ function mapReducer(state = initialState, action) {
         }
         return {
           ...state,
-          name: action.payload.name,
+          name: payload.name,
           data: showDetaislData.length ? JSON.stringify(showDetaislData) : '',
         }
       } catch (err) {
@@ -79,7 +79,7 @@ function mapReducer(state = initialState, action) {
         const showData = JSON.stringify(['无明细数据'])
         return {
           ...state,
-          name: action.payload.name,
+          name: payload.name,
           data: showData,
         }
       }

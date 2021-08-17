@@ -5,8 +5,8 @@
 // electron render process
 const { ipcRenderer } = window.require('electron')
 // check network module
-const internetAvailable = window.require('internet-available')
-// const isOnline = window.require('is-online');
+const internetAvailable = window.require('internet-available');
+
 const windowUtils = {
   /**
    * set window max
