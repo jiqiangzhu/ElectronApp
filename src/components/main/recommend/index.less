@@ -1,48 +1,52 @@
 .recommend {
-    overflow: hidden;
+  overflow: hidden;
 
-    .scroller-bar {
-        overflow-y: hidden;
-        overflow-x: hidden;
-        max-height: 100%;
-        padding-right: 10px;
+  .scroller-bar {
+    overflow-y: hidden;
+    overflow-x: hidden;
+    max-height: 100%;
+    padding-right: 0.1rem;
 
-        .ant-row {
+    .ant-row {
+      .ant-col-lg-4 {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.2rem;
+      }
 
-            .ant-col-lg-6 {
-                display: flex;
-                align-items: center;
-                margin-bottom: 20px;
-            }
+      .ant-col-xs-4 {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.2rem;
+      }
 
-            .ant-image-img {
-                border-radius: 30px;
-                -webkit-touch-callout: none;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-                cursor: not-allowed;
-            }
+      .ant-image-img {
+        border-radius: 0.3rem;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        cursor: not-allowed;
+      }
 
-            .ant-image-mask {
-                border-radius: 30px;
-            }
-        }
+      .ant-image-mask {
+        border-radius: 0.3rem;
+      }
     }
+  }
 
-    .scroller-bar:hover {
-        overflow-y: scroll;
-        padding-right: 0px;
-    }
+  .scroller-bar:hover {
+    overflow-y: scroll;
+    padding-right: 0rem;
+  }
 
-    .scroller-bar::-webkit-scrollbar {
-        width: 10px;
-    }
+  .scroller-bar::-webkit-scrollbar {
+    width: 0.1rem;
+  }
 
-    .scroller-bar::-webkit-scrollbar-thumb {
-        background-color: rgba(42, 39, 39, 0.841);
-        border-radius: 10px;
-    }
-
+  .scroller-bar::-webkit-scrollbar-thumb {
+    background-color: rgba(42, 39, 39, 0.841);
+    border-radius: 0.1rem;
+  }
 }

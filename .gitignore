@@ -5,6 +5,7 @@
 /.pnp
 .vscode
 .pnp.js
+/src/static
 /nodemodules
 /src/assets/img/recommend
 /src/assets/img/animation

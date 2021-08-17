@@ -1,5 +1,5 @@
 @import '~antd/dist/antd.less';
-@import url("hover.css");
+@import url('hover.css');
 * {
   box-sizing: border-box;
   margin: 0;
@@ -17,12 +17,12 @@
 .main-content {
   width: 100vw;
   height: 100vh;
-  padding: 13px 15px 9px;
+  padding: 0.13rem 0.15rem 0.09rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   .ant-tabs-tab-active .anticon svg {
-    color: #00CED1;
+    color: #00ced1;
   }
   .ant-layout {
     padding: 0 0;
@@ -48,15 +48,15 @@
 
 .ant-input-group-addon {
   .ant-input-search-button {
-    border: 2px #EFEFEF solid;
+    border: 0.02rem #efefef solid;
     border-left: none;
-    border-bottom-right-radius: 1px;
-    border-top-right-radius: 1px;
+    border-bottom-right-radius: 0.01rem;
+    border-top-right-radius: 0.01rem;
   }
 }
 
 .ant-layout-footer {
-  padding: 0 10px;
+  padding: 0 0.1rem;
 }
 
 // Pre-defined style
@@ -65,11 +65,11 @@
 }
 
 .ant-drawer-title {
-  color: #FFF;
+  color: #fff;
 }
 
 .ant-drawer-body {
-  padding: 10px;
+  padding: 0.1rem;
 }
 
 .flex-align-self-start {
@@ -112,7 +112,7 @@
 }
 
 .ant-list-items .ant-list-item:hover {
-  color: #00CED1;
+  color: #00ced1;
 }
 
 .flex-justify-evenly {
@@ -124,36 +124,36 @@
 }
 
 .padding-top5 {
-  padding-top: 5px;
+  padding-top: 0.05rem;
 }
 
 .padding-left5 {
-  padding-left: 5px;
+  padding-left: 0.05rem;
 }
 
 .padding-left15 {
-  padding-left: 15px;
+  padding-left: 0.15rem;
 }
 
 .my-content {
   overflow-y: hidden;
   overflow-x: hidden;
   max-height: 100%;
-  padding: 10px;
+  padding: 0.1rem;
 }
 
 .my-content:hover {
   overflow-y: scroll;
-  padding-right: 0px;
+  padding-right: 0rem;
 }
 
 .my-content::-webkit-scrollbar {
-  width: 10px;
+  width: 0.1rem;
 }
 
 .my-content::-webkit-scrollbar-thumb {
   background-color: #11171a;
-  border-radius: 10px;
+  border-radius: 0.1rem;
 }
 
 // ::-webkit-scrollbar-track {
@@ -168,7 +168,7 @@
 //   border-radius: 10px;
 // }
 .ant-empty-description {
-  color: #FFF;
+  color: #fff;
 }
 
 .ant-drawer-wrapper-body {
@@ -176,13 +176,11 @@
 }
 
 .music-active {
-  color: #00CED1;
-  background: #00CED1 linear-gradient(-135deg,
-      #acd69a 30%,
-      #87d068 60%,
-      transparent);
-  background-size: 30px 30px;
+  color: #00ced1;
+  background: #00ced1 linear-gradient(-135deg, #acd69a 30%, #87d068 60%, transparent);
+  background-size: 0.3rem 0.3rem;
   background-repeat: no-repeat;
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: scratchy 3s linear infinite;
@@ -201,13 +199,16 @@
 //   animation: switch 1s ease-out infinite;
 // }
 @keyframes switch {
-  0%, 33.1% {
-      margin-left: 0px;
+  0%,
+  33.1% {
+    margin-left: 0rem;
   }
-  33.5%, 67% {
-      margin-left: -90px;
+  33.5%,
+  67% {
+    margin-left: -0.9rem;
   }
-  67.4%, 100% {
-      margin-left: -200px;
+  67.4%,
+  100% {
+    margin-left: -2rem;
   }
 }

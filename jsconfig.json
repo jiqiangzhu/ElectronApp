@@ -2,7 +2,9 @@
     "compilerOptions": {
         "baseUrl": "./",
         "paths": {
-            "@localUtils/": ["src/utils"]
+            "@localUtils/": [
+                "src/utils"
+            ]
         },
         "experimentalDecorators": true
     },
