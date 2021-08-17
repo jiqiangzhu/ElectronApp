@@ -27,17 +27,13 @@ function Recommend(props) {
     <div className="home-content recommend">
       <div className="scroller-bar">
         <Row>
-          {
-            // if(imgPathArr.length>0) {
-            imgPathArr.map((item, index) => {
-              return (
-                <Col key={index} xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 1 }}>
-                  <Image src={item} />
-                </Col>
-              )
-            })
-            // }
-          }
+          {imgPathArr.map((item, index) => {
+            return (
+              <Col key={index} xs={{ span: 4, offset: 1 }} lg={{ span: 5, offset: 1 }}>
+                <Image src={item} />
+              </Col>
+            )
+          })}
         </Row>
       </div>
     </div>

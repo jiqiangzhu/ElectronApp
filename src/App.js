@@ -23,6 +23,7 @@ function AppCom(props) {
     }
     initRequset()
     ipcRendererUtil()
+    return () => {}
   }, [])
 
   useEffect(() => {

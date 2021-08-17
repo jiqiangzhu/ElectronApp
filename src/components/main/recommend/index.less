@@ -5,17 +5,23 @@
     overflow-y: hidden;
     overflow-x: hidden;
     max-height: 100%;
-    padding-right: 10px;
+    padding-right: 0.1rem;
 
     .ant-row {
-      .ant-col-lg-6 {
+      .ant-col-lg-4 {
         display: flex;
         align-items: center;
-        margin-bottom: 20px;
+        margin-bottom: 0.2rem;
+      }
+
+      .ant-col-xs-4 {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.2rem;
       }
 
       .ant-image-img {
-        border-radius: 30px;
+        border-radius: 0.3rem;
         -webkit-touch-callout: none;
         -webkit-user-select: none;
         -moz-user-select: none;
@@ -25,22 +31,22 @@
       }
 
       .ant-image-mask {
-        border-radius: 30px;
+        border-radius: 0.3rem;
       }
     }
   }
 
   .scroller-bar:hover {
     overflow-y: scroll;
-    padding-right: 0px;
+    padding-right: 0rem;
   }
 
   .scroller-bar::-webkit-scrollbar {
-    width: 10px;
+    width: 0.1rem;
   }
 
   .scroller-bar::-webkit-scrollbar-thumb {
     background-color: rgba(42, 39, 39, 0.841);
-    border-radius: 10px;
+    border-radius: 0.1rem;
   }
 }

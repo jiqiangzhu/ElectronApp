@@ -7,6 +7,7 @@ module.exports = {
     alias: {
       '@localUtils': pathResolve('src/utils'),
       '@': pathResolve('src'),
+      '~': pathResolve('.'),
       '@redux': pathResolve('src/redux'),
     },
   },

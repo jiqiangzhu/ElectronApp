@@ -32,7 +32,7 @@ function FooterCom(props) {
   const [popupList, setPopupList] = useState([])
   const [popupVisible, setPopupVisible] = useState(false)
   const [showLyrics, setShowLyrics] = useState(false)
-  const [audioVolume, setAudioVolume] = useState(localStorage.defalutVolume ? localStorage.defalutVolume : 1)
+  const [audioVolume, setAudioVolume] = useState(localStorage.defalutVolume ?? 1)
   useEffect(() => {
     function init() {
       if (localStorage.defaultMusicPath) {
@@ -58,12 +58,18 @@ function FooterCom(props) {
     return () => {}
   }, [duration, audioRef, audioVolume]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    const currentAudioRef = audioRef.current
+    return () => {
+      localStorage.currentTime = currentAudioRef.currentTime
+    }
+  })
+
   const updateTime = () => {
     const currentTime = audioRef.current.currentTime
     let temPercent = (currentTime / duration) * 100
     setPercent(temPercent)
     setBeginTime(parseInt(currentTime))
-    localStorage.currentTime = currentTime
   }
 
   const changePlayMode = (e) => {
@@ -83,11 +89,11 @@ function FooterCom(props) {
         return
       }
       /*
-                pageX 点击点相对于边框的横向距离 
-                offsetWidth 当前时间对应的dom元素的宽度
-                offsetLeft 当前时间对应dom元素相对于边框的横向距离
-                pageX - (offsetWidth + offsetLeft)即为点击点相对于起点的长度
-            */
+        pageX 点击点相对于边框的横向距离 
+        offsetWidth 当前时间对应的dom元素的宽度
+        offsetLeft 当前时间对应dom元素相对于边框的横向距离
+        pageX - (offsetWidth + offsetLeft)即为点击点相对于起点的长度
+      */
       let currentProgress = event.pageX - (beginRef.current.offsetWidth + beginRef.current.offsetLeft)
       let currentRate = (currentProgress / progressRef.current.offsetWidth) * 100
       let setCurrentTime = (duration * currentRate) / 100
@@ -224,7 +230,11 @@ function FooterCom(props) {
           setPopupList(() =>
             musicList.map((item, index) => {
               return (
-                <p onDoubleClick={() => playMusicByPopupList(index)} key={index} className={index === store.getState().playReducer.currentIndex ? 'music-active' : ''}>
+                <p
+                  onDoubleClick={() => playMusicByPopupList(index)}
+                  key={index}
+                  className={index === store.getState().playReducer.currentIndex ? 'music-active' : ''}
+                >
                   {item.indexOf('.mp3') !== -1 ? item.substr(0, item.indexOf('.mp3')) : item}
                 </p>
               )
@@ -253,7 +263,11 @@ function FooterCom(props) {
       setPopupList(() =>
         fileNameArray.map((item, index) => {
           return (
-            <p onDoubleClick={() => playMusicByPopupList(index)} key={index} className={index === store.getState().playReducer.currentIndex ? 'music-active' : ''}>
+            <p
+              onDoubleClick={() => playMusicByPopupList(index)}
+              key={index}
+              className={index === store.getState().playReducer.currentIndex ? 'music-active' : ''}
+            >
               {item.indexOf('.mp3') !== -1 ? item.substr(0, item.indexOf('.mp3')) : item}
             </p>
           )
@@ -277,7 +291,17 @@ function FooterCom(props) {
   }
   return (
     <div className="footer">
-      <audio onTimeUpdate={updateTime.bind(this)} onError={playMusic.bind(this, 'pause')} ref={audioRef} preload="true" loop={playMode === '2' ? true : false} controls={false} onEnded={playNext.bind(this, 1)} src={currentSrc} onCanPlay={getDuration.bind(this)}></audio>
+      <audio
+        onTimeUpdate={updateTime.bind(this)}
+        onError={playMusic.bind(this, 'pause')}
+        ref={audioRef}
+        preload="true"
+        loop={playMode === '2' ? true : false}
+        controls={false}
+        onEnded={playNext.bind(this, 1)}
+        src={currentSrc}
+        onCanPlay={getDuration.bind(this)}
+      ></audio>
       <Row align="middle" style={{ width: '100%' }}>
         <Col span={3}>
           <Space size={10}>
@@ -308,11 +332,29 @@ function FooterCom(props) {
         </span>
         <Col span={4} className="flex-type flex-justify-end">
           <Space size="middle" style={{ paddingBottom: '10px' }}>
-            <IconFont style={{ fontSize: '18px' }} type={showLyrics ? 'icon-geciweidianji' : 'icon-geciweidianji-copy'} onClick={() => setShowLyrics(!showLyrics)} className="webkit-no-drag" />
+            <IconFont
+              style={{ fontSize: '18px' }}
+              type={showLyrics ? 'icon-geciweidianji' : 'icon-geciweidianji-copy'}
+              onClick={() => setShowLyrics(!showLyrics)}
+              className="webkit-no-drag"
+            />
             <SetPlayModeCom changePlayMode={changePlayMode.bind(this)} playMode={playMode} />
-            <IconFont style={{ fontSize: '16px' }} type="icon-jia" onClick={importLocal.bind(this)} className="webkit-no-drag" />
-            <SetVolumeCom defaultValue={localStorage.defalutVolume ? localStorage.defalutVolume : 1} setVolume={setVolume.bind(this)} />
-            <IconFont style={{ fontSize: '16px' }} type="icon-liebiao1" onClick={() => setPopupVisible(true)} className="webkit-no-drag" />
+            <IconFont
+              style={{ fontSize: '16px' }}
+              type="icon-jia"
+              onClick={importLocal.bind(this)}
+              className="webkit-no-drag"
+            />
+            <SetVolumeCom
+              defaultValue={localStorage.defalutVolume ? localStorage.defalutVolume : 1}
+              setVolume={setVolume.bind(this)}
+            />
+            <IconFont
+              style={{ fontSize: '16px' }}
+              type="icon-liebiao1"
+              onClick={() => setPopupVisible(true)}
+              className="webkit-no-drag"
+            />
           </Space>
         </Col>
       </Row>

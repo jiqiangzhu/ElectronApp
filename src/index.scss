@@ -1,5 +1,5 @@
 html {
-  font-size: 460%;
+  font-size: 480%;
 }
 
 body {
@@ -15,8 +15,8 @@ code {
 }
 .bg-gif {
   position: fixed;
-  width: 300px;
-  height: 300px;
+  width: 3rem;
+  height: 3rem;
   right: 0;
   bottom: 0;
   z-index: 0;
@@ -24,8 +24,9 @@ code {
   background-position: right bottom;
   background-attachment: fixed;
   background-repeat: no-repeat;
-  background-size: 300px auto;
+  background-size: 3rem auto;
   -webkit-app-region: drag;
+  background-color: #3b3b4dc1;
 }
 .bg-gif::after {
   position: absolute;

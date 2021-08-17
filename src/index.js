@@ -1,11 +1,11 @@
-import ReactDOM from 'react-dom'
-import './index.css'
-import App from './App'
-import './mock/index'
-import store from './redux'
-import { Provider } from 'react-redux'
+import ReactDOM from 'react-dom';
+import './index.scss';
+import App from './App';
+import './mock/index';
+import store from './redux';
+import { Provider } from 'react-redux';
 // import routes from '@/router';
-import React from 'react'
+import React from 'react';
 
 // React.$routes = { routes }
 
