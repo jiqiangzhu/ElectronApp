@@ -7,6 +7,11 @@ import LoadingCom from './components/main/loading';
 import { connect } from 'react-redux';
 import ipcRendererUtil from './utils/ipc-render-util';
 
+/**
+ * main Components
+ * @param {*} props 
+ * @returns 
+ */
 function AppCom(props) {
   let [loadingFlag, setLoadingFlag] = useState(true)
   const [RenderCom, setRenderCom] = useState('')
