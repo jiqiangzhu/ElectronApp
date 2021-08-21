@@ -11,6 +11,7 @@ function Recommend(props) {
         const result = await Api.get('/home/recommend')
         console.log('result', result)
         if (result && result.data && result.data.data) {
+          // let data = result?.data?.data;
           const data = result.data.data
           setImgPathArr(data)
         } else {

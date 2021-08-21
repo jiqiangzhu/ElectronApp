@@ -3,8 +3,7 @@ import React, { useState } from 'react'
 import './index.less'
 import { MenuUnfoldOutlined, MenuFoldOutlined, createFromIconfontCN } from '@ant-design/icons'
 import { SelectKeyRedux } from 'src/redux/actions/play-actions'
-import { connect } from 'react-redux'
-// import store from 'src/redux';
+import { connect } from 'react-redux';
 
 const { SubMenu } = Menu
 const IconFont = createFromIconfontCN()
@@ -15,7 +14,6 @@ function MenuBarCom(props) {
   const [collapsed, setCollapsed] = useState(localStorage.collapsed === '1' ? false : true)
 
   const toPage = (path, key) => {
-    // store.dispatch(setShowLoaingRedux(true));
     props.history.push('/' + path)
     setSelectedKeys(key)
   }

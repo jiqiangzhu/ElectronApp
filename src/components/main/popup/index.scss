@@ -2,3 +2,38 @@
     cursor: default;
     opacity: 0.9;
 }
+
+.list-item {
+    animation: slider 3s linear infinite;
+}
+.music-active {
+    color: #00ced1;
+    background: #00ced1 linear-gradient(-135deg, #acd69a 30%, #87d068 60%, transparent);
+    background-size: 0.3rem 0.3rem;
+    background-repeat: no-repeat;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: scratchy 3s linear infinite;
+    font-size: 0.22rem;
+}
+
+@keyframes scratchy {
+    0% {
+        background-position: -50% 0;
+    }
+
+    100% {
+        background-position: 130% 0;
+    }
+}
+
+@keyframes slider {
+    0% {
+        margin-left: 0;
+    }
+
+    100% {
+        margin-left: -3rem;
+    }
+}

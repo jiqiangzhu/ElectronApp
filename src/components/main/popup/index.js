@@ -1,5 +1,6 @@
-import store from '@redux'
 import { List, Drawer, Layout } from 'antd'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
 import './index.scss'
 
 const { Content } = Layout
@@ -8,7 +9,22 @@ const { Content } = Layout
  * @param {*} props
  * @returns react dom
  */
-function MusicListPopup(props) {
+function MusicList(props) {
+  const { currentIndex } = props
+  const popupRef = React.createRef()
+  useEffect(() => {
+    function updateScroll() {
+      try {
+        console.log('props.visible', props.visible)
+        if (popupRef.current && props.visible) {
+          popupRef.current.scrollTo(0, 1000)
+        }
+      } catch {
+        console.warn('自动滚动出错了')
+      }
+    }
+    updateScroll()
+  }, [popupRef, props])
   return (
     <>
       <Drawer
@@ -20,12 +36,12 @@ function MusicListPopup(props) {
         headerStyle={{ color: '#FFFFFF' }}
         className="webkit-no-drag cannotselect"
       >
-        <div className="my-content">
+        <div ref={popupRef} className="my-content music-popup">
           <Content>
             <List
               dataSource={props.musicDom}
               renderItem={(item, index) => (
-                <List.Item className={index === store.getState().playReducer.currentIndex ? 'list-item' : ''}>
+                <List.Item className={index === currentIndex && item.props.children.length >= 14 ? 'list-item' : ''}>
                   {item}
                 </List.Item>
               )}
@@ -36,5 +52,13 @@ function MusicListPopup(props) {
     </>
   )
 }
+
+const mapStateToProps = (state) => {
+  return {
+    currentIndex: state.playReducer.currentIndex,
+  }
+}
+
+const MusicListPopup = connect(mapStateToProps)(MusicList)
 
 export default MusicListPopup

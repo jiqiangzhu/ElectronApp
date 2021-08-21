@@ -9,4 +9,4 @@ function Home(props) {
   return <div className="home">{routes2}</div>
 }
 
-export default Home
+export default Home;

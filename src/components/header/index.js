@@ -1,12 +1,12 @@
-import { Row, Col, Input, Space, Modal, Slider, Dropdown, Menu } from 'antd'
-import React from 'react'
-import './index.less'
-import '../../App.less'
-import windowUtils from '@localUtils/window-util'
-import Api from '../../api/index'
-import { createFromIconfontCN, SkinOutlined } from '@ant-design/icons'
-import store from 'src/redux'
-import { SelectKeyRedux } from 'src/redux/actions/play-actions'
+import { Row, Col, Input, Space, Modal, Slider, Dropdown, Menu } from 'antd';
+import React from 'react';
+import './index.less';
+import '../../App.less';
+import windowUtils from '@localUtils/window-util';
+import Api from '../../api/index';
+import { createFromIconfontCN, SkinOutlined } from '@ant-design/icons';
+import store from 'src/redux';
+import { SelectKeyRedux } from 'src/redux/actions/play-actions';
 
 const IconFont = createFromIconfontCN()
 const { Search } = Input
@@ -108,7 +108,11 @@ class Header extends React.Component {
     const menu = (
       <Menu onClick={this.handleMenuClick} theme="dark" className="custom-menu">
         <Menu.Item key="1">
-          <SetOpacityCom className="webkit-no-drag" defaultValue={this.state.defaultValue} changeOpacity={(value) => this.changeOpacity(value)} />
+          <SetOpacityCom
+            className="webkit-no-drag"
+            defaultValue={this.state.defaultValue}
+            changeOpacity={(value) => this.changeOpacity(value)}
+          />
         </Menu.Item>
         <Menu.Item
           key="2"
@@ -174,13 +178,38 @@ class Header extends React.Component {
               {/* <IconFont style={{ fontSize: '16px' }} onClick={() => { this.props.history.go(0) }}
                                 className={["webkit-no-drag"]}
                                 type= 'icon-shuaxin-copy' /> */}
-              <Search allowClear={true} className="webkit-no-drag flex-type flex-align-mid cannotselect" placeholder="Please Input..." size="small" prefix={<IconFont onClick={() => this.onSearch(this.state.inputValue)} style={{ fontSize: '16px' }} type="icon-sousuo" />} onSearch={this.onSearch} onChange={this.onChange} style={{ width: 200 }} />
+              <Search
+                allowClear={true}
+                className="webkit-no-drag flex-type flex-align-mid cannotselect"
+                placeholder="Please Input..."
+                size="small"
+                prefix={
+                  <IconFont
+                    onClick={() => this.onSearch(this.state.inputValue)}
+                    style={{ fontSize: '16px' }}
+                    type="icon-sousuo"
+                  />
+                }
+                onSearch={this.onSearch}
+                onChange={this.onChange}
+                style={{ width: 200 }}
+              />
             </Space>
           </Col>
           <Col span={2}>
             <Space className="flex-type flex-justify-start flex-align-mid">
-              <Dropdown overlay={menu} trigger={['click']} onVisibleChange={this.handleVisibleChange} placement="bottomLeft">
-                <IconFont onClick={(e) => e.preventDefault()} style={{ fontSize: '17px' }} className="webkit-no-drag" type="icon-icon_huabanfuben1" />
+              <Dropdown
+                overlay={menu}
+                trigger={['click']}
+                onVisibleChange={this.handleVisibleChange}
+                placement="bottomLeft"
+              >
+                <IconFont
+                  onClick={(e) => e.preventDefault()}
+                  style={{ fontSize: '17px' }}
+                  className="webkit-no-drag"
+                  type="icon-icon_huabanfuben1"
+                />
               </Dropdown>
             </Space>
           </Col>
@@ -222,7 +251,15 @@ function SetOpacityCom(props) {
   }
   const menu = (
     <div style={style}>
-      <Slider vertical max={100} min={78} step={1} style={{ height: '50%' }} defaultValue={props.defaultValue * 100} onChange={(value) => props.changeOpacity(value / 100)} />
+      <Slider
+        vertical
+        max={100}
+        min={78}
+        step={1}
+        style={{ height: '50%' }}
+        defaultValue={props.defaultValue * 100}
+        onChange={(value) => props.changeOpacity(value / 100)}
+      />
     </div>
   )
   return (

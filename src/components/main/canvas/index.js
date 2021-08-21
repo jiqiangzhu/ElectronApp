@@ -87,6 +87,8 @@ function Clock() {
           ctx.restore()
         }
 
+        // 逆时针旋转1/2 Math.PI
+        ctx.rotate((-Math.PI * 2) / 4)
         for (let i = 1; i < 13; i++) {
           ctx.save()
           ctx.rotate((Math.PI * 2 * i) / 12)
