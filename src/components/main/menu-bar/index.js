@@ -1,29 +1,29 @@
-import { Menu, Button } from 'antd'
-import React, { useState } from 'react'
-import './index.less'
-import { MenuUnfoldOutlined, MenuFoldOutlined, createFromIconfontCN } from '@ant-design/icons'
-import { SelectKeyRedux } from 'src/redux/actions/play-actions'
+import { Menu, Button } from 'antd';
+import React, { useState } from 'react';
+import './index.less';
+import { MenuUnfoldOutlined, MenuFoldOutlined, createFromIconfontCN } from '@ant-design/icons';
+import { SelectKeyRedux } from 'src/redux/actions/play-actions';
 import { connect } from 'react-redux';
 
-const { SubMenu } = Menu
-const IconFont = createFromIconfontCN()
+const { SubMenu } = Menu;
+const IconFont = createFromIconfontCN();
 
 function MenuBarCom(props) {
-  const { selectedKeys, setSelectedKeys } = props
+  const { selectedKeys, setSelectedKeys } = props;
   // 1 Unfold 2 collapsed
-  const [collapsed, setCollapsed] = useState(localStorage.collapsed === '1' ? false : true)
+  const [collapsed, setCollapsed] = useState(localStorage.collapsed === '1' ? false : true);
 
   const toPage = (path, key) => {
-    props.history.push('/' + path)
-    setSelectedKeys(key)
-  }
+    props.history.push('/' + path);
+    setSelectedKeys(key);
+  };
   return (
     <div className="menu-bar">
       <Button
         type="dashed"
         onClick={() => {
-          setCollapsed(!collapsed)
-          localStorage.collapsed = collapsed ? '1' : '2'
+          setCollapsed(!collapsed);
+          localStorage.collapsed = collapsed ? '1' : '2';
         }}
         style={{ marginBottom: 16 }}
       >
@@ -84,23 +84,23 @@ function MenuBarCom(props) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function mapStateToProps(state) {
   return {
     selectedKeys: state.playReducer.selectedKeys,
-  }
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     setSelectedKeys: (key) => {
-      dispatch(SelectKeyRedux(key))
+      dispatch(SelectKeyRedux(key));
     },
-  }
+  };
 }
 
-const MenuBar = connect(mapStateToProps, mapDispatchToProps)(MenuBarCom)
+const MenuBar = connect(mapStateToProps, mapDispatchToProps)(MenuBarCom);
 
-export default MenuBar
+export default MenuBar;

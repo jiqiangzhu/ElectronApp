@@ -1,8 +1,8 @@
-import { Row, Col, Input, Space, Tooltip, Image, Slider, Dropdown } from 'antd'
-import React from 'react'
-import './index.less'
-import '../../App.less'
-import { getUserInfor } from '../../api/index'
+import { Row, Col, Input, Space, Tooltip, Image, Slider, Dropdown } from 'antd';
+import React from 'react';
+import './index.less';
+import '../../App.less';
+import { getUserInfor } from '../../api/index';
 import {
   MinusOutlined,
   ExpandOutlined,
@@ -14,58 +14,58 @@ import {
   AudioOutlined,
   SkinOutlined,
   LeftOutlined,
-} from '@ant-design/icons'
+} from '@ant-design/icons';
 
-import imgPath from '../../assets/img/avatar.jpg'
-const { Search } = Input
+import imgPath from '../../assets/img/avatar.jpg';
+const { Search } = Input;
 
 const onSearch = (value) => {
-  console.log(value)
-}
+  console.log(value);
+};
 
-const { ipcRenderer } = window.require('electron')
+const { ipcRenderer } = window.require('electron');
 
 class Header extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       showMinOrMax: 'normal',
       fixedTopFlag: 'fixedOnTop',
       nickname: '',
       value: 0,
       imgPath: '',
-    }
+    };
   }
   async componentDidMount() {
-    let result = await getUserInfor()
-    console.log('获取用户个人信息-------------', result)
+    let result = await getUserInfor();
+    console.log('获取用户个人信息-------------', result);
     this.setState({
       nickname: result.data.profile.nickname,
       imgPath: result.data.profile.avatarUrl,
-    })
+    });
   }
   changeWindowSize = (e, todo) => {
     if (todo) {
-      ipcRenderer.send('changeWinSize', todo)
+      ipcRenderer.send('changeWinSize', todo);
       if (todo === 'cancelOnTop') {
         this.setState({
           fixedTopFlag: 'fixedOnTop',
-        })
+        });
       } else if (todo === 'fixedOnTop') {
         this.setState({
           fixedTopFlag: 'cancelOnTop',
-        })
+        });
       } else if (todo === 'normal') {
         this.setState({
           showMinOrMax: 'maximize',
-        })
+        });
       } else if (todo === 'maximize') {
         this.setState({
           showMinOrMax: 'normal',
-        })
+        });
       }
     }
-  }
+  };
   render() {
     return (
       <>
@@ -105,7 +105,7 @@ class Header extends React.Component {
               <TopByPropsCom
                 renderCom={this.state.fixedTopFlag}
                 onClick={(e) => {
-                  this.changeWindowSize(e, this.state.fixedTopFlag)
+                  this.changeWindowSize(e, this.state.fixedTopFlag);
                 }}
               />
               {/* <Tooltip title="最小化" defaultVisible={false} color="transparent"> */}
@@ -122,7 +122,7 @@ class Header extends React.Component {
           </Col>
         </Row>
       </>
-    )
+    );
   }
 }
 
@@ -136,7 +136,7 @@ function SetOpacityCom(props) {
     display: 'inline-block',
     height: 300,
     marginLeft: 70,
-  }
+  };
   const menu = (
     <div style={style}>
       <Slider
@@ -148,12 +148,12 @@ function SetOpacityCom(props) {
         onChange={(value) => props.changeOpacity(value)}
       />
     </div>
-  )
+  );
   return (
     <Dropdown overlay={menu} trigger={['click']} placement="topCenter">
       <SkinOutlined className="webkit-no-drag" />
     </Dropdown>
-  )
+  );
 }
 
 /**
@@ -163,9 +163,9 @@ function SetOpacityCom(props) {
  */
 function ShowMaxOrMinCom(props) {
   if (props.showWhat === 'maximize') {
-    return <ExpandOutlined onClick={props.onClick} className="webkit-no-drag" />
+    return <ExpandOutlined onClick={props.onClick} className="webkit-no-drag" />;
   } else if (props.showWhat === 'normal') {
-    return <BorderOutlined onClick={props.onClick} className="webkit-no-drag" />
+    return <BorderOutlined onClick={props.onClick} className="webkit-no-drag" />;
   }
 }
 
@@ -180,14 +180,14 @@ function TopByPropsCom(props) {
       <Tooltip title="取消置顶" trigger="hover" color="transparent">
         <HourglassOutlined onClick={props.onClick} className="webkit-no-drag" />
       </Tooltip>
-    )
+    );
   } else if (props.renderCom === 'fixedOnTop') {
     return (
       <Tooltip title="置顶" trigger="hover" color="transparent">
         <PushpinOutlined onClick={props.onClick} className="webkit-no-drag" />
       </Tooltip>
-    )
+    );
   }
 }
 
-export { Header as CustomHeader }
+export { Header as CustomHeader };

@@ -1,30 +1,30 @@
-import { List, Drawer, Layout } from 'antd'
-import React, { useEffect } from 'react'
-import { connect } from 'react-redux'
-import './index.scss'
+import { List, Drawer, Layout } from 'antd';
+import React from 'react';
+import { connect } from 'react-redux';
+import './index.scss';
 
-const { Content } = Layout
+const { Content } = Layout;
 /**
  * music list popup
  * @param {*} props
  * @returns react dom
  */
 function MusicList(props) {
-  const { currentIndex } = props
-  const popupRef = React.createRef()
-  useEffect(() => {
-    function updateScroll() {
-      try {
-        console.log('props.visible', props.visible)
-        if (popupRef.current && props.visible) {
-          popupRef.current.scrollTo(0, 1000)
-        }
-      } catch {
-        console.warn('自动滚动出错了')
-      }
-    }
-    updateScroll()
-  }, [popupRef, props])
+  const { currentIndex } = props;
+  const popupRef = React.createRef();
+  // useEffect(() => {
+  //   function updateScroll() {
+  //     try {
+  //       console.log('props.visible', props.visible)
+  //       if (popupRef.current && props.visible) {
+  //         popupRef.current.scrollTo(0, 1000)
+  //       }
+  //     } catch {
+  //       console.warn('自动滚动出错了')
+  //     }
+  //   }
+  //   updateScroll()
+  // }, [popupRef, props])
   return (
     <>
       <Drawer
@@ -50,15 +50,15 @@ function MusicList(props) {
         </div>
       </Drawer>
     </>
-  )
+  );
 }
 
 const mapStateToProps = (state) => {
   return {
     currentIndex: state.playReducer.currentIndex,
-  }
-}
+  };
+};
 
-const MusicListPopup = connect(mapStateToProps)(MusicList)
+const MusicListPopup = connect(mapStateToProps)(MusicList);
 
-export default MusicListPopup
+export default MusicListPopup;

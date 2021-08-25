@@ -1,8 +1,8 @@
-import Mock from 'mockjs'
+import Mock from 'mockjs';
 
 Mock.setup({
   timeout: '1000-1500',
-})
+});
 
 Mock.mock('/user/details', 'get', () => {
   return {
@@ -93,8 +93,8 @@ Mock.mock('/user/details', 'get', () => {
     code: 200,
     createTime: 1570336833373,
     createDays: 549,
-  }
-})
+  };
+});
 // get recommand music list
 Mock.mock('/home/musiclist', 'get', () => {
   return {
@@ -493,25 +493,25 @@ Mock.mock('/home/musiclist', 'get', () => {
         alg: 'cityLevel_unknow',
       },
     ],
-  }
-})
+  };
+});
 
 // get covid-19 map
 Mock.mock('/sina/fymap', 'get', () => {
-  const jsonStr = require('../../src/static/fydata.json')
-  console.log('jsonStr', jsonStr)
+  const jsonStr = require('../../src/static/fydata.json');
+  console.log('jsonStr', jsonStr);
   return {
     data: jsonStr.data.data,
-  }
-})
+  };
+});
 
 // get recommend picture url
 Mock.mock('/home/recommend', 'get', () => {
-  let arr = []
+  let arr = [];
   for (let i = 1; i <= 30; i++) {
-    arr.push(require(`@/assets/img/recommend/${i}.jpg`).default)
+    arr.push(require(`@/assets/img/recommend/${i}.jpg`).default);
   }
   return {
     data: arr,
-  }
-})
+  };
+});

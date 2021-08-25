@@ -1,8 +1,8 @@
-import React from 'react'
-import { HashRouter, Redirect, Route } from 'react-router-dom'
-import FooterCom from 'src/components/footer'
-import { CustomHeader } from 'src/components/header'
-import Home from 'src/components/main/home'
+import React from 'react';
+import { HashRouter, Redirect, Route } from 'react-router-dom';
+import FooterCom from 'src/components/footer';
+import { CustomHeader } from 'src/components/header';
+import Home from 'src/components/main/home';
 
 const routes = (
   <HashRouter>
@@ -13,6 +13,6 @@ const routes = (
     </Route>
     <Route component={FooterCom} />
   </HashRouter>
-)
+);
 
-export default routes
+export default routes;

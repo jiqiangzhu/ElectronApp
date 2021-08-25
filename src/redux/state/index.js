@@ -11,6 +11,6 @@ const initialState = {
   },
   currentTime: localStorage.currentTime ? localStorage.currentTime * 1 : 0,
   showLoading: false,
-}
+};
 
-export default initialState
+export default initialState;

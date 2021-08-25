@@ -1,8 +1,8 @@
-import { useEffect } from 'react'
-import './index.scss'
+import { useEffect } from 'react';
+import './index.scss';
 
 function LeaderBoard(props) {
-  useEffect(() => {}, [])
+  useEffect(() => {}, []);
   return (
     <div className="home-content rank-content">
       {/* <div className="cta-container-images">
@@ -92,7 +92,7 @@ function LeaderBoard(props) {
 
             </div> */}
     </div>
-  )
+  );
 }
 
-export default LeaderBoard
+export default LeaderBoard;

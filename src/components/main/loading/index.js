@@ -1,22 +1,22 @@
-import { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
-import { setShowLoaingRedux } from 'src/redux/actions/play-actions'
-import './index.less'
+import { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { setShowLoaingRedux } from 'src/redux/actions/play-actions';
+import './index.less';
 
 function Loading(props) {
-  const { showLoading, setShowLoading } = props
-  const [showTips, setShowTips] = useState(props.show)
+  const { showLoading, setShowLoading } = props;
+  const [showTips, setShowTips] = useState(props.show);
   useEffect(() => {
     const timer = setTimeout(() => {
       function init() {
-        setShowTips(false)
+        setShowTips(false);
       }
-      init()
-    }, 5000) //user could cancel after five seconds
+      init();
+    }, 5000); //user could cancel after five seconds
     return () => {
-      clearTimeout(timer)
-    }
-  }, [showTips])
+      clearTimeout(timer);
+    };
+  }, [showTips]);
   return (
     <div className="loading cannotselect" style={{ display: showLoading ? 'flex' : 'none' }}>
       <div className="box1" style={{ display: localStorage.loadingMode === '1' ? 'block' : 'none' }}>
@@ -48,21 +48,21 @@ function Loading(props) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 const mapStateToProps = (state) => {
   return {
     showLoading: state.playReducer.showLoading,
-  }
-}
+  };
+};
 const mapDispatchToProps = (dispatch) => {
   return {
     setShowLoading: (showLoading) => {
-      dispatch(setShowLoaingRedux(showLoading))
+      dispatch(setShowLoaingRedux(showLoading));
     },
-  }
-}
-const LoadingCom = connect(mapStateToProps, mapDispatchToProps)(Loading)
+  };
+};
+const LoadingCom = connect(mapStateToProps, mapDispatchToProps)(Loading);
 
-export default LoadingCom
+export default LoadingCom;
