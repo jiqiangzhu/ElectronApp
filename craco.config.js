@@ -1,7 +1,7 @@
-const CracoLessPlugin = require('craco-less')
-const path = require('path')
+const CracoLessPlugin = require('craco-less');
+const path = require('path');
 
-const pathResolve = (pathUrl) => path.join(__dirname, pathUrl)
+const pathResolve = (pathUrl) => path.join(__dirname, pathUrl);
 module.exports = {
   webpack: {
     alias: {
@@ -10,6 +10,12 @@ module.exports = {
       '~': pathResolve('.'),
       '@redux': pathResolve('src/redux'),
     },
+  },
+  babel: {
+    plugins: [
+      ['import', { libraryName: 'antd', style: true }],
+      ['@babel/plugin-proposal-decorators', { legacy: true }],
+    ],
   },
   plugins: [
     {
@@ -36,5 +42,7 @@ module.exports = {
       },
     },
   ],
+
+  devtool: 'eval-source-map',
   // "homepage": "./"
-}
+};

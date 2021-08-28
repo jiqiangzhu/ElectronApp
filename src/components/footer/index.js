@@ -328,7 +328,7 @@ function FooterCom(props) {
         <Col span={4} className="flex-type flex-justify-end">
           <Space size="middle" style={{ paddingBottom: '10px' }}>
             <IconFont
-              style={{ fontSize: '18px' }}
+              style={{ fontSize: '0.20rem', marginLeft: '0.1rem' }}
               type={showLyrics ? 'icon-geciweidianji' : 'icon-geciweidianji-copy'}
               onClick={() => setShowLyrics(!showLyrics)}
               className="webkit-no-drag"

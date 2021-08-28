@@ -6,7 +6,11 @@ import routes from './router';
 import LoadingCom from './components/main/loading';
 import { connect } from 'react-redux';
 import ipcRendererUtil from './utils/ipc-render-util';
-
+import Store from './mobx';
+const myState = new Store();
+console.log('myState', myState);
+myState.add()
+console.log('myState', myState);
 /**
  * main Components
  * @param {*} props
