@@ -2,7 +2,14 @@
     cursor: default;
     opacity: 0.9;
 }
-
+.music-popup {
+    .ant-list-item {
+        border: none;
+    }
+}
+.ant-drawer-title {
+    color: #fff;
+}
 .list-item {
     animation: slider 3s linear infinite;
 }
@@ -17,7 +24,11 @@
     animation: scratchy 3s linear infinite;
     font-size: 0.22rem;
 }
-
+.ant-tooltip-content {
+    .ant-tooltip-inner {
+        background-color: #00ced14d;
+    }
+}
 @keyframes scratchy {
     0% {
         background-position: -50% 0;

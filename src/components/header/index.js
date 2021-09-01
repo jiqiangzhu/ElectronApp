@@ -85,9 +85,16 @@ class Header extends React.Component {
     }
   };
   onChange = (e) => {
+    // 不允许连续输入两个空格
+    // Two consecutive spaces is not allowed
+    if(e.target.value.includes("  ") ) {
+      console.log('e.target.value', e.target.value);
+      return;
+    }
     this.setState({
       inputValue: e.target.value,
     });
+
   };
   onSearch = (value) => {
     console.log('onSearch--------', value);
@@ -190,6 +197,7 @@ class Header extends React.Component {
                     type="icon-sousuo"
                   />
                 }
+                value={this.state.inputValue}
                 onSearch={this.onSearch}
                 onChange={this.onChange}
                 style={{ width: 200 }}

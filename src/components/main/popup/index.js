@@ -1,4 +1,4 @@
-import { List, Drawer, Layout } from 'antd';
+import { List, Drawer, Layout, Tooltip } from 'antd';
 import React from 'react';
 import { connect } from 'react-redux';
 import './index.scss';
@@ -42,7 +42,9 @@ function MusicList(props) {
               dataSource={props.musicDom}
               renderItem={(item, index) => (
                 <List.Item className={index === currentIndex && item.props.children.length >= 14 ? 'list-item' : ''}>
-                  {item}
+                  <Tooltip title={item} placement="left">
+                    {item}
+                  </Tooltip>
                 </List.Item>
               )}
             />
