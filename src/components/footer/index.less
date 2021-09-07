@@ -3,27 +3,27 @@
   margin-bottom: 10px;
 }
 
-.my-progress {
-  display: flex;
+// .my-progress {
+//   display: flex;
 
-  .progress {
-    position: relative;
-    bottom: 8px;
+.progress {
+  position: relative;
+  bottom: 8px;
 
-    .ant-progress-line {
+  .ant-progress-line {
+    position: absolute;
+    cursor: pointer;
+
+    .ant-progress-outer {
       position: absolute;
 
-      .ant-progress-outer {
+      .ant-progress-inner {
         position: absolute;
-
-        .ant-progress-inner {
-          position: absolute;
-        }
       }
     }
   }
 }
-
+// }
 .footer {
   height: 30px;
 }

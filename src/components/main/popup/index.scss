@@ -17,7 +17,7 @@
     color: #00ced1;
     background: #00ced1 linear-gradient(-135deg, #acd69a 30%, #87d068 60%, transparent);
     background-size: 0.3rem 0.3rem;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat; 
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -28,6 +28,9 @@
     .ant-tooltip-inner {
         background-color: #00ced14d;
     }
+}
+.ant-drawer-body {
+    padding: 0;
 }
 @keyframes scratchy {
     0% {

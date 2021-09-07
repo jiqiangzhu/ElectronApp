@@ -7,6 +7,7 @@ import Api from '../../api/index';
 import { createFromIconfontCN, SkinOutlined } from '@ant-design/icons';
 import store from 'src/redux';
 import { SelectKeyRedux } from 'src/redux/actions/play-actions';
+import { NavLink } from 'react-router-dom';
 
 const IconFont = createFromIconfontCN();
 const { Search } = Input;
@@ -87,14 +88,13 @@ class Header extends React.Component {
   onChange = (e) => {
     // 不允许连续输入两个空格
     // Two consecutive spaces is not allowed
-    if(e.target.value.includes("  ") ) {
+    if (e.target.value.includes('  ')) {
       console.log('e.target.value', e.target.value);
       return;
     }
     this.setState({
       inputValue: e.target.value,
     });
-
   };
   onSearch = (value) => {
     console.log('onSearch--------', value);
@@ -174,14 +174,18 @@ class Header extends React.Component {
                 className={['webkit-no-drag', this.props.history.length > 1 ? 'allowed' : 'not-allowed']}
                 type={this.props.history.length > 1 ? 'icon-ziyuan1' : 'icon-ziyuan1-copy-copy'}
               />
-              <IconFont
-                style={{ fontSize: '16px' }}
-                onClick={() => {
-                  this.navigatorFn(1);
-                }}
-                className={['webkit-no-drag', this.props.history.length > 1 ? 'allowed' : 'not-allowed']}
-                type={this.props.history.length > 1 ? 'icon-you' : 'icon-you-copy'}
-              />
+
+              <NavLink replace to="/home">
+                <IconFont
+                  style={{ fontSize: '16px' }}
+                  // onClick={() => {
+                  //   this.props.history.go(0);
+                  // }}
+                  className={['webkit-no-drag', 'allowed']}
+                  type="icon-shuaxin"
+                  // type={this.props.history.length > 1 ? 'icon-you' : 'icon-you-copy'}
+                />
+              </NavLink>
               {/* <IconFont style={{ fontSize: '16px' }} onClick={() => { this.props.history.go(0) }}
                                 className={["webkit-no-drag"]}
                                 type= 'icon-shuaxin-copy' /> */}
