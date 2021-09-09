@@ -515,3 +515,39 @@ Mock.mock('/home/recommend', 'get', () => {
     data: arr,
   };
 });
+
+// get covid-19 map
+Mock.mock('/tear/clothe', 'get', () => {
+  const hara_A = require('../assets/img/sex/hara_A.jpg');
+  const hara_B = require('../assets/img/sex/hara_B.jpg');
+  const hoshino_A = require('../assets/img/sex/hoshino_A.jpg');
+  const hoshino_B = require('../assets/img/sex/hoshino_B.jpg');
+  const kinokuchi_A = require('../assets/img/sex/kinokuchi_A.jpg');
+  const kinokuchi_B = require('../assets/img/sex/kinokuchi_B.jpg');
+  const nagasaki_A = require('../assets/img/sex/nagasaki_A.jpg');
+  const nagasaki_B = require('../assets/img/sex/nagasaki_B.jpg');
+  const suzuki_A = require('../assets/img/sex/suzuki_A.jpg');
+  const suzuki_B = require('../assets/img/sex/suzuki_B.jpg');
+  const tani_A = require('../assets/img/sex/tani_A.jpg');
+  const tani_B = require('../assets/img/sex/tani_B.jpg');
+  const watanabe_A = require('../assets/img/sex/watanabe_A.jpg');
+  const watanabe_B = require('../assets/img/sex/watanabe_B.jpg');
+  return {
+    data: [
+      hara_A,
+      hara_B,
+      hoshino_A,
+      hoshino_B,
+      kinokuchi_A,
+      kinokuchi_B,
+      nagasaki_A,
+      nagasaki_B,
+      suzuki_A,
+      suzuki_B,
+      tani_A,
+      tani_B,
+      watanabe_A,
+      watanabe_B,
+    ],
+  };
+});

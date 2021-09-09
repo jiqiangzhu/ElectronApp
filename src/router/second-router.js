@@ -1,6 +1,7 @@
 import React from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import Clock from 'src/components/main/canvas';
+import TearClothe from 'src/components/main/canvas/tear-clothe';
 import { ChinaMapCom } from 'src/components/main/echarts';
 import LeaderBoard from 'src/components/main/leader-board';
 import MenuBar from 'src/components/main/menu-bar';
@@ -17,6 +18,7 @@ const routes2 = (
       <Route exact path="/movie" component={Movie} />
       <Route exact path="/rank" component={LeaderBoard} />
       <Route exact path="/clock" component={Clock} />
+      <Route exact path="/tear-clothe" component={TearClothe} />
       <Route component={NotFound} />
     </Switch>
   </HashRouter>

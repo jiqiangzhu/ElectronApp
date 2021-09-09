@@ -57,8 +57,8 @@ function MenuBarCom(props) {
               <Menu.Item key="6" onClick={toPage.bind(this, 'recordLog', '6')}>
                 Record Log
               </Menu.Item>
-              <Menu.Item key="7" onClick={toPage.bind(this, 'print', '7')}>
-                Print
+              <Menu.Item key="7" onClick={toPage.bind(this, 'tear-clothe', '7')}>
+                Tear Clothe
               </Menu.Item>
               <Menu.Item key="8" onClick={toPage.bind(this, 'clock', '8')}>
                 Clock
