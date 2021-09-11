@@ -45,7 +45,7 @@ class TearClothe extends React.Component {
       store.dispatch(setShowLoaingRedux(true));
       setTimeout(() => {
         store.dispatch(setShowLoaingRedux(false));
-      }, 500);
+      }, 200);
       const img1 = new Image();
       const img2 = new Image();
       img1.src = this.state.imgArr[index].default;
@@ -141,7 +141,7 @@ class TearClothe extends React.Component {
                 style={{
                   display: 'inline-block',
                   height: 200,
-                  marginLeft: 70,
+                  marginLeft: 70
                 }}
               >
                 <Slider

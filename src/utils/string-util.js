@@ -19,7 +19,7 @@ String.prototype.byteLength = function () {
 /**
  *
  * @param {*} length
- * @returns 由数字和字母组成随机数
+ * @returns 由数字和字母组成指定长度随机数
  */
 function getRandomCode(length) {
   if (length > 0) {
