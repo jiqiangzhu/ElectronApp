@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/out
 /.pnp
 .vscode
 .pnp.js
@@ -10,6 +11,7 @@
 /src/assets/img/recommend
 /src/assets/img/animation
 /src/assets/img/rank
+/src/assets/img/sex
 # testing
 /coverage
 

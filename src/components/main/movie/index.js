@@ -1,14 +1,12 @@
-import { useEffect } from 'react'
-// import store from 'src/redux';
-// import { setShowLoaingRedux } from 'src/redux/actions/play-actions';
-import './index.less'
-import './index.scss'
+import { useEffect } from 'react';
+import './index.less';
+import './index.scss';
 
 function Movie(props) {
   useEffect(() => {
     // store.dispatch(setShowLoaingRedux(false))
-    console.log('did mount')
-  }, [])
+    console.log('did mount');
+  }, []);
   return (
     <div className="home-content movie-content">
       <div className="page">
@@ -65,7 +63,7 @@ function Movie(props) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Movie
+export default Movie;

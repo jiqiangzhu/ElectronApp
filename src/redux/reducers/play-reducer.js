@@ -7,70 +7,70 @@ import {
   SelectKey,
   CurrentTime,
   ShowLoading,
-} from '../actions/play-actions'
-import initialState from '../state'
+} from '../actions/play-actions';
+import initialState from '../state';
 
-function playReducer(state = initialState, action) {
-  switch (action.type) {
+function playReducer(state = initialState, { type, payload } = {}) {
+  switch (type) {
     case MusicPlay: {
       return {
         ...state,
-        playFlag: action.payload.playFlag,
-      }
+        playFlag: payload.playFlag,
+      };
     }
     case MusicList: {
       // localStorage.removeItem("currentIndex")
       return {
         ...state,
-        musicList: action.payload.musicList,
-      }
+        musicList: payload.musicList,
+      };
     }
     case CurrentIndex: {
-      action.payload.currentAudio.src = state.musicList[action.payload.currentIndex]
-      localStorage.currentIndex = action.payload.currentIndex
+      payload.currentAudio.src = state.musicList[payload.currentIndex];
+      localStorage.currentIndex = payload.currentIndex;
       return {
         ...state,
-        currentIndex: action.payload.currentIndex,
-        currentAudio: action.payload.currentAudio,
-      }
+        currentIndex: payload.currentIndex,
+        currentAudio: payload.currentAudio,
+      };
     }
     case AudioFlag: {
       return {
         ...state,
-        currentAudio: action.payload.currentAudio,
-      }
+        currentAudio: payload.currentAudio,
+      };
     }
     case NetValid: {
       return {
         ...state,
-        netValid: action.payload.netValid,
-      }
+        netValid: payload.netValid,
+      };
     }
     case SelectKey: {
       return {
         ...state,
         selectedKeys: {
           oldKey: state.selectedKeys.currentKey,
-          currentKey: action.payload.key,
+          currentKey: payload.key,
         },
-      }
+      };
     }
     case CurrentTime: {
-      localStorage.currentTime = action.payload.currentTime
+      localStorage.currentTime = payload.currentTime;
       return {
         ...state,
-        currentTime: action.payload.currentTime,
-      }
+        currentTime: payload.currentTime,
+      };
     }
     case ShowLoading: {
       return {
         ...state,
-        showLoading: action.payload.showLoading,
-      }
+        showLoading: payload.showLoading,
+      };
     }
     default:
-      return state
+      return state;
   }
 }
 
-export default playReducer
+export default playReducer;

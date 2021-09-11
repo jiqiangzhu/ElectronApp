@@ -1,56 +1,56 @@
-import { Button, Row, Col, List, Divider, Layout } from 'antd'
-import React, { useEffect, useState } from 'react'
-import { ChinaMap } from '@/components/main/echarts/ChinaMap'
-import store from 'src/redux'
-import { setMapDomRedux } from '@redux/actions/map-actions'
-import './index.less'
-import { connect } from 'react-redux'
+import { Button, Row, Col, List, Divider, Layout } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { ChinaMap } from '@/components/main/echarts/ChinaMap';
+import store from 'src/redux';
+import { setMapDomRedux } from '@redux/actions/map-actions';
+import './index.less';
+import { connect } from 'react-redux';
 
 /**
  * China COVID-19 map use echarts
  * @param {*} props
  * @returns
  */
-const { Content } = Layout
+const { Content } = Layout;
 
 function CovidMap(props) {
-  const myEchart = React.createRef()
-  const { data } = props
-  const [loading] = useState(false)
-  const [mapButtonTip, setMapButtonTip] = useState('Get Again')
-  const [disBtnFlag, setDisBtnFlag] = useState(false)
+  const myEchart = React.createRef();
+  const { data } = props;
+  const [loading] = useState(false);
+  const [mapButtonTip, setMapButtonTip] = useState('Get Again');
+  const [disBtnFlag, setDisBtnFlag] = useState(false);
   useEffect(() => {
     function initRequest() {
-      loadMap()
+      loadMap();
     }
-    initRequest()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    initRequest();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const loadMap = async (flag) => {
-    setMapButtonTip(`loading...`)
+    setMapButtonTip(`loading...`);
     try {
-      store.dispatch(setMapDomRedux(myEchart.current))
-      setDisBtnFlag(true)
-      let isSuccess = await ChinaMap.initalECharts()
+      store.dispatch(setMapDomRedux(myEchart.current));
+      setDisBtnFlag(true);
+      let isSuccess = await ChinaMap.initalECharts();
       if (!isSuccess) {
-        setDisBtnFlag(false)
-        setMapButtonTip(`Get Again`)
-        return
+        setDisBtnFlag(false);
+        setMapButtonTip(`Get Again`);
+        return;
       }
-      let i = 60
+      let i = 60;
       let interval1 = setInterval(() => {
-        i--
+        i--;
         if (i === 0) {
-          setDisBtnFlag(false)
-          setMapButtonTip(`Get Again`)
-          clearInterval(interval1)
-          return
+          setDisBtnFlag(false);
+          setMapButtonTip(`Get Again`);
+          clearInterval(interval1);
+          return;
         }
-        setMapButtonTip(`${i} S`)
-      }, 1000)
+        setMapButtonTip(`${i} S`);
+      }, 1000);
     } catch (e) {
-      console.error('loading map data err', e)
+      console.error('loading map data err', e);
     }
-  }
+  };
   return (
     <div className="home-content">
       <div className="content">
@@ -90,13 +90,13 @@ function CovidMap(props) {
         </Col>
       </Row>
     </div>
-  )
+  );
 }
 const mapStateToprops = (state) => {
   return {
     data: state.mapReducer.data,
-  }
-}
-const ChinaMapCom = connect(mapStateToprops)(CovidMap)
+  };
+};
+const ChinaMapCom = connect(mapStateToprops)(CovidMap);
 
-export { ChinaMapCom }
+export { ChinaMapCom };

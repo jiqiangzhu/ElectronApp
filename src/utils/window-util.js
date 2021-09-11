@@ -3,17 +3,17 @@
  */
 
 // electron render process
-const { ipcRenderer } = window.require('electron')
+const { ipcRenderer } = window.require('electron');
 // check network module
-const internetAvailable = window.require('internet-available')
-// const isOnline = window.require('is-online');
+const internetAvailable = window.require('internet-available');
+
 const windowUtils = {
   /**
    * set window max
    * @returns
    */
   setWindowMax: async function () {
-    return ipcRenderer.send('setMax')
+    return ipcRenderer.send('setMax');
   },
 
   /**
@@ -21,7 +21,7 @@ const windowUtils = {
    * @returns
    */
   setWindowRestore: async function () {
-    return ipcRenderer.send('setRestore')
+    return ipcRenderer.send('setRestore');
   },
 
   /**
@@ -29,7 +29,7 @@ const windowUtils = {
    * @returns
    */
   setWindowClosed: async function () {
-    return ipcRenderer.send('setClose')
+    return ipcRenderer.send('setClose');
   },
   /**
    * set opacity of window
@@ -37,14 +37,14 @@ const windowUtils = {
    * @returns
    */
   setWindowOpacity: async function (value) {
-    return ipcRenderer.send('setOpacity', value)
+    return ipcRenderer.send('setOpacity', value);
   },
   /**
    * set window min
    * @returns
    */
   setWindowMin: async function () {
-    return ipcRenderer.send('setMin')
+    return ipcRenderer.send('setMin');
   },
 
   /**
@@ -53,8 +53,8 @@ const windowUtils = {
    * @param {*} resolve
    */
   openFolder: async function (path, resolve) {
-    await ipcRenderer.send('openFolder', path)
-    ipcRenderer.once('asynchronous-reply', resolve)
+    await ipcRenderer.send('openFolder', path);
+    ipcRenderer.once('asynchronous-reply', resolve);
   },
   /**
    * check network
@@ -67,14 +67,14 @@ const windowUtils = {
         port: 53,
         host: '114.114.114.114',
         rate: 1000,
-      })
-      console.log('net avaliable--------')
-      return true
+      });
+      console.log('net avaliable--------');
+      return true;
     } catch (err) {
-      console.warn('net cannot connect------', err)
-      return false
+      console.warn('net cannot connect------', err);
+      return false;
     }
   },
-}
+};
 
-export default windowUtils
+export default windowUtils;

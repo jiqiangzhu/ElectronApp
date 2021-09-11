@@ -2,7 +2,7 @@
  * local file utils
  */
 
-const fs = window.require('fs-extra')
+const fs = window.require('fs-extra');
 const fsUtils = {
   /**
    * read all files in path
@@ -12,9 +12,9 @@ const fsUtils = {
    */
   readMusicDir: (path, resolve) => {
     if (!path) {
-      return
+      return;
     }
-    fs.readdir(path, resolve)
+    fs.readdir(path, resolve);
   },
   /**
    * read content of files
@@ -23,15 +23,15 @@ const fsUtils = {
    */
   readFile: async (filename, resolve) => {
     if (!filename) {
-      return
+      return;
     }
-    await fs.readFile(filename, 'utf8', resolve)
+    await fs.readFile(filename, 'utf8', resolve);
   },
   fileStat: async (filename, resolve) => {
     if (!filename) {
-      return 'null'
+      return 'null';
     }
-    return fs.stat(filename)
+    return fs.stat(filename);
   },
   /**
    *
@@ -41,10 +41,10 @@ const fsUtils = {
    */
   writeFile: async (path, data, callback) => {
     if (!data) {
-      return 'null'
+      return 'null';
     }
-    await fs.writeFile(path, data, { encoding: 'utf8' }, callback)
+    await fs.writeFile(path, data, { encoding: 'utf8' }, callback);
   },
-}
+};
 
-export default fsUtils
+export default fsUtils;
