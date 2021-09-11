@@ -1,6 +1,5 @@
 import echarts from 'echarts';
 import chinaJson from '@/static/china.json';
-// import { getFYDataFromSina } from '@/api';
 import fsUtils from '@/utils/fs-util';
 import { commonUtils, windowUtils } from '@localUtils/';
 import store from 'src/redux';
@@ -152,11 +151,10 @@ const ChinaMap = {
         trigger: 'item',
         formatter: function (datas) {
           try {
-            return `${datas.name}<br/>累计确诊人数：${!isNaN(datas.value) ? datas.value : 0}<br/>累计死亡人数：${
-              !isNaN(datas.data.deathNum) ? datas.data.deathNum : 0
-            }`;
+            return `${datas.name}<br/>累计确诊人数：${!isNaN(datas.value) ? datas.value : 0}<br/>累计死亡人数：${!isNaN(datas.data.deathNum) ? datas.data.deathNum : 0
+              }`;
           } catch (err) {
-            // console.warn(`format error \n${err}`);
+            console.warn(`format error \n${err}`);
           }
         },
       },

@@ -96,12 +96,9 @@ class TearClothe extends React.Component {
         let res = '';
         if (index % 2 === 0) {
           res = (
-            <div
-              key={index + 100}
-              className="photo-item"
-              onClick={() => {
-                this.change(index);
-              }}
+            <div key={index + 100} className="photo-item" onClick={() => {
+              this.change(index);
+            }}
             >
               <img style={{ width: '1rem' }} src={item.default} alt="nothing" />
             </div>

@@ -183,7 +183,7 @@ class Header extends React.Component {
                   // }}
                   className={['webkit-no-drag', 'allowed']}
                   type="icon-shuaxin"
-                  // type={this.props.history.length > 1 ? 'icon-you' : 'icon-you-copy'}
+                // type={this.props.history.length > 1 ? 'icon-you' : 'icon-you-copy'}
                 />
               </NavLink>
               {/* <IconFont style={{ fontSize: '16px' }} onClick={() => { this.props.history.go(0) }}

@@ -38,12 +38,11 @@ function MusicList(props) {
               renderItem={(item, index) => {
                 return (
                   <List.Item key={index} className={index === currentIndex && item.props.children.byteLength() >= 24 ? 'list-item' : ''}>
-                    <Tooltip title={item} placement="left" defaultVisible={true}>
+                    <Tooltip title={item} placement="left">
                       {item}
                       <p className="music-active" style={{ display: props.musicList[index].byteLength() >= 24 ? 'inline-block' : 'none' }}>
                         {props.musicList[index]}
                       </p>
-                      {/* {props.musicList[index].byteLength() >= 24 ? () => <p className="music-active">{props.musicList[index]}</p> : ''} */}
                     </Tooltip>
                   </List.Item>
                 );
